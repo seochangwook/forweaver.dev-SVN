@@ -1,16 +1,24 @@
 package com.tproject.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
+import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
+import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.SVNProperties;
+import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
@@ -20,15 +28,18 @@ import org.tmatesoft.svn.core.wc.admin.SVNAdminClient;
 
 @Component
 public class SVNUtil {
+	private static int totalrepotreecount = 0; //재귀호출이라 정적 멤버변수로 필요//
+	private static List<Object>repotreelist_name;
+	private static List<Object>repotreelist_author;
+	private static List<Object>repotreelist_revesion;
+	private static List<Object>repotreelist_date;
+	private static List<Object>repotreelist_lock;
+	
 	public String doMakeRepo(String repourl){
-		System.out.println("repo make(local file://)");
-		
 		String tgtPath = repourl;
 		
 		try {
 			SVNURL tgtURL = SVNRepositoryFactory.createLocalRepository( new File( tgtPath ), true , false );
-			
-			System.out.println("repo url: " + tgtURL.toString());
 			
 			return tgtURL.toString();
 		} catch (SVNException e) {
@@ -44,16 +55,18 @@ public class SVNUtil {
 		
 		SVNRepository repository = null;
 		
-		System.out.println("repo info");
-		
 		try {
 			repository = SVNRepositoryFactory.create( SVNURL.parseURIEncoded(repourl));
 			
 			String repoUUID = repository.getRepositoryUUID(true).toString();
 			String reporevesion = ""+repository.getLatestRevision();
+			String repoRoot = repository.getRepositoryRoot(true).toString();
+			String repoURL = repository.getLocation().toString();
 			
 			repoinfomap.put("repouuid", repoUUID);
 			repoinfomap.put("reporevesion", reporevesion);
+			repoinfomap.put("reporoot", repoRoot);
+			repoinfomap.put("repolocation", repoURL);
 		} catch (SVNException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,43 +75,206 @@ public class SVNUtil {
 		return repoinfomap;
 	}
 	
-	public void doPrintRepoLog(String repourl){
+	public Map<String, Object> doPrintRepoLog(String repourl){
 		SVNRepository repository = null;
 		Collection logEntries = null;
+		
+		//각 로그에서 필요한 데이터를 저장할 수 있는 자료구조 선언//
+		List<Object>revesionlist = new ArrayList<Object>();
+		List<Object>authorlist = new ArrayList<Object>();
+		List<Object>datelist = new ArrayList<Object>();
+		List<Object>logmessagelist = new ArrayList<Object>();
+		List<Object>changepathlist = new ArrayList<Object>();
+		
+		//종합정보를 가질 리스트//
+		Map<String, Object>loglist = new HashMap<String, Object>();
 		
 		long startRevision = 0;
 		long endRevision = -1; //HEAD (the latest) revision
 		
+		int logcount = 0; //key로 활용//
+		
+		StringBuffer str_paths_buffer = new StringBuffer();
+		
 		try {
-			repository = SVNRepositoryFactory.create( SVNURL.parseURIEncoded(repourl));
-			logEntries = repository.log( new String[] { "" } , null , startRevision , endRevision , true , true );
-			
-			for ( Iterator entries = logEntries.iterator( ); entries.hasNext( ); ) {
-				  SVNLogEntry logEntry = ( SVNLogEntry ) entries.next( );
-				  System.out.println( "---------------------------------------------" );
-				  System.out.println ("revision: " + logEntry.getRevision( ) );
-				  System.out.println( "author: " + logEntry.getAuthor( ) );
-				  System.out.println( "date: " + logEntry.getDate( ) );
-				  System.out.println( "log message: " + logEntry.getMessage( ) ); 
-				  	if ( logEntry.getChangedPaths( ).size( ) > 0 ) {
-				  		System.out.println( );
-				  		System.out.println( "changed paths:" );
-				  		Set changedPathsSet = logEntry.getChangedPaths( ).keySet( );
-				  			for ( Iterator changedPaths = changedPathsSet.iterator( ); changedPaths.hasNext( ); ) {
-				  				SVNLogEntryPath entryPath = ( SVNLogEntryPath ) logEntry.getChangedPaths( ).get( changedPaths.next( ) );
-				  					System.out.println( " "
-				  						+ entryPath.getType( )
-				  						+ " "
-				  						+ entryPath.getPath( )
-				  						+ ( ( entryPath.getCopyPath( ) != null ) ? " (from "
-				  								+ entryPath.getCopyPath( ) + " revision "
-				  								+ entryPath.getCopyRevision( ) + ")" : "" ) );
-				  					}
-				  		}
+			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			logEntries = repository.log(new String[] { "" }, null, startRevision, endRevision, true, true);
+
+			for (Iterator entries = logEntries.iterator(); entries.hasNext();) {
+				SVNLogEntry logEntry = (SVNLogEntry) entries.next();
+	
+				revesionlist.add(logEntry.getRevision());
+				authorlist.add(logEntry.getAuthor());
+				datelist.add(logEntry.getDate().toString());
+				logmessagelist.add(logEntry.getMessage());
+
+				if (logEntry.getChangedPaths().size() > 0){
+					Set changedPathsSet = logEntry.getChangedPaths().keySet();
+					for (Iterator changedPaths = changedPathsSet.iterator(); changedPaths.hasNext();) {
+						SVNLogEntryPath entryPath = (SVNLogEntryPath) logEntry.getChangedPaths().get(changedPaths.next());
+
+						str_paths_buffer.append(entryPath.getType());
+						str_paths_buffer.append(" ");
+						str_paths_buffer.append(entryPath.getPath());
+						str_paths_buffer.append(" ");
+						str_paths_buffer.append(" ");
+						str_paths_buffer.append((entryPath.getCopyPath() != null)
+								? " (from " + entryPath.getCopyPath() + " revision " + entryPath.getCopyRevision() + ")"
+								: "");
+						str_paths_buffer.append("\n");
+					}
+
+					changepathlist.add(str_paths_buffer.toString());
+
+					str_paths_buffer.setLength(0); // 초기화//
 				}
-		} catch (SVNException e) {
-			// TODO Auto-generated catch block
+				
+				logcount++;
+			}
+			
+			loglist.put("revesionlist", revesionlist);
+			loglist.put("authorlist", authorlist);
+			loglist.put("datelist", datelist);
+			loglist.put("logmessagelist", logmessagelist);
+			loglist.put("changepathlist", changepathlist);
+			loglist.put("count", ""+logcount);
+			
+			return loglist;
+		}
+		catch (SVNException e) {
 			e.printStackTrace();
 		}
+		
+		return loglist;
+	}
+	
+	public Map<String, Object> doPrintRepotree(String repourl){
+		Map<String, Object>repotreelistinfo = new HashMap<String, Object>();
+		
+		SVNRepository repository = null;
+		
+		try {
+			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			SVNNodeKind nodeKind = repository.checkPath("", -1);
+			
+			if (nodeKind == SVNNodeKind.NONE) {
+				System.err.println("There is no entry at '" + repourl + "'.");
+			} else if (nodeKind == SVNNodeKind.FILE) {
+				System.err.println("The entry at '" + repourl + "' is a file while a directory was expected.");
+			}
+			
+			repotreelist_name = new ArrayList<Object>();
+			repotreelist_author = new ArrayList<Object>();
+			repotreelist_revesion = new ArrayList<Object>();
+			repotreelist_date = new ArrayList<Object>();
+			repotreelist_lock = new ArrayList<Object>();
+			
+			listEntries(repository, ""); //리스트를 정보를 추가//
+			
+			repotreelistinfo.put("listcount", totalrepotreecount);
+			repotreelistinfo.put("repotreelistname", repotreelist_name);
+			repotreelistinfo.put("repotreelistauthor", repotreelist_author);
+			repotreelistinfo.put("repotreelistrevesion", repotreelist_revesion);
+			repotreelistinfo.put("repotreelistdate", repotreelist_date);
+			repotreelistinfo.put("repotreelistlock", repotreelist_lock);
+			
+			totalrepotreecount = 0; //초기화//
+		} catch (SVNException e) {
+			e.printStackTrace();
+		}
+		
+		return repotreelistinfo;
+	}
+	
+	public static void listEntries(SVNRepository repository, String path) throws SVNException {
+        Collection entries = repository.getDir(path, -1, null, (Collection) null);
+        Iterator iterator = entries.iterator();
+        
+        int repptreecount = 0;
+        
+        while (iterator.hasNext()) {
+            SVNDirEntry entry = (SVNDirEntry) iterator.next();
+            
+            repotreelist_name.add(entry.getName());
+            if(entry.getAuthor() != null){
+            	repotreelist_author.add(entry.getAuthor());
+            }else{
+            	repotreelist_author.add("not author");
+            }
+            repotreelist_revesion.add(entry.getRevision());
+            repotreelist_date.add(entry.getDate().toString());
+            if(entry.getLock() == null){
+            	repotreelist_lock.add("unlock");
+            }else{
+            	repotreelist_lock.add(entry.getLock());
+            }
+            
+            repptreecount++;
+            
+            if (entry.getKind() == SVNNodeKind.DIR) {
+            	//저장소가 디렉터리이면 Depth하나를 더 들어가야지 파일이 있기에 listEntries를 재귀호출한다.//
+                listEntries(repository, (path.equals("")) ? entry.getName() : path + "/" + entry.getName());
+            }
+        }
+        
+        totalrepotreecount += repptreecount;
+    }
+	
+	public Map<String,Object> doPrintFilecontent(String repourl, String filepath){
+		Map<String, Object>filecontentinfo = new HashMap<String, Object>();
+		
+		System.out.println("file content view");
+		
+		System.out.println("repo url: " + repourl);
+		System.out.println("file url: " + filepath);
+		
+		SVNRepository repository = null;
+		
+		try {
+			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			SVNNodeKind nodeKind = repository.checkPath(filepath, -1);
+
+			if (nodeKind == SVNNodeKind.NONE) {
+				filecontentinfo.put("type", "file");
+			
+				SVNProperties fileProperties = new SVNProperties();
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				
+				repository.getFile(filepath, -1, fileProperties, baos);
+				
+				String mimeType = fileProperties.getStringValue(SVNProperty.MIME_TYPE);
+				boolean isTextType = SVNProperty.isTextMimeType(mimeType);
+
+				Iterator iterator = fileProperties.nameSet().iterator();
+				
+				while (iterator.hasNext()) {
+					String propertyName = (String) iterator.next();
+					String propertyValue = fileProperties.getStringValue(propertyName);
+					System.out.println("File property: " + propertyName + "=" + propertyValue);
+				}
+
+				if (isTextType) {
+					System.out.println("File contents:");
+					System.out.println();
+					try {
+						baos.writeTo(System.out);
+					} catch (IOException ioe) {
+						ioe.printStackTrace();
+					}
+				} else {
+					System.out.println("Not a text file.");
+				}
+			} else if (nodeKind == SVNNodeKind.DIR) {
+				filecontentinfo.put("type", "directory");
+			}
+			
+			
+		} catch (SVNException e) {
+			e.printStackTrace();
+		}
+		
+		return filecontentinfo;
 	}
 }
