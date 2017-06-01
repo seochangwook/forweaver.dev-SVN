@@ -28,7 +28,7 @@ import org.tmatesoft.svn.core.wc.admin.SVNAdminClient;
 
 @Component
 public class SVNUtil {
-	private static int totalrepotreecount = 0; //재귀호출이라 정적 멤버변수로 필요//
+	private static int totalrepotreecount = 0; //�옱洹��샇異쒖씠�씪 �젙�쟻 硫ㅻ쾭蹂��닔濡� �븘�슂//
 	private static List<Object>repotreelist_name;
 	private static List<Object>repotreelist_author;
 	private static List<Object>repotreelist_revesion;
@@ -79,20 +79,20 @@ public class SVNUtil {
 		SVNRepository repository = null;
 		Collection logEntries = null;
 		
-		//각 로그에서 필요한 데이터를 저장할 수 있는 자료구조 선언//
+		//媛� 濡쒓렇�뿉�꽌 �븘�슂�븳 �뜲�씠�꽣瑜� ���옣�븷 �닔 �엳�뒗 �옄猷뚭뎄議� �꽑�뼵//
 		List<Object>revesionlist = new ArrayList<Object>();
 		List<Object>authorlist = new ArrayList<Object>();
 		List<Object>datelist = new ArrayList<Object>();
 		List<Object>logmessagelist = new ArrayList<Object>();
 		List<Object>changepathlist = new ArrayList<Object>();
 		
-		//종합정보를 가질 리스트//
+		//醫낇빀�젙蹂대�� 媛�吏� 由ъ뒪�듃//
 		Map<String, Object>loglist = new HashMap<String, Object>();
 		
 		long startRevision = 0;
 		long endRevision = -1; //HEAD (the latest) revision
 		
-		int logcount = 0; //key로 활용//
+		int logcount = 0; //key濡� �솢�슜//
 		
 		StringBuffer str_paths_buffer = new StringBuffer();
 		
@@ -126,7 +126,7 @@ public class SVNUtil {
 
 					changepathlist.add(str_paths_buffer.toString());
 
-					str_paths_buffer.setLength(0); // 초기화//
+					str_paths_buffer.setLength(0); // 珥덇린�솕//
 				}
 				
 				logcount++;
@@ -170,7 +170,7 @@ public class SVNUtil {
 			repotreelist_date = new ArrayList<Object>();
 			repotreelist_lock = new ArrayList<Object>();
 			
-			listEntries(repository, ""); //리스트를 정보를 추가//
+			listEntries(repository, ""); //由ъ뒪�듃瑜� �젙蹂대�� 異붽�//
 			
 			repotreelistinfo.put("listcount", totalrepotreecount);
 			repotreelistinfo.put("repotreelistname", repotreelist_name);
@@ -179,7 +179,7 @@ public class SVNUtil {
 			repotreelistinfo.put("repotreelistdate", repotreelist_date);
 			repotreelistinfo.put("repotreelistlock", repotreelist_lock);
 			
-			totalrepotreecount = 0; //초기화//
+			totalrepotreecount = 0; //珥덇린�솕//
 		} catch (SVNException e) {
 			e.printStackTrace();
 		}
@@ -213,7 +213,7 @@ public class SVNUtil {
             repptreecount++;
             
             if (entry.getKind() == SVNNodeKind.DIR) {
-            	//저장소가 디렉터리이면 Depth하나를 더 들어가야지 파일이 있기에 listEntries를 재귀호출한다.//
+            	//���옣�냼媛� �뵒�젆�꽣由ъ씠硫� Depth�븯�굹瑜� �뜑 �뱾�뼱媛��빞吏� �뙆�씪�씠 �엳湲곗뿉 listEntries瑜� �옱洹��샇異쒗븳�떎.//
                 listEntries(repository, (path.equals("")) ? entry.getName() : path + "/" + entry.getName());
             }
         }
@@ -233,7 +233,7 @@ public class SVNUtil {
 		
 		try {
 			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
-			
+		
 			SVNNodeKind nodeKind = repository.checkPath(filepath, -1);
 
 			if (nodeKind == SVNNodeKind.NONE) {
@@ -242,6 +242,7 @@ public class SVNUtil {
 				SVNProperties fileProperties = new SVNProperties();
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				
+				//filepath = "/SampleProject/src/Main.java";
 				repository.getFile(filepath, -1, fileProperties, baos);
 				
 				String mimeType = fileProperties.getStringValue(SVNProperty.MIME_TYPE);
