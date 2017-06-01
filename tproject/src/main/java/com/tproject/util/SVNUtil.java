@@ -221,28 +221,30 @@ public class SVNUtil {
         totalrepotreecount += repptreecount;
     }
 	
-	public Map<String,Object> doPrintFilecontent(String repourl, String filepath){
+	public Map<String,Object> doPrintFilecontent(String repourl, String filename){
 		Map<String, Object>filecontentinfo = new HashMap<String, Object>();
+		
+		String filepath = "/SampleProject/src/Main.java"; //임시선언//
 		
 		System.out.println("file content view");
 		
 		System.out.println("repo url: " + repourl);
-		System.out.println("file url: " + filepath);
+		System.out.println("file name: " + filename);
+		System.out.println("file path: " + filepath);
 		
 		SVNRepository repository = null;
 		
 		try {
 			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
 		
-			SVNNodeKind nodeKind = repository.checkPath(filepath, -1);
+			SVNNodeKind nodeKind = repository.checkPath(filename, -1);
 
 			if (nodeKind == SVNNodeKind.NONE) {
 				filecontentinfo.put("type", "file");
 			
 				SVNProperties fileProperties = new SVNProperties();
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				
-				//filepath = "/SampleProject/src/Main.java";
+		
 				repository.getFile(filepath, -1, fileProperties, baos);
 				
 				String mimeType = fileProperties.getStringValue(SVNProperty.MIME_TYPE);

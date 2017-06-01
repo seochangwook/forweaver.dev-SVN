@@ -335,13 +335,13 @@ $(function(){
 	});
 });
 /////////////////////////
-function viewcode(filepath){
+function viewcode(filename){
 	var repourl = $('#repopathtexttree').val();
 	
 	var trans_objeect = 
 	{
     	'url': repourl,
-    	'filepath':filepath
+    	'filename':filename
     }
 	var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 	
