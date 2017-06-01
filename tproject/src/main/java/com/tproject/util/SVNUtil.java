@@ -212,19 +212,17 @@ public class SVNUtil {
             
             repptreecount++;
             
-            if (entry.getKind() == SVNNodeKind.DIR) {
+            /*if (entry.getKind() == SVNNodeKind.DIR) {
             	//���옣�냼媛� �뵒�젆�꽣由ъ씠硫� Depth�븯�굹瑜� �뜑 �뱾�뼱媛��빞吏� �뙆�씪�씠 �엳湲곗뿉 listEntries瑜� �옱洹��샇異쒗븳�떎.//
                 listEntries(repository, (path.equals("")) ? entry.getName() : path + "/" + entry.getName());
-            }
+            }*/
         }
         
         totalrepotreecount += repptreecount;
     }
 	
-	public Map<String,Object> doPrintFilecontent(String repourl, String filename){
+	public Map<String,Object> doPrintFilecontent(String repourl, String filename, String filepath){
 		Map<String, Object>filecontentinfo = new HashMap<String, Object>();
-		
-		String filepath = "/SampleProject/src/Main.java"; //임시선언//
 		
 		System.out.println("file content view");
 		

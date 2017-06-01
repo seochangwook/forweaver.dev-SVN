@@ -49,6 +49,8 @@
 	<label>* 저장소 트리구조 출력: </label>
 	<input type="text" id="repopathtexttree" placeholder="input repo path">
 	<input type="button" id="btn_test5" value="click button"><br>
+	<input type='hidden' id='filepath' value=''>
+	<input type='hidden' id='repourl' value=''>
 	<div id="repotree">
 	</div>
 </body>
@@ -327,6 +329,7 @@ $(function(){
 		        }
 				
 				$('#repotree').append(printStr); //다시 테이블을 보여주기 위해서 HTML코드 적용//
+				$('#repourl').val(repourl);
 			},
 			error: function(retVal, status, er){
 				alert("error: "+retVal+" status: "+status+" er:"+er);
@@ -336,12 +339,14 @@ $(function(){
 });
 /////////////////////////
 function viewcode(filename){
-	var repourl = $('#repopathtexttree').val();
+	var repourl = $('#repourl').val();
+	var filepath = $('#filepath').val() + '/'+ filename;
 	
 	var trans_objeect = 
 	{
     	'url': repourl,
-    	'filename':filename
+    	'filename': filename,
+    	'filepath': filepath
     }
 	var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 	
@@ -380,10 +385,115 @@ function viewcode(filename){
 					onClose: function(caption){
 						if(caption == '닫기'){
 							//alert('yes click');
+							//디렉터리 이므로 내부 구조로 이동//
+							var filepath = $('#filepath').val();
+							var repourl = $('#repourl').val();
+							
+							filepath = filepath + '/' + filename;
+							repourl = repourl + '/' + filename;
+							
+							$('#filepath').val(filepath);
+							$('#repourl').val(repourl);
+							
+							//해당 경로로 다시 리스트 출력//
+							list_reload(repourl);
 						}
 					}
 				});
 			}
+		},
+		error: function(retVal, status, er){
+			alert("error: "+retVal+" status: "+status+" er:"+er);
+		}
+	});
+}
+/////////////////////////////
+function list_reload(repourl){
+	var trans_objeect = 
+	{
+    	'url': repourl
+    }
+	var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+	
+	$.ajax({
+		url: "http://localhost:8080/controller/repotreeajax",
+		type: 'POST',
+		dataType: 'json',
+		data: trans_json,
+		contentType: 'application/json',
+		mimeType: 'application/json',
+		success: function(retVal){
+			var repotreecount = retVal.repotreelist.listcount;
+			var repotreelistname = [];
+			var repotreelistauthor = [];
+			var repotreelistrevesion = [];
+			var repotreelistdate = [];
+			var repotreelistlock = [];
+			
+			repotreelistname = retVal.repotreelist.repotreelistname;
+			repotreelistauthor = retVal.repotreelist.repotreelistauthor;
+			repotreelistrevesion = retVal.repotreelist.repotreelistrevesion;
+			repotreelistdate = retVal.repotreelist.repotreelistdate;
+			repotreelistlock = retVal.repotreelist.repotreelistlock;
+			
+			//Table에 결과를 출력//
+			$('#repotree').empty();
+			
+			if(repotreecount > 0){
+	        	printStr = "<div id='repotree'>";
+	        	printStr += "<table class='table table-hover'>";
+	        	printStr += "<thead>";
+	        	printStr += "<tr>";
+	        	printStr += "<th>구분</th>";
+	        	printStr += "<th>파일</th>";
+	        	printStr += "<th>관리자</th>";
+	        	printStr += "<th>리비전 ver</th>";
+	        	printStr += "<th>날짜</th>";
+	        	printStr += "<th>잠금유무</th>";
+	        	printStr += "<th>소스보기</th>"
+	        	printStr += "</tr>";
+	        	printStr += "</thead>"; 
+	        	printStr += "<tbody>";
+	        	
+	        	//테이블에 들어갈 데이터를 삽입//
+	           	for(var i=0; i<repotreecount; i++){
+	           		printStr += "<tr>";
+	            	printStr += "<td>"+(i+1)+"</td>";
+	            	printStr += "<td>"+repotreelistname[i]+"</td>";
+	            	printStr += "<td>"+repotreelistauthor[i]+"</td>";
+	            	printStr += "<td>ver."+repotreelistrevesion[i]+"</td>";
+	            	printStr += "<td>"+repotreelistdate[i]+"</td>";
+	            	printStr += "<td>"+repotreelistlock[i]+"</td>";
+	            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";
+                	printStr += "</tr>"; 
+	           	}
+	        	
+	           	printStr += "</tbody>";
+	            printStr += "</table>";
+	            printStr += "</div>";
+	        }
+			
+	        else{
+	        	printStr = "<div id='repotree'>";
+         	  	printStr += "<p id='info_sub1' style='font-size:14px;color:#586069; margin:0px'><br>SVN디렉터리가 존재하지 않거나 정보가 없음</b></p>";
+         	  	printStr += "</div>";
+         	  	
+         	  	var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>데이터가 존재하지 않거나 URL을 확인하세요</p>',{
+					title: 'SVN Test Dialog',
+					type: 'error',
+					print: false,
+					width: 760,
+					buttons: ['닫기'],
+					onClose: function(caption){
+						if(caption == '닫기'){
+							//alert('yes click');
+						}
+					}
+				});
+	        }
+			
+			$('#repotree').append(printStr); //다시 테이블을 보여주기 위해서 HTML코드 적용//
+			$('#repourl').val(repourl);
 		},
 		error: function(retVal, status, er){
 			alert("error: "+retVal+" status: "+status+" er:"+er);

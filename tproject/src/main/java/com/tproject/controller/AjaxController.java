@@ -64,7 +64,7 @@ public class AjaxController {
 		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
 		
 		retVal.put("result", "success");
-		retVal.put("filecontentinfo", svnUtil.doPrintFilecontent(info.get("url").toString(), info.get("filename").toString()));
+		retVal.put("filecontentinfo", svnUtil.doPrintFilecontent(info.get("url").toString(), info.get("filename").toString(), info.get("filepath").toString()));
 		
 		return retVal;
 	}
