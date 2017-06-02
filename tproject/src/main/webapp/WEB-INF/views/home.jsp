@@ -53,6 +53,17 @@
 	<input type='hidden' id='repourl' value=''>
 	<div id="repotree">
 	</div>
+	<br>
+	<div>
+	<label>* 저장소 커밋</label><br>
+	<label>-> 커밋 경로:</label>
+	<input type="text" id="commitpath" placeholder="view repo path" disabled="disabled"><br>
+	<label>-> 커밋 파일명:</label>
+	<input type="text" id="commitfilename" placeholder="input file name"><br>
+	<label>-> 파일내용:</label>
+	<textarea class="form-control" rows="5" id="filecontent" placeholder="input content"></textarea><br>
+	<input type="button" id="btn_test6" value="click button">
+	</div>
 </body>
 <script type="text/javascript">
 $(function(){
@@ -340,6 +351,9 @@ $(function(){
 			}
 		});
 	});
+	$('#btn_test6').click(function(){
+		alert('click');
+	});
 });
 /////////////////////////
 function viewcode(filename){
@@ -365,7 +379,8 @@ function viewcode(filename){
 			var type = retVal.filecontentinfo.type;
 			
 			if(type == 'file'){
-				var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>소스코드 확인</p>',{
+				var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>소스코드 확인</p><br>'+
+						'<label>'+retVal.filecontentinfo.content+'</label>',{
 					title: 'SVN Test Dialog',
 					type: 'information',
 					print: false,
@@ -388,6 +403,7 @@ function viewcode(filename){
 				
 				$('#filepath').val(filepath);
 				$('#repourl').val(repourl);
+				$('#commitpath').val(repourl);
 				
 				//해당 경로로 다시 리스트 출력//
 				list_reload(repourl);

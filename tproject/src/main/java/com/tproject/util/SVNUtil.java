@@ -3,6 +3,7 @@ package com.tproject.util;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -223,6 +224,7 @@ public class SVNUtil {
 	
 	public Map<String,Object> doPrintFilecontent(String repourl, String filename, String filepath){
 		Map<String, Object>filecontentinfo = new HashMap<String, Object>();
+		String filecontent = "";
 		
 		System.out.println("file content view");
 		
@@ -262,13 +264,9 @@ public class SVNUtil {
 
 				if (isTextType) {
 					System.out.println("File contents:");
-					System.out.println();
-					try {
-						baos.writeTo(System.out);
-						
-					} catch (IOException ioe) {
-						ioe.printStackTrace();
-					}
+					filecontent = baos.toString();
+					filecontentinfo.put("content", filecontent);
+					System.out.println(filecontent);
 				} else {
 					System.out.println("Not a text file.");
 				}
