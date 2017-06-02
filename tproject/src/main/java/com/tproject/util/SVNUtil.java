@@ -237,13 +237,17 @@ public class SVNUtil {
 		
 			SVNNodeKind nodeKind = repository.checkPath(filename, -1);
 
-			if (nodeKind == SVNNodeKind.NONE) {
+			System.out.println("repo check ok...");
+			System.out.println("nodeKind: " + nodeKind);
+			if (nodeKind == SVNNodeKind.NONE || nodeKind == SVNNodeKind.FILE) {
 				filecontentinfo.put("type", "file");
 			
 				SVNProperties fileProperties = new SVNProperties();
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		
 				repository.getFile(filepath, -1, fileProperties, baos);
+				
+				System.out.println("file view ok...");
 				
 				String mimeType = fileProperties.getStringValue(SVNProperty.MIME_TYPE);
 				boolean isTextType = SVNProperty.isTextMimeType(mimeType);
@@ -261,6 +265,7 @@ public class SVNUtil {
 					System.out.println();
 					try {
 						baos.writeTo(System.out);
+						
 					} catch (IOException ioe) {
 						ioe.printStackTrace();
 					}
@@ -275,6 +280,8 @@ public class SVNUtil {
 		} catch (SVNException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("-----------------------------------------------");
 		
 		return filecontentinfo;
 	}

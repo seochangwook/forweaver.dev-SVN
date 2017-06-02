@@ -245,6 +245,10 @@ $(function(){
 	$('#btn_test5').click(function(){
 		var repourl = $('#repopathtexttree').val();
 		
+		//기존 경로를 위한 값 초기화//
+		$('#filepath').val('');
+		$('#repourl').val('');
+		
 		var trans_objeect = 
     	{
         	'url': repourl
@@ -376,30 +380,17 @@ function viewcode(filename){
 			}
 			
 			else if(type == 'directory'){
-				var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>디렉터리 입니다.(소스코드를 확인할 수 없습니다.)</p>',{
-					title: 'SVN Test Dialog',
-					type: 'warning',
-					print: false,
-					width: 760,
-					buttons: ['닫기'],
-					onClose: function(caption){
-						if(caption == '닫기'){
-							//alert('yes click');
-							//디렉터리 이므로 내부 구조로 이동//
-							var filepath = $('#filepath').val();
-							var repourl = $('#repourl').val();
-							
-							filepath = filepath + '/' + filename;
-							repourl = repourl + '/' + filename;
-							
-							$('#filepath').val(filepath);
-							$('#repourl').val(repourl);
-							
-							//해당 경로로 다시 리스트 출력//
-							list_reload(repourl);
-						}
-					}
-				});
+				var filepath = $('#filepath').val();
+				var repourl = $('#repourl').val();
+				
+				filepath = filepath + '/' + filename;
+				repourl = repourl + '/' + filename;
+				
+				$('#filepath').val(filepath);
+				$('#repourl').val(repourl);
+				
+				//해당 경로로 다시 리스트 출력//
+				list_reload(repourl);
 			}
 		},
 		error: function(retVal, status, er){
