@@ -6,9 +6,9 @@
 </div>
 <div>
 <label>* function test list</label><br>
-<li>make repository<li><br>
-<li>repository info view<li><br>
-<li>repository history view<li><br>
-<li>repository tree view<li><br>
-<li>file content view<li><br>
+<li>make repository<li>
+<li>repository info view<li>
+<li>repository history view<li>
+<li>repository tree view<li>
+<li>file content view<li>
 </div>
