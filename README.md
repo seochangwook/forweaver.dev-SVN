@@ -15,4 +15,5 @@
 <li>repository history view</li>
 <li>repository tree view</li>
 <li>file content view</li>
+<li>commit file and directory</li>
 </div>
