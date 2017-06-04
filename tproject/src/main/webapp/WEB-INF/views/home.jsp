@@ -60,6 +60,8 @@
 	<input type="text" id="commitpath" placeholder="view repo path" disabled="disabled"><br>
 	<label>-> 커밋 파일명:</label>
 	<input type="text" id="commitfilename" placeholder="input file name"><br>
+	<label>-> 커밋명:</label>
+	<input type="text" id="commitname" placeholder="input commit name"><br>
 	<label>-> 파일내용:</label>
 	<textarea class="form-control" rows="5" id="filecontent" placeholder="input content"></textarea><br>
 	<input type="button" id="btn_test6" value="click button">
@@ -352,7 +354,37 @@ $(function(){
 		});
 	});
 	$('#btn_test6').click(function(){
-		alert('click');
+		var repourl = $('#repopathtexttree').val();
+		var commitpath = $('#filepath').val();
+		var commitlog = $('#commitname').val();
+		var commitfilename = $('#commitfilename').val();
+		var commitfilecontent = $('#filecontent').val();
+		
+		//alert('path: ' + commitpath + ', name: ' + commitfilename + ', content: ' + commitfilecontent);
+		var trans_objeect = 
+    	{
+			'repourl':repourl,
+        	'commitpath': commitpath,
+        	'commitlog':commitlog,
+        	'commitfilename':commitfilename,
+        	'commitfilecontent':commitfilecontent
+	    }
+		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+		
+		$.ajax({
+			url: "http://localhost:8080/controller/commitajax",
+			type: 'POST',
+			dataType: 'json',
+			data: trans_json,
+			contentType: 'application/json',
+			mimeType: 'application/json',
+			success: function(retVal){
+				alert('sucess...');
+			},
+			error: function(retVal, status, er){
+				alert("error: "+retVal+" status: "+status+" er:"+er);
+			}
+		});
 	});
 });
 /////////////////////////

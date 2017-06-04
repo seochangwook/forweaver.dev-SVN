@@ -64,7 +64,26 @@ public class AjaxController {
 		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
 		
 		retVal.put("result", "success");
-		retVal.put("filecontentinfo", svnUtil.doPrintFilecontent(info.get("url").toString(), info.get("filename").toString(), info.get("filepath").toString()));
+		retVal.put("filecontentinfo", svnUtil.doPrintFilecontent(
+				info.get("url").toString(), 
+				info.get("filename").toString(), 
+				info.get("filepath").toString()));
+		
+		return retVal;
+	}
+	
+	@RequestMapping(value = "/commitajax", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> commit(@RequestBody Map<String, Object> info) {	
+		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
+		
+		svnUtil.docommit(
+				info.get("repourl").toString(), 
+				info.get("commitpath").toString(), 
+				info.get("commitlog").toString(), 
+				info.get("commitfilename").toString(), 
+				info.get("commitfilecontent").toString());
+		
+		retVal.put("result", "success");
 		
 		return retVal;
 	}

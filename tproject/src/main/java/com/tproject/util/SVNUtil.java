@@ -1,5 +1,6 @@
 package com.tproject.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +14,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
+import org.tmatesoft.svn.core.SVNCommitInfo;
 import org.tmatesoft.svn.core.SVNDirEntry;
+import org.tmatesoft.svn.core.SVNErrorCode;
+import org.tmatesoft.svn.core.SVNErrorMessage;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
@@ -23,8 +27,10 @@ import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
+import org.tmatesoft.svn.core.io.ISVNEditor;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
+import org.tmatesoft.svn.core.io.diff.SVNDeltaGenerator;
 import org.tmatesoft.svn.core.wc.admin.SVNAdminClient;
 
 @Component
@@ -213,6 +219,7 @@ public class SVNUtil {
             
             repptreecount++;
             
+            //재귀적으로 호출 시 하위구조의 정보까지 출력된다.//
             /*if (entry.getKind() == SVNNodeKind.DIR) {
             	//���옣�냼媛� �뵒�젆�꽣由ъ씠硫� Depth�븯�굹瑜� �뜑 �뱾�뼱媛��빞吏� �뙆�씪�씠 �엳湲곗뿉 listEntries瑜� �옱洹��샇異쒗븳�떎.//
                 listEntries(repository, (path.equals("")) ? entry.getName() : path + "/" + entry.getName());
@@ -283,4 +290,58 @@ public class SVNUtil {
 		
 		return filecontentinfo;
 	}
+	
+	public void docommit(String repourl, String commitpath, String commitlog, String commitfilename, String commitfilecontent){
+		System.out.println("file commit");
+		
+		System.out.println("repo url: " + repourl);
+		System.out.println("commit path: " + commitpath);
+		System.out.println("commit log: " + commitlog);
+		System.out.println("commit filename: " + commitfilename);
+		System.out.println("commit filecontent: " + commitfilecontent);
+		
+		SVNRepository repository = null;
+		
+		try {
+			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			byte[] contents = commitfilecontent.getBytes();
+			
+			SVNNodeKind nodeKind = repository.checkPath("", -1);
+
+	        if (nodeKind == SVNNodeKind.NONE) {
+	            SVNErrorMessage err = SVNErrorMessage.create(SVNErrorCode.UNKNOWN, "No entry at URL ''{0}''", repourl);
+	            throw new SVNException(err);
+	        } else if (nodeKind == SVNNodeKind.FILE) {
+	            SVNErrorMessage err = SVNErrorMessage.create(SVNErrorCode.UNKNOWN, "Entry at URL ''{0}'' is a file while directory was expected", repourl);
+	            throw new SVNException(err);
+	        }
+	        
+	        long latestRevision = repository.getLatestRevision();
+	        System.out.println("Repository latest revision (before committing): " + latestRevision);
+	        
+	        ISVNEditor editor = repository.getCommitEditor(commitlog, null);
+	        
+	        SVNCommitInfo commitInfo = addFile(editor, commitpath, commitpath+'/'+commitfilename, contents);
+	        System.out.println("The directory was added: " + commitInfo);
+		} catch (SVNException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static SVNCommitInfo addFile(ISVNEditor editor, String dirPath, String filePath, byte[] data) throws SVNException {    
+        editor.openRoot(-1);
+        editor.openDir(dirPath, -1);
+        editor.addFile(filePath, null, -1);
+        editor.applyTextDelta(filePath, null);
+        SVNDeltaGenerator deltaGenerator = new SVNDeltaGenerator();
+        String checksum = deltaGenerator.sendDelta(filePath, new ByteArrayInputStream(data), editor, true);
+
+        editor.closeFile(filePath, checksum);
+        editor.closeDir();
+        editor.closeDir();
+       
+        return editor.closeEdit();
+    }
 }
