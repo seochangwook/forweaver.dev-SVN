@@ -51,6 +51,7 @@
 	<input type="button" id="btn_test5" value="click button"><br>
 	<input type='hidden' id='filepath' value=''>
 	<input type='hidden' id='repourl' value=''>
+	<input type='hidden' id='originalcontent' value=''>
 	<div id="repotree">
 	</div>
 	<br>
@@ -64,7 +65,8 @@
 	<input type="text" id="commitname" placeholder="input commit name"><br>
 	<label>-> 파일내용:</label>
 	<textarea class="form-control" rows="5" id="filecontent" placeholder="input content"></textarea><br>
-	<input type="button" id="btn_test6" value="click button">
+	<input type="button" id="btn_test6" value="new commit">&nbsp
+	<input type="button" id="btn_test7" value="modify commit">
 	</div>
 </body>
 <script type="text/javascript">
@@ -282,12 +284,16 @@ $(function(){
 				var repotreelistrevesion = [];
 				var repotreelistdate = [];
 				var repotreelistlock = [];
+				var repokind = [];
+				var repocommitmsg = [];
 				
 				repotreelistname = retVal.repotreelist.repotreelistname;
 				repotreelistauthor = retVal.repotreelist.repotreelistauthor;
 				repotreelistrevesion = retVal.repotreelist.repotreelistrevesion;
 				repotreelistdate = retVal.repotreelist.repotreelistdate;
 				repotreelistlock = retVal.repotreelist.repotreelistlock;
+				repokind = retVal.repotreelist.repokind;
+				repocommitmsg = retVal.repotreelist.repocommitmsg;
 				
 				//Table에 결과를 출력//
 				$('#repotree').empty();
@@ -302,8 +308,9 @@ $(function(){
 		        	printStr += "<th>관리자</th>";
 		        	printStr += "<th>리비전 ver</th>";
 		        	printStr += "<th>날짜</th>";
+		        	printStr += "<th>커밋명</th>";
 		        	printStr += "<th>잠금유무</th>";
-		        	printStr += "<th>소스보기</th>"
+		        	printStr += "<th>보기/이동</th>";
 		        	printStr += "</tr>";
 		        	printStr += "</thead>"; 
 		        	printStr += "<tbody>";
@@ -316,8 +323,14 @@ $(function(){
 		            	printStr += "<td>"+repotreelistauthor[i]+"</td>";
 		            	printStr += "<td>ver."+repotreelistrevesion[i]+"</td>";
 		            	printStr += "<td>"+repotreelistdate[i]+"</td>";
+		            	printStr += "<td>"+repocommitmsg[i]+"</td>";
 		            	printStr += "<td>"+repotreelistlock[i]+"</td>";
-		            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";
+		            	if(repokind[i] == 'dir'){
+		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>move</button></td>";
+		            	}
+		            	else if(repokind[i] == 'file'){
+		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";	
+		            	}
 	                	printStr += "</tr>"; 
 		           	}
 		        	
@@ -379,7 +392,46 @@ $(function(){
 			contentType: 'application/json',
 			mimeType: 'application/json',
 			success: function(retVal){
-				alert('sucess...');
+				if(retVal.commitinfo.resultval == '1'){
+					alert('commit success');
+				}else if(retVal.commitinfo.resultval == '0'){
+					alert('commit fail');
+				}
+			},
+			error: function(retVal, status, er){
+				alert("error: "+retVal+" status: "+status+" er:"+er);
+			}
+		});
+	});
+	$('#btn_test7').click(function(){
+		var repourl = $('#repopathtexttree').val();
+		var update_content = $('#filecontent').val();
+		var commitfilename = $('#commitfilename').val();
+		var original_content = $('#originalcontent').val();
+		var commitlog = $('#commitname').val();
+		var commitpath = $('#filepath').val();
+		
+		//alert(repourl + ',' + original_content + ',' + update_content + ',' + commitlog + ',' + commitpath + ',' + filename);
+		var trans_objeect = 
+    	{
+			'repourl':repourl,
+        	'commitpath': commitpath,
+        	'commitlog':commitlog,
+        	'commitfilename':commitfilename,
+        	'updatecontent':update_content,
+        	'originalcontent':original_content
+	    }
+		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+		
+		$.ajax({
+			url: "http://localhost:8080/controller/commitmodifyajax",
+			type: 'POST',
+			dataType: 'json',
+			data: trans_json,
+			contentType: 'application/json',
+			mimeType: 'application/json',
+			success: function(retVal){
+				alert('success...');
 			},
 			error: function(retVal, status, er){
 				alert("error: "+retVal+" status: "+status+" er:"+er);
@@ -411,6 +463,10 @@ function viewcode(filename){
 			var type = retVal.filecontentinfo.type;
 			
 			if(type == 'file'){
+				$('#originalcontent').val(retVal.filecontentinfo.content);
+				$('#filecontent').val(retVal.filecontentinfo.content);
+				$('#commitfilename').val(filename);
+				
 				var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>소스코드 확인</p><br>'+
 						'<label>'+retVal.filecontentinfo.content+'</label>',{
 					title: 'SVN Test Dialog',
@@ -468,12 +524,16 @@ function list_reload(repourl){
 			var repotreelistrevesion = [];
 			var repotreelistdate = [];
 			var repotreelistlock = [];
+			var repokind = [];
+			var repocommitmsg = [];
 			
 			repotreelistname = retVal.repotreelist.repotreelistname;
 			repotreelistauthor = retVal.repotreelist.repotreelistauthor;
 			repotreelistrevesion = retVal.repotreelist.repotreelistrevesion;
 			repotreelistdate = retVal.repotreelist.repotreelistdate;
 			repotreelistlock = retVal.repotreelist.repotreelistlock;
+			repokind = retVal.repotreelist.repokind;
+			repocommitmsg = retVal.repotreelist.repocommitmsg;
 			
 			//Table에 결과를 출력//
 			$('#repotree').empty();
@@ -488,8 +548,9 @@ function list_reload(repourl){
 	        	printStr += "<th>관리자</th>";
 	        	printStr += "<th>리비전 ver</th>";
 	        	printStr += "<th>날짜</th>";
+	        	printStr += "<th>커밋명</th>";
 	        	printStr += "<th>잠금유무</th>";
-	        	printStr += "<th>소스보기</th>"
+	        	printStr += "<th>보기/이동</th>";
 	        	printStr += "</tr>";
 	        	printStr += "</thead>"; 
 	        	printStr += "<tbody>";
@@ -502,8 +563,14 @@ function list_reload(repourl){
 	            	printStr += "<td>"+repotreelistauthor[i]+"</td>";
 	            	printStr += "<td>ver."+repotreelistrevesion[i]+"</td>";
 	            	printStr += "<td>"+repotreelistdate[i]+"</td>";
+	            	printStr += "<td>"+repocommitmsg[i]+"</td>";
 	            	printStr += "<td>"+repotreelistlock[i]+"</td>";
-	            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";
+	            	if(repokind[i] == 'dir'){
+	            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>move</button></td>";
+	            	}
+	            	else if(repokind[i] == 'file'){
+	            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";	
+	            	}
                 	printStr += "</tr>"; 
 	           	}
 	        	

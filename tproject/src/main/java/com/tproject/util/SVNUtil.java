@@ -41,6 +41,8 @@ public class SVNUtil {
 	private static List<Object>repotreelist_revesion;
 	private static List<Object>repotreelist_date;
 	private static List<Object>repotreelist_lock;
+	private static List<Object>repotreelist_kind;
+	private static List<Object>repotreelist_commitmessage;
 	
 	public String doMakeRepo(String repourl){
 		String tgtPath = repourl;
@@ -176,6 +178,9 @@ public class SVNUtil {
 			repotreelist_revesion = new ArrayList<Object>();
 			repotreelist_date = new ArrayList<Object>();
 			repotreelist_lock = new ArrayList<Object>();
+			repotreelist_kind = new ArrayList<Object>();
+			repotreelist_commitmessage = new ArrayList<Object>();
+			
 			
 			listEntries(repository, ""); //由ъ뒪�듃瑜� �젙蹂대�� 異붽�//
 			
@@ -185,6 +190,8 @@ public class SVNUtil {
 			repotreelistinfo.put("repotreelistrevesion", repotreelist_revesion);
 			repotreelistinfo.put("repotreelistdate", repotreelist_date);
 			repotreelistinfo.put("repotreelistlock", repotreelist_lock);
+			repotreelistinfo.put("repokind", repotreelist_kind);
+			repotreelistinfo.put("repocommitmsg", repotreelist_commitmessage);
 			
 			totalrepotreecount = 0; //珥덇린�솕//
 		} catch (SVNException e) {
@@ -217,6 +224,9 @@ public class SVNUtil {
             	repotreelist_lock.add(entry.getLock());
             }
             
+            repotreelist_kind.add(entry.getKind().toString());
+            repotreelist_commitmessage.add(entry.getCommitMessage());
+        
             repptreecount++;
             
             //재귀적으로 호출 시 하위구조의 정보까지 출력된다.//
@@ -291,7 +301,9 @@ public class SVNUtil {
 		return filecontentinfo;
 	}
 	
-	public void docommit(String repourl, String commitpath, String commitlog, String commitfilename, String commitfilecontent){
+	public Map<String, Object> docommit(String repourl, String commitpath, String commitlog, String commitfilename, String commitfilecontent){
+		Map<String, Object>resultcommit = new HashMap<String, Object>();
+		
 		System.out.println("file commit");
 		
 		System.out.println("repo url: " + repourl);
@@ -324,10 +336,21 @@ public class SVNUtil {
 	        
 	        SVNCommitInfo commitInfo = addFile(editor, commitpath, commitpath+'/'+commitfilename, contents);
 	        System.out.println("The directory was added: " + commitInfo);
+	        
+	        if(commitInfo != null){
+	        	resultcommit.put("resultval", "1");
+	        }else if(commitInfo == null){
+	        	resultcommit.put("resultval", "0");
+	        }
+	        
+	        return resultcommit;
 		} catch (SVNException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			resultcommit.put("resultval", "0");
 		}
+		
+		return resultcommit;
 	}
 	
 	private static SVNCommitInfo addFile(ISVNEditor editor, String dirPath, String filePath, byte[] data) throws SVNException {    
@@ -344,4 +367,19 @@ public class SVNUtil {
        
         return editor.closeEdit();
     }
+	
+	public void docommitmodify(String repourl, String commitpath, String commitlog, String commitfilename, String originalcontent, String updatecontent){
+		Map<String, Object>resultcommit = new HashMap<String, Object>();
+		
+		System.out.println("file commit");
+		
+		System.out.println("repo url: " + repourl);
+		System.out.println("commit path: " + commitpath);
+		System.out.println("commit log: " + commitlog);
+		System.out.println("commit filename: " + commitfilename);
+		System.out.println("commit filecontent: " + originalcontent);
+		System.out.println("update content:" + updatecontent);
+		
+		
+	}
 }
