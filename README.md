@@ -16,4 +16,5 @@
 <li>repository tree view</li>
 <li>file content view</li>
 <li>commit file and directory</li>
+<li>commit modify file</li>
 </div>
