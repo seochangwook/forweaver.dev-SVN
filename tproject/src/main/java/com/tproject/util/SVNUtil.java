@@ -368,7 +368,7 @@ public class SVNUtil {
         return editor.closeEdit();
     }
 	
-	public void docommitmodify(String repourl, String commitpath, String commitlog, String commitfilename, String originalcontent, String updatecontent){
+	public Map<String, Object> docommitmodify(String repourl, String commitpath, String commitlog, String commitfilename, String originalcontent, String updatecontent){
 		Map<String, Object>resultcommit = new HashMap<String, Object>();
 		
 		System.out.println("file commit");
@@ -405,10 +405,20 @@ public class SVNUtil {
 	        
 	        SVNCommitInfo commitInfo = modifyFile(editor, commitpath, commitpath+'/'+commitfilename, oldcontents, updatecontents);
 	        System.out.println("The file was changed: " + commitInfo);
+	        
+	        if(commitInfo != null){
+	        	resultcommit.put("resultval", "1");
+	        }else if(commitInfo == null){
+	        	resultcommit.put("resultval", "0");
+	        }
+	        
+	        return resultcommit;
 		} catch (SVNException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		return resultcommit;
 	}
 	
 	private static SVNCommitInfo modifyFile(ISVNEditor editor, String dirPath, String filePath, byte[] oldData, byte[] newData) throws SVNException {

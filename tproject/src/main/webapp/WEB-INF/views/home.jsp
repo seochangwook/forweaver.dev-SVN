@@ -74,7 +74,7 @@ $(function(){
 	$('#btn_test').click(function(){
 		var trans_objeect = 
     	{
-        	'url': '/Users/macbook/Desktop/repo'
+        	'url': 'C:\\Users\\seochangwook\\Desktop\\testrepo'
 	    }
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
@@ -431,7 +431,11 @@ $(function(){
 			contentType: 'application/json',
 			mimeType: 'application/json',
 			success: function(retVal){
-				alert('success...');
+				if(retVal.commitinfo.resultval == '1'){
+					alert('commit modify success');
+				}else if(retVal.commitinfo.resultval == '0'){
+					alert('commit modify fail');
+				}
 			},
 			error: function(retVal, status, er){
 				alert("error: "+retVal+" status: "+status+" er:"+er);
