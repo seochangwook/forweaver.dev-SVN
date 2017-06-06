@@ -353,9 +353,77 @@ public class SVNUtil {
 		return resultcommit;
 	}
 	
+	public Map<String, Object> docommitdir(String repourl, String commitpath, String commitlog, String commitfilename, String commitfilecontent, String comitdirname){
+		Map<String, Object>resultcommit = new HashMap<String, Object>();
+		
+		System.out.println("file commit");
+		
+		System.out.println("repo url: " + repourl);
+		System.out.println("commit path: " + commitpath);
+		System.out.println("commit log: " + commitlog);
+		System.out.println("commit filename: " + commitfilename);
+		System.out.println("commit filecontent: " + commitfilecontent);
+		System.out.println("commit dirname: " + comitdirname);
+		
+		SVNRepository repository = null;
+		
+		try {
+			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			byte[] contents = commitfilecontent.getBytes();
+			
+			SVNNodeKind nodeKind = repository.checkPath("", -1);
+
+	        if (nodeKind == SVNNodeKind.NONE) {
+	            SVNErrorMessage err = SVNErrorMessage.create(SVNErrorCode.UNKNOWN, "No entry at URL ''{0}''", repourl);
+	            throw new SVNException(err);
+	        } else if (nodeKind == SVNNodeKind.FILE) {
+	            SVNErrorMessage err = SVNErrorMessage.create(SVNErrorCode.UNKNOWN, "Entry at URL ''{0}'' is a file while directory was expected", repourl);
+	            throw new SVNException(err);
+	        }
+	        
+	        long latestRevision = repository.getLatestRevision();
+	        System.out.println("Repository latest revision (before committing): " + latestRevision);
+	        
+	        ISVNEditor editor = repository.getCommitEditor(commitlog, null);
+	        
+	        SVNCommitInfo commitInfo = adddir(editor, commitpath+'/'+comitdirname, commitpath+'/'+comitdirname+'/'+commitfilename, contents);
+	        System.out.println("The directory was added: " + commitInfo);
+	        
+	        if(commitInfo != null){
+	        	resultcommit.put("resultval", "1");
+	        }else if(commitInfo == null){
+	        	resultcommit.put("resultval", "0");
+	        }
+	        
+	        return resultcommit;
+		} catch (SVNException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			resultcommit.put("resultval", "0");
+		}
+		
+		return resultcommit;
+	}
+	
 	private static SVNCommitInfo addFile(ISVNEditor editor, String dirPath, String filePath, byte[] data) throws SVNException {    
         editor.openRoot(-1);
         editor.openDir(dirPath, -1);
+        editor.addFile(filePath, null, -1);
+        editor.applyTextDelta(filePath, null);
+        SVNDeltaGenerator deltaGenerator = new SVNDeltaGenerator();
+        String checksum = deltaGenerator.sendDelta(filePath, new ByteArrayInputStream(data), editor, true);
+
+        editor.closeFile(filePath, checksum);
+        editor.closeDir();
+        editor.closeDir();
+       
+        return editor.closeEdit();
+    }
+	
+	private static SVNCommitInfo adddir(ISVNEditor editor, String dirPath, String filePath, byte[] data) throws SVNException {    
+        editor.openRoot(-1);
+        editor.addDir(dirPath, null, -1);
         editor.addFile(filePath, null, -1);
         editor.applyTextDelta(filePath, null);
         SVNDeltaGenerator deltaGenerator = new SVNDeltaGenerator();
@@ -433,6 +501,62 @@ public class SVNUtil {
         editor.closeFile(filePath, checksum);
         editor.closeDir();
 
+        return editor.closeEdit();
+    }
+	
+	public Map<String, Object> docommitdelete(String repourl, String deletepath, String commitlog){
+		Map<String, Object>resultcommit = new HashMap<String, Object>();
+		
+		System.out.println("file commit");
+		
+		System.out.println("repo url: " + repourl);
+		System.out.println("commit delete path: " + deletepath);
+		System.out.println("commit log: " + commitlog);
+		
+		SVNRepository repository = null;
+		
+		try {
+			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			SVNNodeKind nodeKind = repository.checkPath("", -1);
+
+	        if (nodeKind == SVNNodeKind.NONE) {
+	            SVNErrorMessage err = SVNErrorMessage.create(SVNErrorCode.UNKNOWN, "No entry at URL ''{0}''", repourl);
+	            throw new SVNException(err);
+	        } else if (nodeKind == SVNNodeKind.FILE) {
+	            SVNErrorMessage err = SVNErrorMessage.create(SVNErrorCode.UNKNOWN, "Entry at URL ''{0}'' is a file while directory was expected", repourl);
+	            throw new SVNException(err);
+	        }
+	        
+	        long latestRevision = repository.getLatestRevision();
+	        System.out.println("Repository latest revision (before committing): " + latestRevision);
+	        
+	        ISVNEditor editor = repository.getCommitEditor(commitlog, null);
+	        
+	        SVNCommitInfo commitInfo = deleteDir(editor, deletepath);
+	        System.out.println("The directory was deleted: " + commitInfo);
+	        
+	        if(commitInfo != null){
+	        	resultcommit.put("resultval", "1");
+	        }else if(commitInfo == null){
+	        	resultcommit.put("resultval", "0");
+	        }
+	        
+	        return resultcommit;
+		} catch (SVNException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			resultcommit.put("resultval", "0");
+		}
+		
+		return resultcommit;
+	}
+	
+	private static SVNCommitInfo deleteDir(ISVNEditor editor, String dirPath) throws SVNException {
+        editor.openRoot(-1);
+        editor.deleteEntry(dirPath, -1);
+        editor.closeDir();
+        
         return editor.closeEdit();
     }
 }

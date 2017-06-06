@@ -102,4 +102,33 @@ public class AjaxController {
 		
 		return retVal;
 	}
+	
+	@RequestMapping(value = "/commitdirajax", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> commitdir(@RequestBody Map<String, Object> info) {	
+		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
+		
+		retVal.put("result", "success");
+		retVal.put("commitinfo", svnUtil.docommitdir(
+				info.get("repourl").toString(), 
+				info.get("commitpath").toString(), 
+				info.get("commitlog").toString(), 
+				info.get("commitfilename").toString(), 
+				info.get("commitfilecontent").toString(),
+				info.get("commitdirname").toString()));
+		
+		return retVal;
+	}
+	
+	@RequestMapping(value = "/commitdeleteajax", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> commitdelete(@RequestBody Map<String, Object> info) {	
+		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
+		
+		retVal.put("result", "success");
+		retVal.put("commitinfo", svnUtil.docommitdelete(
+				info.get("url").toString(), 
+				info.get("deletepath").toString(),
+				info.get("commitlog").toString()));
+		
+		return retVal;
+	}
 }

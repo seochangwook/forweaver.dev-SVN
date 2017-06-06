@@ -59,13 +59,16 @@
 	<label>* 저장소 커밋</label><br>
 	<label>-> 커밋 경로:</label>
 	<input type="text" id="commitpath" placeholder="view repo path" disabled="disabled"><br>
+	<label>-> 커밋 디렉터리명:</label>
+	<input type="text" id="commitdirname" placeholder="input dir name"><br>
 	<label>-> 커밋 파일명:</label>
 	<input type="text" id="commitfilename" placeholder="input file name"><br>
-	<label>-> 커밋명:</label>
+	<label>-> 커밋 로그명:</label>
 	<input type="text" id="commitname" placeholder="input commit name"><br>
 	<label>-> 파일내용:</label>
 	<textarea class="form-control" rows="5" id="filecontent" placeholder="input content"></textarea><br>
-	<input type="button" id="btn_test6" value="new commit">&nbsp
+	<input type="button" id="btn_test6" value="new file commit">&nbsp
+	<input type="button" id="btn_test8" value="new dir commit">
 	<input type="button" id="btn_test7" value="modify commit">
 	</div>
 </body>
@@ -311,6 +314,7 @@ $(function(){
 		        	printStr += "<th>커밋명</th>";
 		        	printStr += "<th>잠금유무</th>";
 		        	printStr += "<th>보기/이동</th>";
+		        	printStr += "<th>제거</th>";
 		        	printStr += "</tr>";
 		        	printStr += "</thead>"; 
 		        	printStr += "<tbody>";
@@ -331,6 +335,7 @@ $(function(){
 		            	else if(repokind[i] == 'file'){
 		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";	
 		            	}
+		            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='deletepath(this.value)'>remove</button></td>";
 	                	printStr += "</tr>"; 
 		           	}
 		        	
@@ -442,6 +447,44 @@ $(function(){
 			}
 		});
 	});
+	$('#btn_test8').click(function(){
+		var repourl = $('#repopathtexttree').val();
+		var commitpath = $('#filepath').val();
+		var commitlog = $('#commitname').val();
+		var commitfilename = $('#commitfilename').val();
+		var commitfilecontent = $('#filecontent').val();
+		var commitdirname = $('#commitdirname').val();
+		
+		var trans_objeect = 
+    	{
+			'repourl':repourl,
+        	'commitpath': commitpath,
+        	'commitlog':commitlog,
+        	'commitfilename':commitfilename,
+        	'commitfilecontent':commitfilecontent,
+        	'commitdirname':commitdirname
+	    }
+		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+		
+		$.ajax({
+			url: "http://localhost:8080/controller/commitdirajax",
+			type: 'POST',
+			dataType: 'json',
+			data: trans_json,
+			contentType: 'application/json',
+			mimeType: 'application/json',
+			success: function(retVal){
+				if(retVal.commitinfo.resultval == '1'){
+					alert('commit success');
+				}else if(retVal.commitinfo.resultval == '0'){
+					alert('commit fail');
+				}
+			},
+			error: function(retVal, status, er){
+				alert("error: "+retVal+" status: "+status+" er:"+er);
+			}
+		});
+	});
 });
 /////////////////////////
 function viewcode(filename){
@@ -507,6 +550,85 @@ function viewcode(filename){
 	});
 }
 /////////////////////////////
+function deletepath(filename){
+	var repourl = $('#repourl').val();
+	var filepath = $('#filepath').val() + '/'+ filename;
+	var commitlog = $('#commitname').val();
+	
+	var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>'+filepath+' 를 제거 합니까?</p>',{
+		title: 'SVN Test Dialog',
+		type: 'question',
+		print: false,
+		width: 760,
+		buttons: ['제거','닫기'],
+		onClose: function(caption){
+			if(caption == '닫기'){
+				
+			}else if(caption == '제거'){
+				var trans_objeect = 
+				{
+			    	'url': repourl,
+			    	'deletepath': filepath,
+			    	'commitlog':commitlog
+			    }
+				var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+				
+				$.ajax({
+					url: "http://localhost:8080/controller/commitdeleteajax",
+					type: 'POST',
+					dataType: 'json',
+					data: trans_json,
+					contentType: 'application/json',
+					mimeType: 'application/json',
+					success: function(retVal){
+						if(retVal.commitinfo.resultval == '1'){
+							var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>'+filepath+' 를 제거 합니다.</p>',{
+								title: 'SVN Test Dialog',
+								type: 'confirmation',
+								print: false,
+								width: 760,
+								buttons: ['닫기'],
+								onClose: function(caption){
+									if(caption == '닫기'){
+										alert('close click');
+									}
+								}
+							});
+						}else if(retVal.commitinfo.resultval == '0'){
+							var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>'+filepath+' 를 제거실패.</p>',{
+								title: 'SVN Test Dialog',
+								type: 'error',
+								print: false,
+								width: 760,
+								buttons: ['닫기'],
+								onClose: function(caption){
+									if(caption == '닫기'){
+										alert('close click');
+									}
+								}
+							});
+						}
+					},
+					error: function(retVal, status, er){
+						var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>'+filepath+' 를 제거실패.</p>',{
+							title: 'SVN Test Dialog',
+							type: 'error',
+							print: false,
+							width: 760,
+							buttons: ['닫기'],
+							onClose: function(caption){
+								if(caption == '닫기'){
+									alert('close click');
+								}
+							}
+						});
+					}
+				});
+			}
+		}
+	});
+}
+/////////////////////////////
 function list_reload(repourl){
 	var trans_objeect = 
 	{
@@ -555,6 +677,7 @@ function list_reload(repourl){
 	        	printStr += "<th>커밋명</th>";
 	        	printStr += "<th>잠금유무</th>";
 	        	printStr += "<th>보기/이동</th>";
+	        	printStr += "<th>제거</th>";
 	        	printStr += "</tr>";
 	        	printStr += "</thead>"; 
 	        	printStr += "<tbody>";
@@ -575,6 +698,7 @@ function list_reload(repourl){
 	            	else if(repokind[i] == 'file'){
 	            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";	
 	            	}
+	            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='deletepath(this.value)'>remove</button></td>";
                 	printStr += "</tr>"; 
 	           	}
 	        	
