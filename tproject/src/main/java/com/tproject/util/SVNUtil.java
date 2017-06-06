@@ -380,6 +380,49 @@ public class SVNUtil {
 		System.out.println("commit filecontent: " + originalcontent);
 		System.out.println("update content:" + updatecontent);
 		
+		SVNRepository repository = null;
 		
+		try {
+			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			byte[] oldcontents = originalcontent.getBytes();
+			byte[] updatecontents = updatecontent.getBytes();
+			
+			SVNNodeKind nodeKind = repository.checkPath("", -1);
+
+	        if (nodeKind == SVNNodeKind.NONE) {
+	            SVNErrorMessage err = SVNErrorMessage.create(SVNErrorCode.UNKNOWN, "No entry at URL ''{0}''", repourl);
+	            throw new SVNException(err);
+	        } else if (nodeKind == SVNNodeKind.FILE) {
+	            SVNErrorMessage err = SVNErrorMessage.create(SVNErrorCode.UNKNOWN, "Entry at URL ''{0}'' is a file while directory was expected", repourl);
+	            throw new SVNException(err);
+	        }
+	        
+	        long latestRevision = repository.getLatestRevision();
+	        System.out.println("Repository latest revision (before committing): " + latestRevision);
+	        
+	        ISVNEditor editor = repository.getCommitEditor(commitlog, null);
+	        
+	        SVNCommitInfo commitInfo = modifyFile(editor, commitpath, commitpath+'/'+commitfilename, oldcontents, updatecontents);
+	        System.out.println("The file was changed: " + commitInfo);
+		} catch (SVNException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
+	private static SVNCommitInfo modifyFile(ISVNEditor editor, String dirPath, String filePath, byte[] oldData, byte[] newData) throws SVNException {
+        editor.openRoot(-1);
+        editor.openDir(dirPath, -1);
+        editor.openFile(filePath, -1);
+        editor.applyTextDelta(filePath, null);
+        
+        SVNDeltaGenerator deltaGenerator = new SVNDeltaGenerator();
+        String checksum = deltaGenerator.sendDelta(filePath, new ByteArrayInputStream(oldData), 0, new ByteArrayInputStream(newData), editor, true);
+
+        editor.closeFile(filePath, checksum);
+        editor.closeDir();
+
+        return editor.closeEdit();
+    }
 }
