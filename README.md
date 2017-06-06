@@ -17,4 +17,5 @@
 <li>file content view</li>
 <li>commit file and directory</li>
 <li>commit modify file</li>
+<li>commit delete file</li>
 </div>
