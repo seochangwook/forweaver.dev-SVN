@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>  
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<html>
+<html ng-app="myApp">
 <head>
 	<title>Home</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,6 +15,15 @@
 	<!-- Zebra-Dialog CDN -->
 	<script src="resources/js/dialog/zebra_dialog.src.js"></script>
 	<link rel="stylesheet" href="resources/css/dialog/zebra_dialog.css" type="text/css"/>
+	<!-- AngularJS CDN -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<!-- AngularJS External File -->
+	<script src="resources/js/homeangular.js"></script>
+	<!-- Beautiful Code, Theme CDN -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushJava.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCore.css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeDefault.css"/>
 </head>
 <body>
 	<h1>SVN Test page</h1>
@@ -66,13 +75,20 @@
 	<label>-> 커밋 로그명:</label>
 	<input type="text" id="commitname" placeholder="input commit name"><br>
 	<label>-> 파일내용:</label>
-	<textarea class="form-control" rows="5" id="filecontent" placeholder="input content"></textarea><br>
+	<div ng-controller="codecontroller">
+		<pre class="brush: java">
+			{{printCode}}
+		</pre>
+	</div>
+	<textarea class="form-control" rows="5" id="filecontent" placeholder="input content"></textarea>
 	<input type="button" id="btn_test6" value="new file commit">&nbsp
 	<input type="button" id="btn_test8" value="new dir commit">
 	<input type="button" id="btn_test7" value="modify commit">
 	</div>
 </body>
 <script type="text/javascript">
+SyntaxHighlighter.all();
+
 $(function(){
 	$('#btn_test').click(function(){
 		var trans_objeect = 
@@ -398,9 +414,31 @@ $(function(){
 			mimeType: 'application/json',
 			success: function(retVal){
 				if(retVal.commitinfo.resultval == '1'){
-					alert('commit success');
+					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>commit success</p>',{
+						title: 'SVN Test Dialog',
+						type: 'confirmation',
+						print: false,
+						width: 760,
+						buttons: ['닫기'],
+						onClose: function(caption){
+							if(caption == '닫기'){
+								alert('close click');
+							}
+						}
+					});
 				}else if(retVal.commitinfo.resultval == '0'){
-					alert('commit fail');
+					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>commit fail</p>',{
+						title: 'SVN Test Dialog',
+						type: 'confirmation',
+						print: false,
+						width: 760,
+						buttons: ['닫기'],
+						onClose: function(caption){
+							if(caption == '닫기'){
+								alert('close click');
+							}
+						}
+					});
 				}
 			},
 			error: function(retVal, status, er){
@@ -437,9 +475,31 @@ $(function(){
 			mimeType: 'application/json',
 			success: function(retVal){
 				if(retVal.commitinfo.resultval == '1'){
-					alert('commit modify success');
+					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>commit modify success</p>',{
+						title: 'SVN Test Dialog',
+						type: 'confirmation',
+						print: false,
+						width: 760,
+						buttons: ['닫기'],
+						onClose: function(caption){
+							if(caption == '닫기'){
+								alert('close click');
+							}
+						}
+					});
 				}else if(retVal.commitinfo.resultval == '0'){
-					alert('commit modify fail');
+					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>commit modify fail</p>',{
+						title: 'SVN Test Dialog',
+						type: 'confirmation',
+						print: false,
+						width: 760,
+						buttons: ['닫기'],
+						onClose: function(caption){
+							if(caption == '닫기'){
+								alert('close click');
+							}
+						}
+					});
 				}
 			},
 			error: function(retVal, status, er){
@@ -475,9 +535,31 @@ $(function(){
 			mimeType: 'application/json',
 			success: function(retVal){
 				if(retVal.commitinfo.resultval == '1'){
-					alert('commit success');
+					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>commit success</p>',{
+						title: 'SVN Test Dialog',
+						type: 'confirmation',
+						print: false,
+						width: 760,
+						buttons: ['닫기'],
+						onClose: function(caption){
+							if(caption == '닫기'){
+								alert('close click');
+							}
+						}
+					});
 				}else if(retVal.commitinfo.resultval == '0'){
-					alert('commit fail');
+					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>commit fail</p>',{
+						title: 'SVN Test Dialog',
+						type: 'confirmation',
+						print: false,
+						width: 760,
+						buttons: ['닫기'],
+						onClose: function(caption){
+							if(caption == '닫기'){
+								alert('close click');
+							}
+						}
+					});
 				}
 			},
 			error: function(retVal, status, er){
