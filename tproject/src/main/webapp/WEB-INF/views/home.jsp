@@ -305,6 +305,7 @@ $(function(){
 				var repotreelistlock = [];
 				var repokind = [];
 				var repocommitmsg = [];
+				var repofilepath = [];
 				
 				repotreelistname = retVal.repotreelist.repotreelistname;
 				repotreelistauthor = retVal.repotreelist.repotreelistauthor;
@@ -313,6 +314,7 @@ $(function(){
 				repotreelistlock = retVal.repotreelist.repotreelistlock;
 				repokind = retVal.repotreelist.repokind;
 				repocommitmsg = retVal.repotreelist.repocommitmsg;
+				repofilepath = retVal.repotreelist.repofilepath;
 				
 				//Table에 결과를 출력//
 				$('#repotree').empty();
@@ -330,6 +332,7 @@ $(function(){
 		        	printStr += "<th>커밋명</th>";
 		        	printStr += "<th>잠금유무</th>";
 		        	printStr += "<th>보기/이동</th>";
+		        	printStr += "<th>다운로드</th>";
 		        	printStr += "<th>제거</th>";
 		        	printStr += "</tr>";
 		        	printStr += "</thead>"; 
@@ -347,9 +350,11 @@ $(function(){
 		            	printStr += "<td>"+repotreelistlock[i]+"</td>";
 		            	if(repokind[i] == 'dir'){
 		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>move</button></td>";
+		            		printStr += "<td><button enabled='true'>not</button></td>";
 		            	}
 		            	else if(repokind[i] == 'file'){
-		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";	
+		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";
+		            		printStr += "<td><button value='"+repofilepath[i]+"' onclick='filedownload(this.value)'>download</button></td>";
 		            	}
 		            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='deletepath(this.value)'>remove</button></td>";
 	                	printStr += "</tr>"; 
@@ -710,6 +715,21 @@ function deletepath(filename){
 		}
 	});
 }
+//////////////////////////////
+function filedownload(filepath){
+	var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>'+filepath+' 정보보기</p>',{
+		title: 'SVN Test Dialog',
+		type: 'information',
+		print: false,
+		width: 760,
+		buttons: ['닫기'],
+		onClose: function(caption){
+			if(caption == '닫기'){
+				
+			}
+		}
+	});
+}
 /////////////////////////////
 function list_reload(repourl){
 	var trans_objeect = 
@@ -734,6 +754,8 @@ function list_reload(repourl){
 			var repotreelistlock = [];
 			var repokind = [];
 			var repocommitmsg = [];
+			var repofilepath = [];
+			
 			
 			repotreelistname = retVal.repotreelist.repotreelistname;
 			repotreelistauthor = retVal.repotreelist.repotreelistauthor;
@@ -742,6 +764,7 @@ function list_reload(repourl){
 			repotreelistlock = retVal.repotreelist.repotreelistlock;
 			repokind = retVal.repotreelist.repokind;
 			repocommitmsg = retVal.repotreelist.repocommitmsg;
+			repofilepath = retVal.repotreelist.repofilepath;
 			
 			//Table에 결과를 출력//
 			$('#repotree').empty();
@@ -759,6 +782,7 @@ function list_reload(repourl){
 	        	printStr += "<th>커밋명</th>";
 	        	printStr += "<th>잠금유무</th>";
 	        	printStr += "<th>보기/이동</th>";
+	        	printStr += "<th>다운로드</th>";
 	        	printStr += "<th>제거</th>";
 	        	printStr += "</tr>";
 	        	printStr += "</thead>"; 
@@ -776,9 +800,11 @@ function list_reload(repourl){
 	            	printStr += "<td>"+repotreelistlock[i]+"</td>";
 	            	if(repokind[i] == 'dir'){
 	            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>move</button></td>";
+	            		printStr += "<td><button enabled='true'>not</button></td>";
 	            	}
 	            	else if(repokind[i] == 'file'){
 	            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";	
+	            		printStr += "<td><button value='"+repofilepath[i]+"' onclick='filedownload(this.value)'>download</button></td>";
 	            	}
 	            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='deletepath(this.value)'>remove</button></td>";
                 	printStr += "</tr>"; 

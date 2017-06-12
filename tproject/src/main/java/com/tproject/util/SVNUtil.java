@@ -43,6 +43,7 @@ public class SVNUtil {
 	private static List<Object>repotreelist_lock;
 	private static List<Object>repotreelist_kind;
 	private static List<Object>repotreelist_commitmessage;
+	private static List<Object>repotreelist_filepath;
 	
 	public String doMakeRepo(String repourl){
 		String tgtPath = repourl;
@@ -180,6 +181,7 @@ public class SVNUtil {
 			repotreelist_lock = new ArrayList<Object>();
 			repotreelist_kind = new ArrayList<Object>();
 			repotreelist_commitmessage = new ArrayList<Object>();
+			repotreelist_filepath = new ArrayList<Object>();
 			
 			
 			listEntries(repository, ""); //由ъ뒪�듃瑜� �젙蹂대�� 異붽�//
@@ -192,6 +194,7 @@ public class SVNUtil {
 			repotreelistinfo.put("repotreelistlock", repotreelist_lock);
 			repotreelistinfo.put("repokind", repotreelist_kind);
 			repotreelistinfo.put("repocommitmsg", repotreelist_commitmessage);
+			repotreelistinfo.put("repofilepath", repotreelist_filepath);
 			
 			totalrepotreecount = 0; //珥덇린�솕//
 		} catch (SVNException e) {
@@ -226,6 +229,9 @@ public class SVNUtil {
             
             repotreelist_kind.add(entry.getKind().toString());
             repotreelist_commitmessage.add(entry.getCommitMessage());
+            repotreelist_filepath.add(entry.getRelativePath().toString());
+            
+            System.out.println("filefilepath: " + entry.getPath().toString());
         
             repptreecount++;
             
