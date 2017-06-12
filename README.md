@@ -18,4 +18,6 @@
 <li>commit file and directory</li>
 <li>commit modify file</li>
 <li>commit delete file</li>
+<li>code Syntax Beautiful</li>
+<li>file download - fixing</li>
 </div>
