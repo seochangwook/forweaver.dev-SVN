@@ -230,8 +230,6 @@ public class SVNUtil {
             repotreelist_kind.add(entry.getKind().toString());
             repotreelist_commitmessage.add(entry.getCommitMessage());
             repotreelist_filepath.add(entry.getRelativePath().toString());
-            
-            System.out.println("filefilepath: " + entry.getPath().toString());
         
             repptreecount++;
             

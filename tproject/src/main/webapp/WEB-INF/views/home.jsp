@@ -350,11 +350,11 @@ $(function(){
 		            	printStr += "<td>"+repotreelistlock[i]+"</td>";
 		            	if(repokind[i] == 'dir'){
 		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>move</button></td>";
-		            		printStr += "<td><button enabled='true'>not</button></td>";
+		            		printStr += "<td><button value='"+repotreelistname[i]+"' disabled='disabled'>download</button></td>";
 		            	}
 		            	else if(repokind[i] == 'file'){
 		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";
-		            		printStr += "<td><button value='"+repofilepath[i]+"' onclick='filedownload(this.value)'>download</button></td>";
+		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='filedownload(this.value)'>download</button></td>";
 		            	}
 		            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='deletepath(this.value)'>remove</button></td>";
 	                	printStr += "</tr>"; 
@@ -716,19 +716,10 @@ function deletepath(filename){
 	});
 }
 //////////////////////////////
-function filedownload(filepath){
-	var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>'+filepath+' 정보보기</p>',{
-		title: 'SVN Test Dialog',
-		type: 'information',
-		print: false,
-		width: 760,
-		buttons: ['닫기'],
-		onClose: function(caption){
-			if(caption == '닫기'){
-				
-			}
-		}
-	});
+function filedownload(filename){
+	var filepath = $('#filepath').val() + '/'+ filename;
+	
+	console.log('download file path: ' + filepath);
 }
 /////////////////////////////
 function list_reload(repourl){
@@ -800,11 +791,11 @@ function list_reload(repourl){
 	            	printStr += "<td>"+repotreelistlock[i]+"</td>";
 	            	if(repokind[i] == 'dir'){
 	            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>move</button></td>";
-	            		printStr += "<td><button enabled='true'>not</button></td>";
+	            		printStr += "<td><button value='"+repotreelistname[i]+"' disabled='disabled'>download</button></td>";
 	            	}
 	            	else if(repokind[i] == 'file'){
 	            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";	
-	            		printStr += "<td><button value='"+repofilepath[i]+"' onclick='filedownload(this.value)'>download</button></td>";
+	            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='filedownload(this.value)'>download</button></td>";
 	            	}
 	            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='deletepath(this.value)'>remove</button></td>";
                 	printStr += "</tr>"; 
