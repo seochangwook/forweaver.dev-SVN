@@ -64,26 +64,34 @@
 	<div id="repotree">
 	</div>
 	<br>
-	<div>
-	<label>* 저장소 커밋</label><br>
-	<label>-> 커밋 경로:</label>
-	<input type="text" id="commitpath" placeholder="view repo path" disabled="disabled"><br>
-	<label>-> 커밋 디렉터리명:</label>
-	<input type="text" id="commitdirname" placeholder="input dir name"><br>
-	<label>-> 커밋 파일명:</label>
-	<input type="text" id="commitfilename" placeholder="input file name"><br>
-	<label>-> 커밋 로그명:</label>
-	<input type="text" id="commitname" placeholder="input commit name"><br>
-	<label>-> 파일내용:</label>
-	<div ng-controller="codecontroller">
-		<pre class="brush: java">
-			{{printCode}}
-		</pre>
-	</div>
-	<textarea class="form-control" rows="5" id="filecontent" placeholder="input content"></textarea>
-	<input type="button" id="btn_test6" value="new file commit">&nbsp
-	<input type="button" id="btn_test8" value="new dir commit">
-	<input type="button" id="btn_test7" value="modify commit">
+	<div class="well">
+		<label>* 저장소 커밋</label><br>
+		<label>-> 커밋 경로:</label>
+		<input type="text" id="commitpath" placeholder="view repo path" disabled="disabled"><br>
+		<label>-> 커밋 디렉터리명:</label>
+		<input type="text" id="commitdirname" placeholder="input dir name"><br>
+		<label>-> 커밋 파일명:</label>
+		<input type="text" id="commitfilename" placeholder="input file name"><br>
+		<label>-> 커밋 로그명:</label>
+		<input type="text" id="commitname" placeholder="input commit name"><br>
+		<label>-> 파일내용:</label>
+		<div class="row">
+    		<div class="col-sm-6">
+	    		<div ng-controller="codecontroller">
+					<pre class="brush: java">
+						{{printCode}}
+					</pre>
+				</div>
+    		</div>
+   		 	<div class="col-sm-6">
+   		 		<textarea class="form-control" rows="7" id="filecontent" placeholder="input/modify content"></textarea><br>
+   		 	</div>
+  		</div>
+  		<div class="btn-group btn-group-justified">
+	     	<input type="button" id="btn_test6" value="new file commit">
+	      	<input type="button" id="btn_test8" value="new dir commit">
+	      	<input type="button" id="btn_test7" value="modify commit">
+  		</div>
 	</div>
 </body>
 <script type="text/javascript">
@@ -341,7 +349,12 @@ $(function(){
 		        	//테이블에 들어갈 데이터를 삽입//
 		           	for(var i=0; i<repotreecount; i++){
 		           		printStr += "<tr>";
-		            	printStr += "<td>"+(i+1)+"</td>";
+		           		if(repokind[i] == 'dir'){
+		           			printStr += "<td><img src='./resources/images/directory.PNG' width='50' height='50'></td>";
+		            	}
+		            	else if(repokind[i] == 'file'){
+		            		printStr += "<td><img src='./resources/images/fileicon.PNG' width='50' height='50'></td>";
+		            	}
 		            	printStr += "<td>"+repotreelistname[i]+"</td>";
 		            	printStr += "<td>"+repotreelistauthor[i]+"</td>";
 		            	printStr += "<td>ver."+repotreelistrevesion[i]+"</td>";
@@ -427,7 +440,7 @@ $(function(){
 						buttons: ['닫기'],
 						onClose: function(caption){
 							if(caption == '닫기'){
-								alert('close click');
+								
 							}
 						}
 					});
@@ -440,7 +453,7 @@ $(function(){
 						buttons: ['닫기'],
 						onClose: function(caption){
 							if(caption == '닫기'){
-								alert('close click');
+								
 							}
 						}
 					});
@@ -488,7 +501,7 @@ $(function(){
 						buttons: ['닫기'],
 						onClose: function(caption){
 							if(caption == '닫기'){
-								alert('close click');
+								
 							}
 						}
 					});
@@ -501,7 +514,7 @@ $(function(){
 						buttons: ['닫기'],
 						onClose: function(caption){
 							if(caption == '닫기'){
-								alert('close click');
+								
 							}
 						}
 					});
@@ -548,7 +561,7 @@ $(function(){
 						buttons: ['닫기'],
 						onClose: function(caption){
 							if(caption == '닫기'){
-								alert('close click');
+							
 							}
 						}
 					});
@@ -561,7 +574,7 @@ $(function(){
 						buttons: ['닫기'],
 						onClose: function(caption){
 							if(caption == '닫기'){
-								alert('close click');
+								
 							}
 						}
 					});
@@ -677,7 +690,7 @@ function deletepath(filename){
 								buttons: ['닫기'],
 								onClose: function(caption){
 									if(caption == '닫기'){
-										alert('close click');
+										
 									}
 								}
 							});
@@ -690,7 +703,7 @@ function deletepath(filename){
 								buttons: ['닫기'],
 								onClose: function(caption){
 									if(caption == '닫기'){
-										alert('close click');
+										
 									}
 								}
 							});
@@ -705,7 +718,7 @@ function deletepath(filename){
 							buttons: ['닫기'],
 							onClose: function(caption){
 								if(caption == '닫기'){
-									alert('close click');
+									
 								}
 							}
 						});
@@ -782,7 +795,12 @@ function list_reload(repourl){
 	        	//테이블에 들어갈 데이터를 삽입//
 	           	for(var i=0; i<repotreecount; i++){
 	           		printStr += "<tr>";
-	            	printStr += "<td>"+(i+1)+"</td>";
+	           		if(repokind[i] == 'dir'){
+	           			printStr += "<td><img src='./resources/images/directory.PNG' width='50' height='50'></td>";
+	            	}
+	            	else if(repokind[i] == 'file'){
+	            		printStr += "<td><img src='./resources/images/fileicon.PNG' width='50' height='50'></td>";
+	            	}
 	            	printStr += "<td>"+repotreelistname[i]+"</td>";
 	            	printStr += "<td>"+repotreelistauthor[i]+"</td>";
 	            	printStr += "<td>ver."+repotreelistrevesion[i]+"</td>";
