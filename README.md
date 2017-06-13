@@ -15,7 +15,7 @@
 <li>repository history view</li>
 <li>repository tree view</li>
 <li>file content view</li>
-<li>commit file and directory</li>
+<li>commit/add file and directory</li>
 <li>commit modify file (Checksum mismatch issue -> modifying)</li>
 <li>commit delete file (out of date issue -> modifying)</li>
 <li>code Syntax Beautiful</li>
