@@ -1,4 +1,4 @@
-# SVNTest (ver.1.0)
+# SVNTest (ver 1.0)
 
 <div>
 <label>* refrence site address</label><br>
