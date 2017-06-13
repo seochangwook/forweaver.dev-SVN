@@ -16,9 +16,9 @@
 <li>repository tree view</li>
 <li>file content view</li>
 <li>commit file and directory</li>
-<li style='color:red'>commit modify file (Checksum mismatch issue -> modifying)</li>
-<li style='color:red'>commit delete file (out of date issue -> modifying)</li>
+<li>commit modify file (Checksum mismatch issue -> modifying)</li>
+<li>commit delete file (out of date issue -> modifying)</li>
 <li>code Syntax Beautiful</li>
 <li>Separate files and directories with images</li>
-<li style="color:red">file download -> Under development</li>
+<li>file download -> Under development</li>
 </div>
