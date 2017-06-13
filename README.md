@@ -16,8 +16,9 @@
 <li>repository tree view</li>
 <li>file content view</li>
 <li>commit file and directory</li>
-<li>commit modify file</li>
-<li>commit delete file</li>
+<li>commit modify file (Checksum mismatch issue)</li>
+<li>commit delete file (out of date issue)</li>
 <li>code Syntax Beautiful</li>
+<li>Separate files and directories with images</li>
 <li>file download - fixing</li>
 </div>
