@@ -93,6 +93,7 @@
 	      	<input type="button" id="btn_test7" value="modify commit">
   		</div>
 	</div>
+	<iframe id="my_iframe" style="display:none;"></iframe>
 </body>
 <script type="text/javascript">
 SyntaxHighlighter.all();
@@ -732,7 +733,29 @@ function deletepath(filename){
 function filedownload(filename){
 	var filepath = $('#filepath').val() + '/'+ filename;
 	
-	console.log('download file path: ' + filepath);
+	document.getElementById('my_iframe').src = '/Users/macbook/git/SVNTestt/tproject/src/main/webapp/resources/images/warning.png';
+	/*console.log('download file path: ' + filepath);
+	
+	var trans_objeect = 
+	{
+    	'downloadfilepath': '/Users/macbook/git/SVNTestt/tproject/src/main/webapp/resources/images/warning.png'
+    }
+	var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+	
+	$.ajax({
+		url: "http://localhost:8080/controller/downloadfile",
+		type: 'POST',
+		dataType: 'json',
+		data: trans_json,
+		contentType: 'application/json',
+		mimeType: 'application/json',
+		success: function(retVal){
+			
+		},
+		error: function(retVal, status, er){
+			alert("error: "+retVal+" status: "+status+" er:"+er);
+		}
+	});*/
 }
 /////////////////////////////
 function list_reload(repourl){

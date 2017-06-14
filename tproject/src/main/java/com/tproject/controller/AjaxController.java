@@ -1,5 +1,6 @@
 package com.tproject.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.tproject.util.FileDownloadView;
 import com.tproject.util.SVNUtil;
 
 @Controller
@@ -130,5 +134,21 @@ public class AjaxController {
 				info.get("commitlog").toString()));
 		
 		return retVal;
+	}
+	
+	@RequestMapping(value = "/downloadfile", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody ModelAndView downloadfile(@RequestBody Map<String, Object> info) throws Exception {	
+		
+		System.out.println("file download path: " + info.get("downloadfilepath").toString());
+		
+		File downloadFile = new File(info.get("downloadfilepath").toString());
+		
+		System.out.println("file object info: " + downloadFile);
+		
+		if(!downloadFile.canRead()){
+			System.out.println("status: " + downloadFile.getAbsolutePath());
+		}
+		
+		return new ModelAndView("fileDownloadView", "downloadFile", downloadFile);
 	}
 }
