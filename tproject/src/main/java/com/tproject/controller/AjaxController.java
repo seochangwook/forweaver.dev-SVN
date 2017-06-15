@@ -136,19 +136,17 @@ public class AjaxController {
 		return retVal;
 	}
 	
-	@RequestMapping(value = "/downloadfile", method = RequestMethod.POST, produces = {"application/json"})
+	@RequestMapping(value = "/downloadfile" ,method = RequestMethod.POST, produces = {"application/json"})
 	public @ResponseBody ModelAndView downloadfile(@RequestBody Map<String, Object> info) throws Exception {	
+		File downloadFile = null;
 		
-		System.out.println("file download path: " + info.get("downloadfilepath").toString());
-		
-		File downloadFile = new File(info.get("downloadfilepath").toString());
-		
-		System.out.println("file object info: " + downloadFile);
-		
-		if(!downloadFile.canRead()){
-			System.out.println("status: " + downloadFile.getAbsolutePath());
+		try{
+			downloadFile = new File(info.get("downloadfilepath").toString());
+		} catch(Exception e){
+			e.printStackTrace();
 		}
 		
+		//파일을 downloadFile 이라는 이름으로 삽입시켜 servlet의 download에 매핑된 view Class로 간다.
 		return new ModelAndView("fileDownloadView", "downloadFile", downloadFile);
 	}
 }
