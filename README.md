@@ -20,5 +20,5 @@
 <li>commit delete file (out of date issue -> modifying)</li>
 <li>code Syntax Beautiful</li>
 <li>Separate files and directories with images</li>
-<li>file download -> Under development</li>
+<li>file download</li>
 </div>
