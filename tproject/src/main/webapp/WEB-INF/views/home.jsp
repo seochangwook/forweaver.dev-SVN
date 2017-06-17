@@ -367,7 +367,7 @@ $(function(){
 		            	}
 		            	else if(repokind[i] == 'file'){
 		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";
-		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='filedownload(this.value)'>download</button></td>";
+		            		printStr += "<td><a href='http://localhost:8080/controller/download.do/"+repotreelistname[i]+"'>Download</a></td>";
 		            	}
 		            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='deletepath(this.value)'>remove</button></td>";
 	                	printStr += "</tr>"; 
@@ -728,27 +728,6 @@ function deletepath(filename){
 		}
 	});
 }
-//////////////////////////////
-function filedownload(filename){
-	var filepath = $('#filepath').val() + '/'+ filename;
-	
-	filepath = 'C:\\Users\\seochangwook\\Desktop\\test.txt';
-	console.log('download file path: ' + filepath);
-	
-	var trans_objeect = 
-	{
-    	'downloadfilepath': filepath
-    }
-	var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
-	
-	$.ajax({
-		url: "http://localhost:8080/controller/downloadfile",
-		type: 'POST',
-		dataType: 'json',
-		data: trans_json,
-		contentType: 'application/json'
-	});
-}
 /////////////////////////////
 function list_reload(repourl){
 	var trans_objeect = 
@@ -828,7 +807,7 @@ function list_reload(repourl){
 	            	}
 	            	else if(repokind[i] == 'file'){
 	            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";	
-	            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='filedownload(this.value)'>download</button></td>";
+	            		printStr += "<td><a href='http://localhost:8080/controller/download.do?filename="+repotreelistname[i]+"'>Download</a></td>";
 	            	}
 	            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='deletepath(this.value)'>remove</button></td>";
                 	printStr += "</tr>"; 

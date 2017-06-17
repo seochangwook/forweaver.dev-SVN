@@ -5,19 +5,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tproject.util.FileDownloadView;
+import com.tproject.util.FileDownloadUtil;
 import com.tproject.util.SVNUtil;
 
 @Controller
-public class AjaxController {
+public class AjaxController{
 	@Autowired
 	SVNUtil svnUtil;
 	
@@ -134,19 +139,5 @@ public class AjaxController {
 				info.get("commitlog").toString()));
 		
 		return retVal;
-	}
-	
-	@RequestMapping(value = "/downloadfile" ,method = RequestMethod.POST, produces = {"application/json"})
-	public @ResponseBody ModelAndView downloadfile(@RequestBody Map<String, Object> info) throws Exception {	
-		File downloadFile = null;
-		
-		try{
-			downloadFile = new File(info.get("downloadfilepath").toString());
-		} catch(Exception e){
-			e.printStackTrace();
-		}
-		
-		//파일을 downloadFile 이라는 이름으로 삽입시켜 servlet의 download에 매핑된 view Class로 간다.
-		return new ModelAndView("fileDownloadView", "downloadFile", downloadFile);
 	}
 }
