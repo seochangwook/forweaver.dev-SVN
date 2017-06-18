@@ -286,6 +286,9 @@ $(function(){
 	});
 	$('#btn_test5').click(function(){
 		var repourl = $('#repopathtexttree').val();
+		var filepath = $('#filepath').val();
+		
+		console.log('table filepath: ' + filepath);
 		
 		//기존 경로를 위한 값 초기화//
 		$('#filepath').val('');
@@ -367,7 +370,7 @@ $(function(){
 		            	}
 		            	else if(repokind[i] == 'file'){
 		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";
-		            		printStr += "<td><a href='http://localhost:8080/controller/download.do/"+repotreelistname[i]+"'>Download</a></td>";
+		            		printStr += "<td><a href='http://localhost:8080/controller/download.do/"+repotreelistname[i]+"&filepath="+filepath+"'>Download</a></td>";
 		            	}
 		            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='deletepath(this.value)'>remove</button></td>";
 	                	printStr += "</tr>"; 
@@ -730,6 +733,10 @@ function deletepath(filename){
 }
 /////////////////////////////
 function list_reload(repourl){
+	var filepath = $('#filepath').val();
+	
+	console.log('table filepath: ' + filepath);
+	
 	var trans_objeect = 
 	{
     	'url': repourl
@@ -807,7 +814,7 @@ function list_reload(repourl){
 	            	}
 	            	else if(repokind[i] == 'file'){
 	            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";	
-	            		printStr += "<td><a href='http://localhost:8080/controller/download.do?filename="+repotreelistname[i]+"'>Download</a></td>";
+	            		printStr += "<td><a href='http://localhost:8080/controller/download.do?filename="+repotreelistname[i]+"&filepath="+filepath+"'>Download</a></td>";
 	            	}
 	            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='deletepath(this.value)'>remove</button></td>";
                 	printStr += "</tr>"; 

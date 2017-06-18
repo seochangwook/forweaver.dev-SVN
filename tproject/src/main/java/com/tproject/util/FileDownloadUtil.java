@@ -17,7 +17,7 @@ import org.springframework.web.servlet.view.AbstractView;
 @Component
 public class FileDownloadUtil extends AbstractView{
 	public FileDownloadUtil(){
-		setContentType("application/force-download; charset=utf-8");
+		setContentType("application/download; charset=utf-8");
 	}
 	@Override
 	protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {

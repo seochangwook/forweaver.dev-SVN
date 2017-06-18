@@ -21,10 +21,10 @@ public class DownloadController implements ApplicationContextAware{
 	private WebApplicationContext context = null;
 	
 	@RequestMapping(value = "/download.do")
-	public ModelAndView download(@RequestParam("filename") String filename ) throws Exception {	
-		String realFolder = "/Users/macbook/Desktop/"; //파일의 실제(디폴트) 경로//
-		filename = "test.txt";
-		File file = new File(realFolder + filename);
+	public ModelAndView download(@RequestParam("filename") String filename, @RequestParam("filepath") String filepath ) throws Exception {	
+		String realFolder = "/Users/macbook/git"; //파일의 실제(디폴트) 경로(서버의 디폴트 경로)//
+
+		File file = new File(realFolder + filepath + "/" + filename);
 		
 		//반환되는 값은 이동할 뷰의 이름(Bean에 등록된 id), 모델에 들어갈 Key, Key에 해당하는 Value(Objeect)// 
 		return new ModelAndView("downloadView", "downloadFile", file);
