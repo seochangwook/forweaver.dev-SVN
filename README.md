@@ -23,5 +23,5 @@
 <li>file download</li>
 </div>
 <br>
-<h3><label>* SVNKit-dav (Server)</label></h3><br>
+<h3><label>* SVNKit-dav (Server)</label></h3>
 <li></li>
