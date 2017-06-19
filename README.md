@@ -1,5 +1,4 @@
 # SVNTest (ver 1.0)
-
 <div>
 <label>* refrence site address</label><br>
 <li>https://github.com/hudson/svnkit/tree/master/doc/examples/src/org/tmatesoft/svn/examples</li>
@@ -9,8 +8,8 @@
 </div>
 <br><br>
 <div>
-<h1><label>* function test list</label></h1><br>
-<h2><label>* SVNKit</label></h2><br>
+<h2><label>* function test list</label></h2><br>
+<h3><label>* SVNKit</label></h3>
 <li>make repository</li>
 <li>repository info view</li>
 <li>repository history view</li>
@@ -24,4 +23,4 @@
 <li>file download</li>
 </div>
 <br>
-<h2><label>* SVNKit-dav</label></h2><br>
+<h3><label>* SVNKit-dav</label></h3><br>
