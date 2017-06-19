@@ -8,7 +8,7 @@
 </div>
 <br>
 <div>
-<h2><label>* function test list</label></h2>
+<h2><label># function test list</label></h2>
 <h3><label>* SVNKit (Client)</label></h3>
 <li>make repository</li>
 <li>repository info view</li>
