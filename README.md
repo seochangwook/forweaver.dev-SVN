@@ -9,7 +9,7 @@
 <br>
 <div>
 <h2><label>* function test list</label></h2>
-<h3><label>* SVNKit</label></h3>
+<h3><label>* SVNKit (Client)</label></h3>
 <li>make repository</li>
 <li>repository info view</li>
 <li>repository history view</li>
@@ -23,4 +23,5 @@
 <li>file download</li>
 </div>
 <br>
-<h3><label>* SVNKit-dav</label></h3><br>
+<h3><label>* SVNKit-dav (Server)</label></h3><br>
+<li></li>
