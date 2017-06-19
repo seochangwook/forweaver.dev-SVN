@@ -1,6 +1,6 @@
 # SVNTest (ver 1.0)
 <div>
-<h2><label>* refrence site address</label></h2><br>
+<h2><label>* refrence site address</label></h2>
 <li>https://github.com/hudson/svnkit/tree/master/doc/examples/src/org/tmatesoft/svn/examples</li>
 <li>https://svnkit.com/</li>
 <li>https://svnkit.com/javadoc/index.html</li>
