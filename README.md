@@ -6,9 +6,9 @@
 <li>https://svnkit.com/javadoc/index.html</li>
 <li>https://wiki.svnkit.com/</li>
 </div>
-<br><br>
+<br>
 <div>
-<h2><label>* function test list</label></h2><br>
+<h2><label>* function test list</label></h2>
 <h3><label>* SVNKit</label></h3>
 <li>make repository</li>
 <li>repository info view</li>
