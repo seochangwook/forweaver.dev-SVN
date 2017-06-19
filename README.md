@@ -9,7 +9,8 @@
 </div>
 <br><br>
 <div>
-<label>* function test list</label><br>
+<h1><label>* function test list</label></h1><br>
+<h2><label>* SVNKit</label></h2><br>
 <li>make repository</li>
 <li>repository info view</li>
 <li>repository history view</li>
@@ -22,3 +23,5 @@
 <li>Separate files and directories with images</li>
 <li>file download</li>
 </div>
+<br>
+<h2><label>* SVNKit-dav</label></h2><br>
