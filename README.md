@@ -1,4 +1,4 @@
-# SVNTest (ver 1.0)
+# SVN Test (ver 1.0) / FTP Test (ver 1.0)
 <div>
 <h2><label># refrence site address</label></h2>
 <li>https://github.com/hudson/svnkit/tree/master/doc/examples/src/org/tmatesoft/svn/examples</li>
