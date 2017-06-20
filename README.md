@@ -31,7 +31,7 @@
 
 <br>
 <div>
-<h1><label>$ FTPN</label></h1>
+<h1><label>$ FTP</label></h1>
 </div>
 <div>
 <h2><label># refrence site address</label></h2>
