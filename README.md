@@ -8,7 +8,7 @@
 <li>https://svnkit.com/</li>
 <li>https://svnkit.com/javadoc/index.html</li>
 <li>https://wiki.svnkit.com/</li>
-<li>https://github.com/ndeloof/svnkit/tree/master/svnkit-dav/src/main/java/org/tmatesoft/svn/core/internal/server/dav</li>
+<li>https://github.com/ndeloof/svnkit/tree/master/svnkit-dav</li>
 </div>
 <br>
 <div>
