@@ -24,6 +24,7 @@
 <li>code Syntax Beautiful</li>
 <li>Separate files and directories with images</li>
 <li>file download</li>
+<li>Authentication</li>
 </div>
 <br>
 <h3><label>* SVNKit-dav (Server)</label></h3>
