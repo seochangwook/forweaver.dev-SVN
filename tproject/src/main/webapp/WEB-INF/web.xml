@@ -3,11 +3,22 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
+	<!-- The definition of the Root Spring Container shared by all Servlets and Filters, Spring Security Setting -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+		<param-value>/WEB-INF/spring/root-context.xml /WEB-INF/spring/security-context.xml</param-value>
 	</context-param>
+	
+	<!-- Spring Security -->
+	<filter> 
+		<filter-name>springSecurityFilterChain</filter-name> 
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class> 
+	</filter> 
+	
+	<filter-mapping> 
+		<filter-name>springSecurityFilterChain</filter-name> 
+		<url-pattern>/*</url-pattern> 
+	</filter-mapping>
 	
 	<!-- Encoding Filter -->
 	<filter> 
@@ -43,6 +54,20 @@
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	<!-- SVNKit dav -->
+	<servlet>
+		<servlet-name>svnkit</servlet-name>
+		<servlet-class>org.tmatesoft.svn.core.internal.server.dav.DAVServlet</servlet-class>
+		<init-param>
+			<param-name>SVNParentPath</param-name>
+			<param-value>E:\svnrepo</param-value><!-- 이게 실제 svn 주소 -->
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>svnkit</servlet-name>
+		<url-pattern>/svn/*</url-pattern> <!-- url로 들어오는 주소 -->
 	</servlet-mapping>
 
 </web-app>

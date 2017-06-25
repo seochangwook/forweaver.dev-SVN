@@ -22,7 +22,7 @@ import com.tproject.util.FileDownloadUtil;
 import com.tproject.util.SVNUtil;
 
 @Controller
-public class AjaxController{
+public class RepoAjaxController{
 	@Autowired
 	SVNUtil svnUtil;
 	
@@ -43,7 +43,10 @@ public class AjaxController{
 		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
 		
 		retVal.put("result", "success");
-		retVal.put("repoinfo", svnUtil.doPrintRepo(info.get("url").toString()));
+		retVal.put("repoinfo", svnUtil.doPrintRepo(
+				info.get("url").toString(),
+				info.get("userid").toString(),
+				info.get("userpassword").toString()));
 		
 		return retVal;
 	}
@@ -53,7 +56,10 @@ public class AjaxController{
 		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
 		
 		retVal.put("result", "success");
-		retVal.put("loginfolist", svnUtil.doPrintRepoLog(info.get("url").toString()));
+		retVal.put("loginfolist", svnUtil.doPrintRepoLog(
+				info.get("url").toString(),
+				info.get("userid").toString(),
+				info.get("userpassword").toString()));
 		
 		return retVal;
 	}
@@ -63,7 +69,10 @@ public class AjaxController{
 		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
 		
 		retVal.put("result", "success");
-		retVal.put("repotreelist", svnUtil.doPrintRepotree(info.get("url").toString()));
+		retVal.put("repotreelist", svnUtil.doPrintRepotree(
+				info.get("url").toString(),
+				info.get("userid").toString(),
+				info.get("userpassword").toString()));
 		
 		return retVal;
 	}
@@ -75,6 +84,8 @@ public class AjaxController{
 		retVal.put("result", "success");
 		retVal.put("filecontentinfo", svnUtil.doPrintFilecontent(
 				info.get("url").toString(), 
+				info.get("userid").toString(),
+				info.get("userpassword").toString(),
 				info.get("filename").toString(), 
 				info.get("filepath").toString()));
 		

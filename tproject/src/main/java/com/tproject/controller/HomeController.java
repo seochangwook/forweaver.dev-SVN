@@ -19,7 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class HomeController {
 	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
 	public ModelAndView home(ModelAndView mv) {
-		mv.setViewName("home");
+		mv.setViewName("main");
+		
+		System.out.println("normal main page");
 		
 		return mv;
 	}

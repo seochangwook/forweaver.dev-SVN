@@ -25,12 +25,14 @@ import org.tmatesoft.svn.core.SVNNodeKind;
 import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.core.io.ISVNEditor;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.io.diff.SVNDeltaGenerator;
+import org.tmatesoft.svn.core.wc.SVNWCUtil;
 import org.tmatesoft.svn.core.wc.admin.SVNAdminClient;
 
 @Component
@@ -60,13 +62,19 @@ public class SVNUtil {
 		return null;
 	}
 	
-	public Map<String, Object> doPrintRepo(String repourl){
+	public Map<String, Object> doPrintRepo(String repourl, String userid, String userpassword){
 		Map<String, Object> repoinfomap = new HashMap<String,Object>();
 		
 		SVNRepository repository = null;
 		
 		try {
 			repository = SVNRepositoryFactory.create( SVNURL.parseURIEncoded(repourl));
+			
+			//인증정보를 설정//
+			ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(userid, userpassword);
+	        repository.setAuthenticationManager(authManager);
+	        
+	        System.out.println("Auth Check Success...");
 			
 			String repoUUID = repository.getRepositoryUUID(true).toString();
 			String reporevesion = ""+repository.getLatestRevision();
@@ -85,7 +93,7 @@ public class SVNUtil {
 		return repoinfomap;
 	}
 	
-	public Map<String, Object> doPrintRepoLog(String repourl){
+	public Map<String, Object> doPrintRepoLog(String repourl, String userid, String userpassword){
 		SVNRepository repository = null;
 		Collection logEntries = null;
 		
@@ -108,6 +116,11 @@ public class SVNUtil {
 		
 		try {
 			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			//인증정보를 설정//
+			ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(userid, userpassword);
+	        repository.setAuthenticationManager(authManager);
+	        
 			logEntries = repository.log(new String[] { "" }, null, startRevision, endRevision, true, true);
 
 			for (Iterator entries = logEntries.iterator(); entries.hasNext();) {
@@ -158,13 +171,17 @@ public class SVNUtil {
 		return loglist;
 	}
 	
-	public Map<String, Object> doPrintRepotree(String repourl){
+	public Map<String, Object> doPrintRepotree(String repourl, String userid, String userpassword){
 		Map<String, Object>repotreelistinfo = new HashMap<String, Object>();
 		
 		SVNRepository repository = null;
 		
 		try {
 			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			//인증정보를 설정//
+			ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(userid, userpassword);
+	        repository.setAuthenticationManager(authManager);
 			
 			SVNNodeKind nodeKind = repository.checkPath("", -1);
 			
@@ -243,7 +260,7 @@ public class SVNUtil {
         totalrepotreecount += repptreecount;
     }
 	
-	public Map<String,Object> doPrintFilecontent(String repourl, String filename, String filepath){
+	public Map<String,Object> doPrintFilecontent(String repourl, String userid, String userpassword, String filename, String filepath){
 		Map<String, Object>filecontentinfo = new HashMap<String, Object>();
 		String filecontent = "";
 		
@@ -257,7 +274,11 @@ public class SVNUtil {
 		
 		try {
 			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
-		
+			
+			//인증정보를 설정//
+			ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(userid, userpassword);
+			repository.setAuthenticationManager(authManager);
+			
 			SVNNodeKind nodeKind = repository.checkPath(filename, -1);
 
 			System.out.println("repo check ok...");

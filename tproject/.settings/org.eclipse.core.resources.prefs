@@ -1,4 +1,4 @@
 eclipse.preferences.version=1
-encoding//src/main/java/com/tproject/controller/AjaxController.java=UTF-8
+encoding//src/main/java/com/tproject/controller/RepoAjaxController.java=UTF-8
 encoding//src/main/java/com/tproject/util/FileDownloadUtil.java=UTF-8
 encoding//src/main/java/com/tproject/util/SVNUtil.java=UTF-8

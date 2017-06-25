@@ -18,7 +18,7 @@
 	<!-- AngularJS CDN -->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 	<!-- AngularJS External File -->
-	<script src="resources/js/homeangular.js"></script>
+	<script src="resources/js/mainangular.js"></script>
 	<!-- Beautiful Code, Theme CDN -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushJava.js"></script>
@@ -34,6 +34,10 @@
 		<label>* 저장소 불러오기: </label>
 		<input type="text" id="repopathtext" placeholder="input repo path">
 		<input type="button" id="btn_test4" value="click button"><br>
+		<label>* 저장소 아이디: </label>
+		<input type="text" id="repouserid" placeholder="Input ID"><br>
+		<label>* 저장소 비밀번호: </label>
+		<input type="password" id="repouserpassword" placeholder="Input Password"><br>
 	</div>
 	<br>
 	<div id="makereponame">
@@ -128,10 +132,14 @@ $(function(){
 	})
 	$('#btn_test2').click(function(){
 		var repourl = $('#repourl').val();
+		var repouserid = $('#repouserid').val();
+		var repouserpassword = $('#repouserpassword').val();
 		
 		var trans_objeect = 
     	{
-        	'url': repourl
+        	'url': repourl,
+        	'userid':repouserid,
+        	'userpassword':repouserpassword
 	    }
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
@@ -185,10 +193,14 @@ $(function(){
 	});
 	$('#btn_test3').click(function(){
 		var repourl = $('#repourl').val();
+		var repouserid = $('#repouserid').val();
+		var repouserpassword = $('#repouserpassword').val();
 		
 		var trans_objeect = 
     	{
-        	'url': repourl
+        	'url': repourl,
+        	'userid':repouserid,
+        	'userpassword':repouserpassword
 	    }
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
@@ -278,15 +290,28 @@ $(function(){
 	});
 	$('#btn_test4').click(function(){
 		var repopath = $('#repopathtext').val();
+		var repouserid = $('#repouserid').val();
+		var repouserpassword = $('#repouserpassword').val();
 		
-		var printHTML = "<label id='repourltext'>-> repo URL: "+repopath+"</label>"
+		var printHTML = "<label id='repourltext'>-> repo URL: "+repopath+"</label>";
+		
+		//저장소 정보 할당//
 		printHTML += "<input type='hidden' id='repourl' value='"+repopath+"'>";
+		//인증정보 할당//
+		printHTML += "<input type='hidden' id='repouserid' value='"+repouserid+"'>";
+		printHTML += "<input type='hidden' id='repouserpassword' value='"+repouserpassword+"'>";
 		
 		$('#makereponame').append(printHTML);
+		
+		console.log("repouURL(hidden): " + repopath);
+		console.log("repouID(hidden): " + repouserid);
+		console.log("repouPassword(hidden): " + repouserpassword);
 	});
 	$('#btn_test5').click(function(){
 		var repourl = $('#repopathtexttree').val();
 		var filepath = $('#filepath').val();
+		var repouserid = $('#repouserid').val();
+		var repouserpassword = $('#repouserpassword').val();
 		
 		console.log('table filepath: ' + filepath);
 		
@@ -296,7 +321,9 @@ $(function(){
 		
 		var trans_objeect = 
     	{
-        	'url': repourl
+        	'url': repourl,
+        	'userid':repouserid,
+        	'userpassword':repouserpassword
 	    }
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
@@ -593,10 +620,14 @@ $(function(){
 function viewcode(filename){
 	var repourl = $('#repourl').val();
 	var filepath = $('#filepath').val() + '/'+ filename;
+	var repouserid = $('#repouserid').val();
+	var repouserpassword = $('#repouserpassword').val();
 	
 	var trans_objeect = 
 	{
     	'url': repourl,
+    	'userid':repouserid,
+    	'userpassword':repouserpassword,
     	'filename': filename,
     	'filepath': filepath
     }
@@ -734,12 +765,16 @@ function deletepath(filename){
 /////////////////////////////
 function list_reload(repourl){
 	var filepath = $('#filepath').val();
+	var repouserid = $('#repouserid').val();
+	var repouserpassword = $('#repouserpassword').val();
 	
 	console.log('table filepath: ' + filepath);
 	
 	var trans_objeect = 
 	{
-    	'url': repourl
+    	'url': repourl,
+    	'userid':repouserid,
+    	'userpassword':repouserpassword
     }
 	var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 	
