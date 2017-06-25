@@ -26,12 +26,11 @@
 <li>Separate files and directories with images</li>
 <li>file download</li>
 <li>Authentication</li>
-<li>Auth System - Spring Security & MongoDB(developing)/li>
 </div>
 <br>
 <h3><label>* SVNKit-dav (Server)</label></h3>
 <li>SVN command learn</li>
-
+<li>Auth System - Spring Security & MongoDB(developing)/li>
 <br>
 <div>
 <h1><label>$ FTP</label></h1>
