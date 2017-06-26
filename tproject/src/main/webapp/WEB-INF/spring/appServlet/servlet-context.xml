@@ -4,11 +4,14 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.2.xsd">
+	
+	<context:annotation-config />
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
@@ -39,8 +42,18 @@
 		<beans:property name="defaultEncoding" value="UTF-8" /> <!-- 인코딩-->
 	</beans:bean>
 	
+	<!-- MongoDB -->
+    <mongo:db-factory 
+    	id="mongoDbFactory" 
+    	host="localhost"
+    	port="27017"
+    	dbname="memberdb"/> 
+    
+    <beans:bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+    	<beans:constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>   
+    </beans:bean>
+	
 	<!-- utill -->
 	<beans:bean id="svnUtil" class="com.tproject.util.SVNUtil"/>
 	<beans:bean id="downloadView" class="com.tproject.util.FileDownloadUtil"/>
-	
 </beans:beans>

@@ -1,6 +1,8 @@
 package com.tproject.controller;
 
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +15,10 @@ public class AuthManageController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView main(ModelAndView mv) {
 		mv.setViewName("adminmain");
+		
+		//사용자 정보 출력(세션)//
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println("user name :" + user.getUsername());
 		
 		System.out.println("main page admin adjust");
 	
