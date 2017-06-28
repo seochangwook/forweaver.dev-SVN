@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +24,8 @@ import com.tproject.dto.MemberInfoDTO;
 public class LoginServiceImpl implements UserDetailsService{
 	@Autowired
 	MemberInfoDAOImpl memberinfodao;
+	@Autowired
+	PasswordEncoder passwordEncoder;
 	
 	@SuppressWarnings("unused")
 	@Override
@@ -42,6 +45,7 @@ public class LoginServiceImpl implements UserDetailsService{
 		
 		else if(userinfo != null){
 			System.out.println("member info: " + userinfo.get(0).getUsername() + "/" + userinfo.get(0).getPassword() + "/" + userinfo.get(0).getRole());
+			System.out.println("password encode: " + passwordEncoder.encodePassword(userinfo.get(0).getPassword(), null));
 			
 			Collection<SimpleGrantedAuthority> roles = new ArrayList<SimpleGrantedAuthority>();
 

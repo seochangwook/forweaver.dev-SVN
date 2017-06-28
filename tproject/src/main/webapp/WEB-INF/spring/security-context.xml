@@ -26,9 +26,14 @@
 	
 	<!-- Authentication manager -->
 	<authentication-manager> 
-		<authentication-provider user-service-ref="loginService"/>
+		<authentication-provider user-service-ref="loginService">
+			
+		</authentication-provider>
 	</authentication-manager> 
 	
+	<!-- Security Encrypt -->
+	<beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
+		
 	<!-- Security Custom Service -->
 	<beans:bean id="loginService" class="com.tproject.service.LoginServiceImpl"/>
 	
