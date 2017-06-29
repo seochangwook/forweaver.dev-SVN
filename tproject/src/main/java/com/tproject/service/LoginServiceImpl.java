@@ -51,10 +51,11 @@ public class LoginServiceImpl implements UserDetailsService{
 
 		    roles.add(new SimpleGrantedAuthority(userinfo.get(0).getRole()));
 		    
-		    user = new User(userinfo.get(0).getUsername(), userinfo.get(0).getPassword(), roles);
+		    user = new User(userinfo.get(0).getUsername(), passwordEncoder.encodePassword(userinfo.get(0).getPassword(), null), roles);
 
 			System.out.println("Auth Checking Success...");
 			
+			//user를 반환하면 form에서 처리한 값하고 비교를 하게 된다.(Spring Security 인증사용)//
 			return user;
 		}
 		
