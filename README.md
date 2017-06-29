@@ -30,7 +30,7 @@
 <br>
 <h3><label>* SVNKit-dav (Server)</label></h3>
 <li>SVN command learn</li>
-<li>Auth System - Spring Security(crypto) & MongoDB(session part -> modifying)</li>
+<li>Auth System - Spring Security(crypto) & MongoDB</li>
 <br>
 <div>
 <h1><label>$ FTP</label></h1>
