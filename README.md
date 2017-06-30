@@ -31,6 +31,7 @@
 <h3><label>* SVNKit-dav (Server)</label></h3>
 <li>SVN command learn</li>
 <li>Auth System - Spring Security(crypto-SHA) & MongoDB</li>
+<li>DAV-Servlet - Spring Security(Basic Login)</li>
 <br>
 <div>
 <h1><label>$ FTP</label></h1>
