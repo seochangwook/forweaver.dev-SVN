@@ -62,7 +62,7 @@
 		<servlet-class>org.tmatesoft.svn.core.internal.server.dav.DAVServlet</servlet-class>
 		<init-param>
 			<param-name>SVNParentPath</param-name>
-			<param-value>E:\svnrepo</param-value><!-- 이게 실제 svn 주소 -->
+			<param-value>/Users/macbook/svn/</param-value><!-- 이게 실제 svn 주소 -->
 		</init-param>
 	</servlet>
 	<servlet-mapping>

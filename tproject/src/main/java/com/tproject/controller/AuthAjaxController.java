@@ -32,6 +32,7 @@ public class AuthAjaxController {
 		System.out.println("--------------------------");
 		
 		//로그아웃 상태인지 점검//
+		//logout()시 HttpSession을 이용하기에 내부적으로 세션을 만료시킴//
 		if(auth != null){
 			 new SecurityContextLogoutHandler().logout(request, response, auth);
 			 
