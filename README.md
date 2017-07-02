@@ -13,7 +13,7 @@
 <br>
 <div>
 <h2><label># Big Picture</label></h2>
-<img src="https://github.com/seochangwook/forweaver.dev-SVN-FTP/blob/master/gitScreenshot/screenshot_1_bigpicture.png" width="400" height="200">
+<img src="https://github.com/seochangwook/forweaver.dev-SVN-FTP/blob/master/gitScreenshot/screenshot_1_bigpicture.png" width="600" height="400">
 </div>
 <br>
 <div>
