@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="3 seconds">
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <layout>
+            <pattern>
+                %d{HH:mm:ss.SSS} [%thread] %-5level %logger{32} - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+    
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/Users/macbook/git/forweaver.dev-SVN-FTP/tes/tproject/Log/test.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>test.log.%d{yyyy-MM-dd}.log</fileNamePattern> <!-- 파일이름 패턴 -->
+            <maxHistory>30</maxHistory> <!-- 파일 저장 기간 -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{32} - %msg%n</pattern>
+            <!-- 파일에 기록할 로그 포맷 -->
+        </encoder>
+    </appender>
+    
+    <!-- <logger name="org.springframework" level="INFO" /> -->
+    <root level="DEBUG">
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </root>
+</configuration>

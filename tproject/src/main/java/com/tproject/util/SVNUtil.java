@@ -120,7 +120,7 @@ public class SVNUtil {
 			//인증정보를 설정//
 			ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(userid, userpassword);
 	        repository.setAuthenticationManager(authManager);
-	        
+	       
 			logEntries = repository.log(new String[] { "" }, null, startRevision, endRevision, true, true);
 
 			for (Iterator entries = logEntries.iterator(); entries.hasNext();) {
