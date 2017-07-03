@@ -38,7 +38,7 @@
 <li>SVN command learn</li>
 <li>Auth System - Spring Security(crypto-SHA) & MongoDB</li>
 <li>DAV-Servlet - Spring Security(Basic Login)</li>
-<li>Logback use - Server Log Print -> developing</li>
+<li>Logback use - Server Log Print & Save Local File</li>
 <br>
 <div>
 <h1><label>$ FTP</label></h1>
