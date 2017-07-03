@@ -1,4 +1,4 @@
-# SVN Test (ver 1.1) / FTP Test (ver 1.0)
+# SVN Test (ver 1.2) / FTP Test (ver 1.0)
 <div>
 <h1><label>$ SVN</label></h1>
 </div>
