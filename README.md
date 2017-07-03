@@ -9,6 +9,7 @@
 <li>https://svnkit.com/javadoc/index.html</li>
 <li>https://wiki.svnkit.com/</li>
 <li>https://github.com/ndeloof/svnkit/tree/master/svnkit-dav</li>
+<li>https://logback.qos.ch/index.html</li>
 </div>
 <br>
 <div>
@@ -37,6 +38,7 @@
 <li>SVN command learn</li>
 <li>Auth System - Spring Security(crypto-SHA) & MongoDB</li>
 <li>DAV-Servlet - Spring Security(Basic Login)</li>
+<li>Logback use - Server Log Print -> developing</li>
 <br>
 <div>
 <h1><label>$ FTP</label></h1>
