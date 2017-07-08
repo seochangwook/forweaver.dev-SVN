@@ -1,4 +1,4 @@
-# SVN Test (ver 1.2) / FTP Test (ver 1.0)
+# SVN Test (ver 1.2)
 <div>
 <h1><label>$ SVN</label></h1>
 </div>
@@ -40,14 +40,3 @@
 <li>DAV-Servlet - Spring Security(Basic Login)</li>
 <li>Logback use - Server Log Print & Save Local File</li>
 <br>
-<div>
-<h1><label>$ FTP</label></h1>
-</div>
-<div>
-<h2><label># refrence site address</label></h2>
-<li>https://mina.apache.org/ftpserver-project/index.html</li>
-<li>http://docs.alfresco.com/5.1/concepts/fileserv-CIFS-javaprops.html</li>
-</div>
-<div>
-<h2><label># function test list</label></h2>
-</div>
