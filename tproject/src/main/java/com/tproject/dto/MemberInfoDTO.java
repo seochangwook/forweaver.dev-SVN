@@ -2,6 +2,7 @@ package com.tproject.dto;
 
 import java.io.Serializable;
 
+/** MongoDB에서 스키마의 역할 **/
 public class MemberInfoDTO implements Serializable{
 	private String username;
 	private String password;

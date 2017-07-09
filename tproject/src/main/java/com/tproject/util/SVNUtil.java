@@ -326,7 +326,7 @@ public class SVNUtil {
 		return filecontentinfo;
 	}
 	
-	public Map<String, Object> docommit(String repourl, String commitpath, String commitlog, String commitfilename, String commitfilecontent){
+	public Map<String, Object> docommit(String repourl, String commitpath, String commitlog, String commitfilename, String commitfilecontent, String userid, String userpassword){
 		Map<String, Object>resultcommit = new HashMap<String, Object>();
 		
 		System.out.println("file commit");
@@ -336,11 +336,18 @@ public class SVNUtil {
 		System.out.println("commit log: " + commitlog);
 		System.out.println("commit filename: " + commitfilename);
 		System.out.println("commit filecontent: " + commitfilecontent);
+		System.out.println("repo userid: " + userid);
+		System.out.println("repo password: " + userpassword);
 		
 		SVNRepository repository = null;
 		
 		try {
 			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			//인증정보를 확인
+			//인증정보를 설정//
+			ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(userid, userpassword);
+			repository.setAuthenticationManager(authManager);
 			
 			byte[] contents = commitfilecontent.getBytes();
 			

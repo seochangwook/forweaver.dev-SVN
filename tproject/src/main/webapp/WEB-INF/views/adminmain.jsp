@@ -73,11 +73,11 @@
 	<br>
 	<div class="well">
 		<label>* 저장소 커밋</label><br>
-		<label>-> 커밋 경로:</label>
+		<label>-> 생성 경로:</label>
 		<input type="text" id="commitpath" placeholder="view repo path" disabled="disabled"><br>
-		<label>-> 커밋 디렉터리명:</label>
+		<label>-> 디렉터리 생성:</label>
 		<input type="text" id="commitdirname" placeholder="input dir name"><br>
-		<label>-> 커밋 파일명:</label>
+		<label>-> 파일 생성:</label>
 		<input type="text" id="commitfilename" placeholder="input file name"><br>
 		<label>-> 커밋 로그명:</label>
 		<input type="text" id="commitname" placeholder="input commit name"><br>
@@ -444,6 +444,8 @@ $(function(){
 		var commitlog = $('#commitname').val();
 		var commitfilename = $('#commitfilename').val();
 		var commitfilecontent = $('#filecontent').val();
+		var repouserid = $('#repouserid').val();
+		var repouserpassword = $('#repouserpassword').val();
 		
 		//alert('path: ' + commitpath + ', name: ' + commitfilename + ', content: ' + commitfilecontent);
 		var trans_objeect = 
@@ -452,7 +454,9 @@ $(function(){
         	'commitpath': commitpath,
         	'commitlog':commitlog,
         	'commitfilename':commitfilename,
-        	'commitfilecontent':commitfilecontent
+        	'commitfilecontent':commitfilecontent,
+        	'userid':repouserid,
+        	'userpassword':repouserpassword
 	    }
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
@@ -480,7 +484,7 @@ $(function(){
 				}else if(retVal.commitinfo.resultval == '0'){
 					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>commit fail</p>',{
 						title: 'SVN Test Dialog',
-						type: 'confirmation',
+						type: 'error',
 						print: false,
 						width: 760,
 						buttons: ['닫기'],

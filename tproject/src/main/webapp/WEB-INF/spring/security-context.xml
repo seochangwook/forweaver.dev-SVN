@@ -15,8 +15,8 @@
 	<context:component-scan base-package="com.tproject.dao" />
 	
 	<!-- Basic Login -->
-	<http pattern="/svn/svnproject/**">
-		<intercept-url pattern='/svn/svnproject/**' access="ROLE_ADMIN, ROLE_USER" />
+	<http pattern="/svn/**">
+		<intercept-url pattern='/svn/**' access="ROLE_ADMIN, ROLE_USER" />
 		<http-basic />
 	</http>
 	

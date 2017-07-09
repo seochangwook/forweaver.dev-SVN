@@ -102,7 +102,9 @@ public class RepoAjaxController{
 				info.get("commitpath").toString(), 
 				info.get("commitlog").toString(), 
 				info.get("commitfilename").toString(), 
-				info.get("commitfilecontent").toString()));
+				info.get("commitfilecontent").toString(),
+				info.get("userid").toString(),
+				info.get("userpassword").toString()));
 		
 		return retVal;
 	}
