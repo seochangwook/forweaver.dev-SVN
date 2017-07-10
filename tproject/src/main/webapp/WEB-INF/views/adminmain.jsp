@@ -100,6 +100,12 @@
 	      	<input type="button" id="btn_test7" value="modify commit">
   		</div>
 	</div>
+	<div>
+		<label>* 채팅방 이동</label><br>
+		<form name='TransTest' id='tForm' method='get' action='http://localhost:8080/controller/chatting.do'>
+			<p><button name='subject' type='submit'>채팅방 입장</button></p>
+		</form>
+	</div>
 </body>
 <script type="text/javascript">
 SyntaxHighlighter.all();

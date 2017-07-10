@@ -126,6 +126,13 @@
 			<artifactId>logback-classic</artifactId>
 			<version>${logback.version}</version>
 		</dependency>
+		
+		<!-- WebSocket -->
+		<dependency>
+          	<groupId>org.springframework</groupId>
+          	<artifactId>spring-websocket</artifactId>
+          	<version>4.1.6.RELEASE</version>
+      	</dependency>
 				
 		<!-- AspectJ -->
 		<dependency>
