@@ -5,7 +5,9 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:security="http://www.springframework.org/schema/security"
 	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.1.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
@@ -52,8 +54,15 @@
     <beans:bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
     	<beans:constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>   
     </beans:bean>
-	
+    
+    <!-- Websocket -->
+    <websocket:handlers>
+    	<websocket:mapping handler="echoHandler" path="/echo"/>
+    	<websocket:sockjs/>
+	</websocket:handlers>
+
 	<!-- utill -->
 	<beans:bean id="svnUtil" class="com.tproject.util.SVNUtil"/>
 	<beans:bean id="downloadView" class="com.tproject.util.FileDownloadUtil"/>
+	<beans:bean id="echoHandler" class="com.tproject.util.EchoHandler"/>
 </beans:beans>

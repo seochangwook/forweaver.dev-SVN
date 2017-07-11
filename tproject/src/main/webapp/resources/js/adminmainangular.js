@@ -14,7 +14,7 @@ app.controller('authcheckcontroller', function($scope, $http){
 		$http({
 			method: 'POST', //방식
 			url: 'http://localhost:8080/controller/adminlogoutajax',
-			headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+			headers: {'Content-Type': 'application/json; charset=utf-8', 'Accept': 'application/json, */*'} //헤더
 		}).then(function(response){
 	        //First function handles success
 			//원래의 로그아웃으로 이동//
@@ -35,7 +35,7 @@ app.controller('mainbackcontroller', function($scope, $http){
 		$http({
 			method: 'POST', //방식
 			url: 'http://localhost:8080/controller/adminlogoutajax',
-			headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+			headers: {'Content-Type': 'application/json; charset=utf-8', 'Accept': 'application/json, */*'} //헤더
 		}).then(function(response){
 	        //First function handles success
 			//원래의 로그아웃으로 이동//

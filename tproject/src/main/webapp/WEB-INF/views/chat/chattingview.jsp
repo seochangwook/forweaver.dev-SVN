@@ -12,6 +12,9 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/latest/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<!-- Zebra-Dialog CDN -->
+	<script src="resources/js/dialog/zebra_dialog.src.js"></script>
+	<link rel="stylesheet" href="resources/css/dialog/zebra_dialog.css" type="text/css"/>
 	<!-- SocketJS CDN -->
 	<script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
 	
@@ -19,6 +22,8 @@
 </head>
 <body>
 	<h1>Chatting Page</h1>
+	<input type="button" id="chattinglistbtn" value="채팅 참여자 리스트">
+	<br>
 	<div>
 		<input type="text" id="message"/>
     	<input type="button" id="sendBtn" value="전송"/>
@@ -26,7 +31,22 @@
 	</div>
 </body>
 <script type="text/javascript">
-
+$(function(){
+	$("#chattinglistbtn").click(function(){
+		var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>채팅방 참여자 리스트</p>',{
+			title: 'Chatting List',
+			type: 'confirmation',
+			print: false,
+			width: 760,
+			buttons: ['닫기'],
+			onClose: function(caption){
+				if(caption == '닫기'){
+					//alert('yes click');
+				}
+			}
+		});
+    });
+});
 </script>
 <script type="text/javascript">
 $(function(){
