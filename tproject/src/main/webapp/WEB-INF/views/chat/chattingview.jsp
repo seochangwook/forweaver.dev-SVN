@@ -65,12 +65,13 @@ sock.onclose = onClose;
         
 function sendMessage(){      
 	//websocket으로 메시지를 보내겠다.
-   sock.send($("#message").val());     
+  	sock.send($("#message").val());     
 }
             
 //evt 파라미터는 websocket이 보내준 데이터다.
 function onMessage(evt){  //변수 안에 function자체를 넣음.
 	var data = evt.data;
+	
    	$("#data").append(data+"<br/>");
   	/* sock.close(); */
 }
