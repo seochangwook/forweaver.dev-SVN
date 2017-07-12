@@ -1,5 +1,11 @@
 package com.tproject.controller;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
@@ -27,6 +33,13 @@ public class AuthManageController {
 		
 		System.out.println("main page admin adjust");
 		
+		//ip주소를 알아온다.//
+		//일반적인 IP주소 얻는 방법이 있지만 정확하지 않아 현재 접속되어 있는 IP주소를 불러온다.//
+		String ip = getLocalServerIp();
+		System.out.println("ip: " + ip);
+		
+		mv.addObject("serverip", ip);
+
 		System.out.println("=-=-=-=-=-=-=-=-=-=-=-==-==-=-");
 		logger.debug("tproject debug print");
     	logger.trace("tproject trace print");
@@ -56,5 +69,23 @@ public class AuthManageController {
 		System.out.println("login error");
 	
 		return mv;
+	}
+	
+	private String getLocalServerIp() {
+		try{
+		    for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();){
+		    	NetworkInterface intf = en.nextElement();
+		        for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();){
+		            InetAddress inetAddress = enumIpAddr.nextElement();
+		            if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress() && inetAddress.isSiteLocalAddress()){
+		            	return inetAddress.getHostAddress().toString();
+		            }
+		        }
+		    }
+		}
+		
+		catch (SocketException ex) {}
+		
+		return null;
 	}
 }

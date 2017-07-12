@@ -105,7 +105,7 @@
 		<form name='TransTest' id='tForm' method='get' action='http://localhost:8080/controller/chatting.do'>
 			<p><button name='subject' type='submit'>채팅방 입장</button></p>
 		</form>
-		<form name='TransTest' id='tForm' method='get' action='http://192.168.0.93:8080/controller/chatting.do'>
+		<form name='TransTest' id='tForm' method='get' action='http://${serverip}:8080/controller/chatting.do'>
 			<p><button name='subject' type='submit'>채팅방 입장(모바일)</button></p>
 		</form>
 	</div>

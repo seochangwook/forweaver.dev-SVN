@@ -1,10 +1,14 @@
 package com.tproject.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -18,7 +22,6 @@ public class EchoHandler extends TextWebSocketHandler{
     
     //방법 2 : 전체 채팅
     private List<WebSocketSession> sessionList = new ArrayList<WebSocketSession>();
-    
     
     private static Logger logger = LoggerFactory.getLogger(EchoHandler.class);
     
@@ -35,6 +38,7 @@ public class EchoHandler extends TextWebSocketHandler{
         //0번째 중괄호에 session.getId()을 넣으라는뜻
         logger.info("{} 연결됨", session.getId()); 
         
+        System.out.println("session principle: " + session.getPrincipal().getName());
     }
     
     /**
@@ -42,14 +46,14 @@ public class EchoHandler extends TextWebSocketHandler{
      */
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        
         //0번째에 session.getId() 1번째에 message.getPayload() 넣음
         logger.info("{}로 부터 {} 받음", session.getId(), message.getPayload());
         //logger.info("{}로부터 {}받음", new String[]{session.getId(),message.getPayload()});
         
         //연결된 모든 클라이언트에게 메시지 전송 : 리스트 방법
+        //getPrincipal()를 이용해서 세션에 물려있는 유저의 정보를 불러온다.세션의 정보는 User를 이용한것과 동일하다.//
         for(WebSocketSession sess : sessionList){
-            sess.sendMessage(new TextMessage("echo:" + message.getPayload()));
+        	sess.sendMessage(new TextMessage(session.getPrincipal().getName()+ "|" + message.getPayload()));
         }
         
         // 맵 방법.

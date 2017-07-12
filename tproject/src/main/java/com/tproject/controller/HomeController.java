@@ -38,6 +38,8 @@ public class HomeController {
 				
 		System.out.println("normal chat page");
 		
+		mv.addObject("userid", user.getUsername());
+		
 		return mv;
 	}
 }
