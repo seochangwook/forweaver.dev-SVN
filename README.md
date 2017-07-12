@@ -1,6 +1,6 @@
 # SVN Test (ver 1.3)
 <div>
-<h1><label>$ SVN</label></h1>
+<h1><label>$ SVN (Spring Framework)</label></h1>
 </div>
 <div>
 <h2><label># refrence site address</label></h2>
