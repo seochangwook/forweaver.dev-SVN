@@ -1,4 +1,4 @@
-# SVN Test (ver 1.2)
+# SVN Test (ver 1.3)
 <div>
 <h1><label>$ SVN</label></h1>
 </div>
