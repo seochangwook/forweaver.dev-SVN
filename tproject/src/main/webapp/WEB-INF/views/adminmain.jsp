@@ -101,6 +101,18 @@
   		</div>
 	</div>
 	<div>
+		<label>* 저장소 diff (리비전 별 차이점)</label><br>
+		<div class="well">
+			<label>-> 저장소 경로:</label>
+			<input type="text" id="diffrepopath" placeholder="input repo path"><br>
+			<label>-> Compare Revesion 1:</label>
+			<input type="text" id="compare_revesion_one" placeholder="input revesion 1"><br>
+			<label>-> Compare Revesion 2:</label>
+			<input type="text" id="compare_revesion_two" placeholder="input revesion 2"><br><br>
+			<input type="button" id="btn_diff_button" value="diff run">
+		</div>
+	</div>
+	<div>
 		<label>* 채팅방 이동</label><br>
 		<form name='TransTest' id='tForm' method='get' action='http://localhost:8080/controller/chatting.do'>
 			<p><button name='subject' type='submit'>채팅방 입장</button></p>
@@ -281,7 +293,7 @@ $(function(){
 	         	  	
 	         	  	var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>데이터가 존재하지 않거나 URL을 확인하세요</p>',{
 						title: 'SVN Test Dialog',
-						type: 'error',
+						type: 'warning',
 						print: false,
 						width: 760,
 						buttons: ['닫기'],
@@ -427,7 +439,7 @@ $(function(){
 	         	  	
 	         	  	var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>데이터가 존재하지 않거나 URL을 확인하세요</p>',{
 						title: 'SVN Test Dialog',
-						type: 'error',
+						type: 'warning',
 						print: false,
 						width: 760,
 						buttons: ['닫기'],
@@ -554,7 +566,7 @@ $(function(){
 				}else if(retVal.commitinfo.resultval == '0'){
 					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>commit modify fail</p>',{
 						title: 'SVN Test Dialog',
-						type: 'confirmation',
+						type: 'error',
 						print: false,
 						width: 760,
 						buttons: ['닫기'],
@@ -614,7 +626,7 @@ $(function(){
 				}else if(retVal.commitinfo.resultval == '0'){
 					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>commit fail</p>',{
 						title: 'SVN Test Dialog',
-						type: 'confirmation',
+						type: 'error',
 						print: false,
 						width: 760,
 						buttons: ['닫기'],
