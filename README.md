@@ -1,4 +1,4 @@
-# SVN Test (ver 1.3)
+# SVN Test (ver 1.4)
 <div>
 <h1><label>$ SVN (Spring Framework)</label></h1>
 </div>
@@ -32,7 +32,7 @@
 <li>Separate files and directories with images</li>
 <li>file download</li>
 <li>Authentication</li>
-<li>diff</li>
+<li>diff (Revision Differences)</li>
 </div>
 <br>
 <h3><label>* SVNKit-dav (Server)</label></h3>
