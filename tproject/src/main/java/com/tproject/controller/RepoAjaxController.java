@@ -153,4 +153,17 @@ public class RepoAjaxController{
 		
 		return retVal;
 	}
+	
+	@RequestMapping(value = "/diffajax", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> diff(@RequestBody Map<String, Object> info) {	
+		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
+		
+		retVal.put("result", "success");
+		retVal.put("diffinfo", svnUtil.doDiff(
+				info.get("repourl").toString(), 
+				Long.parseLong(info.get("revesionone").toString()), 
+				Long.parseLong(info.get("revesiontwo").toString())));
+		
+		return retVal;
+	}
 }

@@ -15,6 +15,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 import org.tmatesoft.svn.core.SVNCommitInfo;
+import org.tmatesoft.svn.core.SVNDepth;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNErrorCode;
 import org.tmatesoft.svn.core.SVNErrorMessage;
@@ -32,6 +33,10 @@ import org.tmatesoft.svn.core.io.ISVNEditor;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.io.diff.SVNDeltaGenerator;
+import org.tmatesoft.svn.core.wc.ISVNOptions;
+import org.tmatesoft.svn.core.wc.SVNClientManager;
+import org.tmatesoft.svn.core.wc.SVNDiffClient;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 import org.tmatesoft.svn.core.wc.admin.SVNAdminClient;
 
@@ -591,4 +596,40 @@ public class SVNUtil {
         
         return editor.closeEdit();
     }
+	
+	public Map<String, Object> doDiff(String repourl, long revesionone, long revesiontwo){
+		Map<String, Object>resultdiff = new HashMap<String, Object>();
+		
+		//System.out.println("repourl: " + repourl + "/ revesionone: " + revesionone + "/ revesiontwo: " + revesiontwo);
+		
+		SVNRepository repository = null;
+		
+		try {
+			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			SVNURL svnURL = SVNURL.parseURIEncoded(repourl);
+
+			// Get diffClient.
+		    SVNClientManager clientManager = SVNClientManager.newInstance();
+		    SVNDiffClient diffClient = clientManager.getDiffClient();
+		    
+		    // Using diffClient, write the changes by commitId into
+		    // byteArrayOutputStream, as unified format.
+		    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		    diffClient.doDiff(svnURL, null, SVNRevision.create(revesionone), SVNRevision.create(revesiontwo), SVNDepth.INFINITY, true, byteArrayOutputStream);
+			
+		    String diffresult = byteArrayOutputStream.toString();
+		    
+		    resultdiff.put("resultval", diffresult);
+		    
+	        return resultdiff;
+		} catch (SVNException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+			resultdiff.put("resultval", "0");
+		}
+		
+		return resultdiff;
+	}
 }
