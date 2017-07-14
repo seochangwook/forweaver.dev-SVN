@@ -33,7 +33,7 @@
 <li>file download</li>
 <li>Authentication</li>
 <li>diff (Revision Differences)</li>
-<li>Lock & UnLock - developing</li>
+<li>Lock & UnLock -> developing</li>
 </div>
 <br>
 <h3><label>* SVNKit-dav (Server)</label></h3>
