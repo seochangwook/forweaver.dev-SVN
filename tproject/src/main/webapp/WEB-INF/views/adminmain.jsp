@@ -22,9 +22,14 @@
 	<!-- Beautiful Code, Theme CDN -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushJava.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushDiff.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCore.css"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeDefault.css"/>
 </head>
+<script type="text/javascript">
+    SyntaxHighlighter.defaults['toolbar'] = false;
+    SyntaxHighlighter.highlight(); 
+</script>
 <body>
 	<div ng-controller="authcheckcontroller">
 		<h1>SVN Test page(for Admin)</h1><br>
@@ -112,6 +117,9 @@
 			<input type="button" id="btn_diff_button" value="diff run">
 		</div>
 		<div id="diffresult">
+			<pre id="code" class="brush : diff">
+			
+			</pre>
 		</div>
 	</div>
 	<div>
@@ -125,8 +133,6 @@
 	</div>
 </body>
 <script type="text/javascript">
-SyntaxHighlighter.all();
-
 $(function(){
 	$('#btn_diff_button').click(function(){
 		var repourl = $('#diffrepopath').val();
@@ -154,8 +160,10 @@ $(function(){
 				} else{
 					alert("success ajax and function..." + retVal.result);	
 					
-					$('#diffresult').empty();
-					$('#diffresult').append(retVal.diffinfo.resultval);
+					$('#code').empty();
+					$('#code').append(retVal.diffinfo.resultval);
+					
+					SyntaxHighlighter.highlight(); //동적으로 한번 더 로드해준다.//
 				}
 			},
 			error: function(retVal, status, er){
@@ -451,7 +459,11 @@ $(function(){
 		            	printStr += "<td>ver."+repotreelistrevesion[i]+"</td>";
 		            	printStr += "<td>"+repotreelistdate[i]+"</td>";
 		            	printStr += "<td>"+repocommitmsg[i]+"</td>";
-		            	printStr += "<td>"+repotreelistlock[i]+"</td>";
+		            	if(repotreelistlock[i] == 'lock'){
+		            		printStr += "<td><img src='./resources/images/lockimage.png' width='40' height='40' onclick='unlock()'></td>";
+		            	} else if(repotreelistlock[i] == 'unlock'){
+		            		printStr += "<td><img src='./resources/images/unlockimage.png' width='40' height='40' onclick='lock()'></td>";
+		            	}
 		            	if(repokind[i] == 'dir'){
 		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>move</button></td>";
 		            		printStr += "<td><button value='"+repotreelistname[i]+"' disabled='disabled'>download</button></td>";
@@ -907,7 +919,11 @@ function list_reload(repourl){
 	            	printStr += "<td>ver."+repotreelistrevesion[i]+"</td>";
 	            	printStr += "<td>"+repotreelistdate[i]+"</td>";
 	            	printStr += "<td>"+repocommitmsg[i]+"</td>";
-	            	printStr += "<td>"+repotreelistlock[i]+"</td>";
+	            	if(repotreelistlock[i] == 'lock'){
+	            		printStr += "<td><img src='./resources/images/lockimage.png' width='40' height='40' onclick='unlock()'></td>";
+	            	} else if(repotreelistlock[i] == 'unlock'){
+	            		printStr += "<td><img src='./resources/images/unlockimage.png' width='40' height='40' onclick='lock()'></td>";
+	            	}
 	            	if(repokind[i] == 'dir'){
 	            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>move</button></td>";
 	            		printStr += "<td><button value='"+repotreelistname[i]+"' disabled='disabled'>download</button></td>";
@@ -951,6 +967,14 @@ function list_reload(repourl){
 			alert("error: "+retVal+" status: "+status+" er:"+er);
 		}
 	});
+}
+//////////////////////////
+function unlock(){
+	alert('click unlock');
+}
+//////////////////////////
+function lock(){
+	alert('click lock');
 }
 </script>
 </html>
