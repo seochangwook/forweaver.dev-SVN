@@ -20,6 +20,7 @@ import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNErrorCode;
 import org.tmatesoft.svn.core.SVNErrorMessage;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNLock;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNLogEntryPath;
 import org.tmatesoft.svn.core.SVNNodeKind;
@@ -27,19 +28,15 @@ import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNProperty;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
-import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
-import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.core.io.ISVNEditor;
 import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.io.diff.SVNDeltaGenerator;
-import org.tmatesoft.svn.core.wc.ISVNOptions;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNDiffClient;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.tmatesoft.svn.core.wc.SVNWCClient;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
-import org.tmatesoft.svn.core.wc.admin.SVNAdminClient;
-
 @Component
 public class SVNUtil {
 	private static int totalrepotreecount = 0; //�옱洹��샇異쒖씠�씪 �젙�쟻 硫ㅻ쾭蹂��닔濡� �븘�슂//
@@ -621,6 +618,70 @@ public class SVNUtil {
 		    String diffresult = byteArrayOutputStream.toString();
 		    
 		    resultdiff.put("resultval", diffresult);
+		    
+	        return resultdiff;
+		} catch (SVNException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+			resultdiff.put("resultval", "0");
+		}
+		
+		return resultdiff;
+	}
+	
+	public Map<String, Object> dolock(String repourl, String lockfilepath){
+		Map<String, Object>resultdiff = new HashMap<String, Object>();
+		
+		System.out.println("repourl: " + repourl + "/ filepath: " + lockfilepath);
+		
+		SVNRepository repository = null;
+		
+		try {
+			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			//File Lock//
+			SVNClientManager clientManager = SVNClientManager.newInstance();
+			SVNWCClient wcclient = clientManager.getWCClient();
+			
+			File lockfilelist[] = new File[1];
+			lockfilelist[0] = new File(lockfilepath);
+			
+			wcclient.doLock(lockfilelist, true, "file lock");
+			
+			resultdiff.put("resultval", "1");
+		    
+	        return resultdiff;
+		} catch (SVNException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+			resultdiff.put("resultval", "0");
+		}
+		
+		return resultdiff;
+	}
+	
+	public Map<String, Object> dounlock(String repourl, String lockfilepath){
+		Map<String, Object>resultdiff = new HashMap<String, Object>();
+		
+		System.out.println("repourl: " + repourl + "/ filepath: " + lockfilepath);
+		
+		SVNRepository repository = null;
+		
+		try {
+			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			//File Lock//
+			SVNClientManager clientManager = SVNClientManager.newInstance();
+			SVNWCClient wcclient = clientManager.getWCClient();
+			
+			File lockfilelist[] = new File[1];
+			lockfilelist[0] = new File(lockfilepath);
+			
+			wcclient.doUnlock(lockfilelist, true);
+			
+			resultdiff.put("resultval", "1");
 		    
 	        return resultdiff;
 		} catch (SVNException e) {

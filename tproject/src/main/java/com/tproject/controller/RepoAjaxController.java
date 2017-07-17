@@ -166,4 +166,32 @@ public class RepoAjaxController{
 		
 		return retVal;
 	}
+	
+	@RequestMapping(value = "/lockajax", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> lock(@RequestBody Map<String, Object> info) {	
+		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
+		
+		svnUtil.dolock(info.get("url").toString(), info.get("lockfilepath").toString());
+		
+		retVal.put("result", "success");
+		retVal.put("lockinfo", svnUtil.dolock(
+				info.get("url").toString(), 
+				info.get("lockfilepath").toString()));
+		
+		return retVal;
+	}
+	
+	@RequestMapping(value = "/unlockajax", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> unlock(@RequestBody Map<String, Object> info) {	
+		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
+		
+		svnUtil.dolock(info.get("url").toString(), info.get("lockfilepath").toString());
+		
+		retVal.put("result", "success");
+		retVal.put("lockinfo", svnUtil.dounlock(
+				info.get("url").toString(), 
+				info.get("unlockfilepath").toString()));
+		
+		return retVal;
+	}
 }

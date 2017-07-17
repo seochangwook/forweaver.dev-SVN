@@ -38,7 +38,8 @@ public class EchoHandler extends TextWebSocketHandler{
         //0번째 중괄호에 session.getId()을 넣으라는뜻
         logger.info("{} 연결됨", session.getId()); 
         
-        System.out.println("session principle: " + session.getPrincipal().getName());
+        //Session값을 가지고 데이터베이스등의 작업을 하면 채팅 참여 사용자 정보 리스트를 구현할 수 있다.//
+        System.out.println("채팅방 입장자: " + session.getPrincipal().getName());
     }
     
     /**
@@ -81,6 +82,8 @@ public class EchoHandler extends TextWebSocketHandler{
         //sessions.remove(session.getId());
         
         logger.info("{} 연결 끊김.", session.getId());
+        
+        System.out.println("채팅방 퇴장자: " + session.getPrincipal().getName());
     }
  
 }

@@ -73,6 +73,7 @@
 	<input type='hidden' id='filepath' value=''>
 	<input type='hidden' id='repourl' value=''>
 	<input type='hidden' id='originalcontent' value=''>
+	<input type="hidden" id='originalrepourl' value=''> 
 	<div id="repotree">
 	</div>
 	<br>
@@ -459,10 +460,13 @@ $(function(){
 		            	printStr += "<td>ver."+repotreelistrevesion[i]+"</td>";
 		            	printStr += "<td>"+repotreelistdate[i]+"</td>";
 		            	printStr += "<td>"+repocommitmsg[i]+"</td>";
-		            	if(repotreelistlock[i] == 'lock'){
-		            		printStr += "<td><img src='./resources/images/lockimage.png' width='40' height='40' onclick='unlock()'></td>";
-		            	} else if(repotreelistlock[i] == 'unlock'){
-		            		printStr += "<td><img src='./resources/images/unlockimage.png' width='40' height='40' onclick='lock()'></td>";
+		            	console.log('lock condition: [' + repotreelistname[i] + '] is [' + repotreelistlock[i] + ']');
+		            	if(repotreelistlock[i] == 'lock' && repokind[i] == 'file'){
+		            		printStr += "<td><img alt='"+repotreelistname[i]+"' src='./resources/images/lockimage.png' width='40' height='40' onclick='unlock(this.alt)'></td>";	
+		            	} else if(repotreelistlock[i] == 'unlock' && repokind[i] == 'file'){
+		            		printStr += "<td><img alt='"+repotreelistname[i]+"' src='./resources/images/unlockimage.png' width='40' height='40' onclick='lock(this.alt)'></td>";	
+		            	} else if(repokind[i] == 'dir') {
+		            		printStr += "<td><img src='./resources/images/notimage.png' width='40' height='40'></td>";
 		            	}
 		            	if(repokind[i] == 'dir'){
 		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>move</button></td>";
@@ -501,7 +505,9 @@ $(function(){
 		        }
 				
 				$('#repotree').append(printStr); //다시 테이블을 보여주기 위해서 HTML코드 적용//
-				$('#repourl').val(repourl);
+				$('#repourl').val(repourl); 
+				
+				$('#originalrepourl').val($('#repourl').val()+'/svnserverone'); //추후 이 부분은 하드코딩이 아닌 저장소의 이름을 받아온다.//
 			},
 			error: function(retVal, status, er){
 				alert("error: "+retVal+" status: "+status+" er:"+er);
@@ -919,10 +925,13 @@ function list_reload(repourl){
 	            	printStr += "<td>ver."+repotreelistrevesion[i]+"</td>";
 	            	printStr += "<td>"+repotreelistdate[i]+"</td>";
 	            	printStr += "<td>"+repocommitmsg[i]+"</td>";
-	            	if(repotreelistlock[i] == 'lock'){
-	            		printStr += "<td><img src='./resources/images/lockimage.png' width='40' height='40' onclick='unlock()'></td>";
-	            	} else if(repotreelistlock[i] == 'unlock'){
-	            		printStr += "<td><img src='./resources/images/unlockimage.png' width='40' height='40' onclick='lock()'></td>";
+	            	console.log('lock condition: [' + repotreelistname[i] + '] is [' + repotreelistlock[i] + ']');
+	            	if(repotreelistlock[i] == 'lock' && repokind[i] == 'file'){
+	            		printStr += "<td><img alt='"+repotreelistname[i]+"' src='./resources/images/lockimage.png' width='40' height='40' onclick='unlock(this.alt)'></td>";	
+	            	} else if(repotreelistlock[i] == 'unlock' && repokind[i] == 'file'){
+	            		printStr += "<td><img alt='"+repotreelistname[i]+"' src='./resources/images/unlockimage.png' width='40' height='40' onclick='lock(this.alt)'></td>";	
+	            	} else if(repokind[i] == 'dir') {
+	            		printStr += "<td><img src='./resources/images/notimage.png' width='40' height='40'></td>";
 	            	}
 	            	if(repokind[i] == 'dir'){
 	            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>move</button></td>";
@@ -969,12 +978,132 @@ function list_reload(repourl){
 	});
 }
 //////////////////////////
-function unlock(){
-	alert('click unlock');
+function unlock(filename){
+	var defaultfilepath = $('#originalrepourl').val();
+	var repourl = $('#repourl').val();
+	var relativefilepath = $('#filepath').val();
+	var unlockfilepath;
+	
+	unlockfilepath = defaultfilepath.substring(7) + relativefilepath + '/' +filename;
+	
+	//앞의 file:// 을 제거//
+	console.log(unlockfilepath +' -> unlock' + ' / repourl: ' + repourl);
+	
+	var trans_objeect = 
+	{
+    	'url': repourl,
+    	'unlockfilepath':lockfilepath
+    }
+	var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+	
+	$.ajax({
+		url: "http://localhost:8080/controller/unlockajax",
+		type: 'POST',
+		dataType: 'json',
+		data: trans_json,
+		contentType: 'application/json',
+		mimeType: 'application/json',
+		success: function(retVal){
+			if(retVal.lockinfo.resultval == '1'){
+				var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>파일잠금 해제가 정상적으로 이루어졌습니다. 새로고침하여 확인하세요</p>',{
+					title: 'SVN Test Dialog',
+					type: 'confirmation',
+					print: false,
+					width: 760,
+					position: ['right - 20', 'top + 20'],
+					buttons: ['닫기'],
+					onClose: function(caption){
+						if(caption == '닫기'){
+							//alert('yes click');
+						}
+					}
+				});
+			}
+			
+			else if(retVal.lockinfo.resultval == '0'){
+				var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>파일잠금 해제를 실패했습니다. 파일정보를 다시한번 확인하세요</p>',{
+					title: 'SVN Test Dialog',
+					type: 'error',
+					print: false,
+					width: 760,
+					position: ['right - 20', 'top + 20'],
+					buttons: ['닫기'],
+					onClose: function(caption){
+						if(caption == '닫기'){
+							//alert('yes click');
+						}
+					}
+				});
+			}
+		},
+		error: function(retVal, status, er){
+			alert("error: "+retVal+" status: "+status+" er:"+er);
+		}
+	});
 }
 //////////////////////////
-function lock(){
-	alert('click lock');
+function lock(filename){
+	var defaultfilepath = $('#originalrepourl').val();
+	var repourl = $('#repourl').val();
+	var relativefilepath = $('#filepath').val();
+	var lockfilepath;
+	
+	lockfilepath = defaultfilepath.substring(7) + relativefilepath + '/' +filename;
+	
+	//앞의 file:// 을 제거//
+	console.log(lockfilepath +' -> lock' + ' / repourl: ' + repourl);
+	
+	var trans_objeect = 
+	{
+    	'url': repourl,
+    	'lockfilepath':lockfilepath
+    }
+	var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+	
+	$.ajax({
+		url: "http://localhost:8080/controller/lockajax",
+		type: 'POST',
+		dataType: 'json',
+		data: trans_json,
+		contentType: 'application/json',
+		mimeType: 'application/json',
+		success: function(retVal){
+			if(retVal.lockinfo.resultval == '1'){
+				var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>파일잠금이 정상적으로 이루어졌습니다. 새로고침하여 확인하세요</p>',{
+					title: 'SVN Test Dialog',
+					type: 'confirmation',
+					print: false,
+					width: 760,
+					position: ['right - 20', 'top + 20'],
+					buttons: ['닫기'],
+					onClose: function(caption){
+						if(caption == '닫기'){
+							//alert('yes click');
+						}
+					}
+				});
+			}
+			
+			else if(retVal.lockinfo.resultval == '0'){
+				var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>파일잠금이 실패했습니다. 파일정보를 다시한번 확인하세요</p>',{
+					title: 'SVN Test Dialog',
+					type: 'error',
+					print: false,
+					width: 760,
+					position: ['right - 20', 'top + 20'],
+					buttons: ['닫기'],
+					onClose: function(caption){
+						if(caption == '닫기'){
+							//alert('yes click');
+						}
+					}
+				});
+			}
+		},
+		error: function(retVal, status, er){
+			alert("error: "+retVal+" status: "+status+" er:"+er);
+		}
+	});
 }
 </script>
 </html>
