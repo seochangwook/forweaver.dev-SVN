@@ -38,9 +38,9 @@
 <br>
 <h3><label>* SVNKit-dav (Server)</label></h3>
 <li>SVN command learn</li>
-<li>Auth System - Spring Security(crypto-SHA) & MongoDB</li>
+<li>Login Auth System - Spring Security(crypto-SHA) & MongoDB</li>
 <li>DAV-Servlet - Spring Security(Basic Login)</li>
-<li>Logback use - Server Log Print & Save Local File</li>
+<li>Logback - Server Log Print & Save Local File</li>
 <br>
 <h3><label>* Additional service</label></h3>
 <li>Chatting (WebSocket)</li>
