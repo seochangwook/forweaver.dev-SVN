@@ -34,7 +34,7 @@
 <li>Authentication</li>
 <li>diff (Revision Differences)</li>
 <li>Lock & UnLock (Troubleshoot Status Mismatch -> modifying)</li>
-<li>status</li>
+<li>Status</li>
 </div>
 <br>
 <h3><label>* SVNKit-dav (Server)</label></h3>
