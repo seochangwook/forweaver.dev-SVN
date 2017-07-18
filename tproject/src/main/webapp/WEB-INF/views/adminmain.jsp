@@ -69,7 +69,8 @@
 	<br><br>
 	<label>* 저장소 트리구조 출력: </label>
 	<input type="text" id="repopathtexttree" placeholder="input repo path">
-	<input type="button" id="btn_test5" value="click button"><br>
+	<input type="button" id="btn_test5" value="click button">&nbsp
+	<input type="button" id="btn_status" value="repo status"><br>
 	<input type='hidden' id='filepath' value=''>
 	<input type='hidden' id='repourl' value=''>
 	<input type='hidden' id='originalcontent' value=''>
@@ -118,23 +119,54 @@
 			<input type="button" id="btn_diff_button" value="diff run">
 		</div>
 		<div id="diffresult">
+			<label>-> diff 결과 출력영역</label>
 			<pre id="code" class="brush : diff">
-			
 			</pre>
 		</div>
 	</div>
 	<div>
 		<label>* 채팅방 이동</label><br>
-		<form name='TransTest' id='tForm' method='get' action='http://localhost:8080/controller/chatting.do'>
+		<form name='TransTest' id='tForm' method='get' action='http://${serverip}:8080/controller/chatting.do'>
 			<p><button name='subject' type='submit'>채팅방 입장</button></p>
 		</form>
-		<form name='TransTest' id='tForm' method='get' action='http://${serverip}:8080/controller/chatting.do'>
-			<p><button name='subject' type='submit'>채팅방 입장(모바일)</button></p>
-		</form>
 	</div>
+	<input type="hidden" id="ipaddress" value='${serverip}'>
 </body>
 <script type="text/javascript">
+var serverip = $('#ipaddress').val();
+</script>
+<script type="text/javascript">
 $(function(){
+	$('#btn_status').click(function(){
+		var defaultfilepath = $('#originalrepourl').val();
+		var repourl = $('#repourl').val();
+		var relativefilepath = $('#filepath').val();
+		var statuspath;
+		
+		statuspath = defaultfilepath.substring(7) + relativefilepath;
+		
+		var trans_objeect = 
+    	{
+        	'repourl':repourl,
+        	'statuspath':statuspath
+	    }
+		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+		
+		$.ajax({
+			url: "http://"+serverip+":8080/controller/statusajax",
+			type: 'POST',
+			dataType: 'json',
+			data: trans_json,
+			contentType: 'application/json',
+			mimeType: 'application/json',
+			success: function(retVal){
+				alert('success ajax');
+			},
+			error: function(retVal, status, er){
+				alert("error: "+retVal+" status: "+status+" er:"+er);
+			}
+		});
+	});
 	$('#btn_diff_button').click(function(){
 		var repourl = $('#diffrepopath').val();
 		var revesionone = $('#compare_revesion_one').val();
@@ -149,7 +181,7 @@ $(function(){
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
 		$.ajax({
-			url: "http://localhost:8080/controller/diffajax",
+			url: "http://"+serverip+":8080/controller/diffajax",
 			type: 'POST',
 			dataType: 'json',
 			data: trans_json,
@@ -157,14 +189,39 @@ $(function(){
 			mimeType: 'application/json',
 			success: function(retVal){
 				if(retVal.diffinfo.resultval == '0'){
-					alert("success ajax and function fail..." + retVal.diffinfo.resultval);
+					//alert("success ajax and function fail..." + retVal.diffinfo.resultval);
+					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>해당 저장소의 [Revesion'+revesionone+'] 과 [Revesion'+revesiontwo+'] 의 차이 결과를 찾을 수 없습니다.</p>',{
+						title: 'SVN Test Dialog',
+						type: 'warning',
+						print: false,
+						width: 760,
+						position: ['right - 20', 'top + 20'],
+						buttons: ['닫기'],
+						onClose: function(caption){
+							if(caption == '닫기'){
+								//alert('yes click');
+							}
+						}
+					});
 				} else{
-					alert("success ajax and function..." + retVal.result);	
-					
 					$('#code').empty();
 					$('#code').append(retVal.diffinfo.resultval);
 					
 					SyntaxHighlighter.highlight(); //동적으로 한번 더 로드해준다.//
+					
+					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>해당 저장소의 [Revesion'+revesionone+'] 과 [Revesion'+revesiontwo+'] 의 차이 결과를 출력합니다.</p>',{
+						title: 'SVN Test Dialog',
+						type: 'confirmation',
+						print: false,
+						width: 760,
+						position: ['right - 20', 'top + 20'],
+						buttons: ['닫기'],
+						onClose: function(caption){
+							if(caption == '닫기'){
+								//alert('yes click');
+							}
+						}
+					});
 				}
 			},
 			error: function(retVal, status, er){
@@ -175,7 +232,7 @@ $(function(){
 	$('#btn_test').click(function(){
 		var trans_objeect = 
     	{
-        	'url': 'C:\\Users\\seochangwook\\Desktop\\testrepo'
+        	'url': 'C:\\Users\\seochangwook\\Desktop\\testrepo' //파일선택하는 걸로 나중엔 설정. 현재는 디폴트//
 	    }
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
@@ -205,6 +262,8 @@ $(function(){
 		var repouserid = $('#repouserid').val();
 		var repouserpassword = $('#repouserpassword').val();
 		
+		console.log('ip address: ' + serverip);
+		
 		var trans_objeect = 
     	{
         	'url': repourl,
@@ -214,7 +273,7 @@ $(function(){
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
 		$.ajax({
-			url: "http://localhost:8080/controller/repoinfoajax",
+			url: "http://"+serverip+":8080/controller/repoinfoajax",
 			type: 'POST',
 			dataType: 'json',
 			data: trans_json,
@@ -232,7 +291,7 @@ $(function(){
 	        	printStr += "<th>구분</th>";
 	        	printStr += "<th>정보</th>";
 	        	printStr += "</tr>";
-	        	printStr += "</thead>"; 
+	        	printStr += "</thead>"; "src/main/webapp/WEB-INF/views/chat/chattingview.jsp"
 	        	printStr += "<tbody>";
 	        	printStr += "<tr>";
 	        	printStr += "<td>UUID</td>";
@@ -275,7 +334,7 @@ $(function(){
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
 		$.ajax({
-			url: "http://localhost:8080/controller/repohistoryajax",
+			url: "http://"+serverip+":8080/controller/repohistoryajax",
 			type: 'POST',
 			dataType: 'json',
 			data: trans_json,
@@ -398,7 +457,7 @@ $(function(){
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
 		$.ajax({
-			url: "http://localhost:8080/controller/repotreeajax",
+			url: "http://"+serverip+":8080/controller/repotreeajax",
 			type: 'POST',
 			dataType: 'json',
 			data: trans_json,
@@ -537,7 +596,7 @@ $(function(){
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
 		$.ajax({
-			url: "http://localhost:8080/controller/commitajax",
+			url: "http://"+serverip+":8080/controller/commitajax",
 			type: 'POST',
 			dataType: 'json',
 			data: trans_json,
@@ -598,7 +657,7 @@ $(function(){
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
 		$.ajax({
-			url: "http://localhost:8080/controller/commitmodifyajax",
+			url: "http://"+serverip+":8080/controller/commitmodifyajax",
 			type: 'POST',
 			dataType: 'json',
 			data: trans_json,
@@ -658,7 +717,7 @@ $(function(){
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
 		$.ajax({
-			url: "http://localhost:8080/controller/commitdirajax",
+			url: "http://"+serverip+":8080/controller/commitdirajax",
 			type: 'POST',
 			dataType: 'json',
 			data: trans_json,
@@ -717,7 +776,7 @@ function viewcode(filename){
 	var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 	
 	$.ajax({
-		url: "http://localhost:8080/controller/filecontentajax",
+		url: "http://"+serverip+":8080/controller/filecontentajax",
 		type: 'POST',
 		dataType: 'json',
 		data: trans_json,
@@ -791,7 +850,7 @@ function deletepath(filename){
 				var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 				
 				$.ajax({
-					url: "http://localhost:8080/controller/commitdeleteajax",
+					url: "http://"+serverip+":8080/controller/commitdeleteajax",
 					type: 'POST',
 					dataType: 'json',
 					data: trans_json,
@@ -862,7 +921,7 @@ function list_reload(repourl){
 	var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 	
 	$.ajax({
-		url: "http://localhost:8080/controller/repotreeajax",
+		url: "http://"+serverip+":8080/controller/repotreeajax",
 		type: 'POST',
 		dataType: 'json',
 		data: trans_json,
@@ -997,7 +1056,7 @@ function unlock(filename){
 	var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 	
 	$.ajax({
-		url: "http://localhost:8080/controller/unlockajax",
+		url: "http://"+serverip+":8080/controller/unlockajax",
 		type: 'POST',
 		dataType: 'json',
 		data: trans_json,
@@ -1061,7 +1120,7 @@ function lock(filename){
 	var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 	
 	$.ajax({
-		url: "http://localhost:8080/controller/lockajax",
+		url: "http://"+serverip+":8080/controller/lockajax",
 		type: 'POST',
 		dataType: 'json',
 		data: trans_json,

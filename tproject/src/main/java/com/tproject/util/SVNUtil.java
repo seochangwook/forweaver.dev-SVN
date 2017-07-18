@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.tmatesoft.svn.core.SVNCommitInfo;
 import org.tmatesoft.svn.core.SVNDepth;
@@ -35,6 +36,8 @@ import org.tmatesoft.svn.core.io.diff.SVNDeltaGenerator;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNDiffClient;
 import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.tmatesoft.svn.core.wc.SVNStatus;
+import org.tmatesoft.svn.core.wc.SVNStatusClient;
 import org.tmatesoft.svn.core.wc.SVNWCClient;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 @Component
@@ -649,7 +652,21 @@ public class SVNUtil {
 			
 			wcclient.doLock(lockfilelist, true, "file lock");
 			
-			resultdiff.put("resultval", "1");
+			//락 확인//
+			String lockPath = lockfilepath;
+			SVNLock lock = repository.getLock(lockPath);
+			
+			if (lock == null) {
+                System.out.println(lockfilepath + " isn't lock");
+                resultdiff.put("resultval", "0");
+            }
+			
+			else if(lock != null){
+				System.out.println(lockfilepath + " is lock");
+				resultdiff.put("resultval", "1");
+			}
+			
+			//resultdiff.put("resultval", "1");
 		    
 	        return resultdiff;
 		} catch (SVNException e) {
@@ -682,6 +699,36 @@ public class SVNUtil {
 			wcclient.doUnlock(lockfilelist, true);
 			
 			resultdiff.put("resultval", "1");
+		    
+	        return resultdiff;
+		} catch (SVNException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+			resultdiff.put("resultval", "0");
+		}
+		
+		return resultdiff;
+	}
+	
+	public Map<String, Object> dostatus(String repourl, String statuspath){
+		Map<String, Object>resultdiff = new HashMap<String, Object>();
+		
+		System.out.println("repourl: " + repourl + "/ statuspath: " + statuspath);
+		
+		SVNRepository repository = null;
+		
+		try {
+			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			// Get StatusClient.
+		    SVNClientManager clientManager = SVNClientManager.newInstance();
+		    SVNStatusClient statusclient = clientManager.getStatusClient();
+		    
+		    /*ourClientManager.getStatusClient( ).doStatus( wcPath , isRecursive , isRemote , isReportAll ,
+                                                    isIncludeIgnored , isCollectParentExternals , 
+                                                    new StatusHandler( isRemote ) );*/
+		    statusclient.doStatus(new File(statuspath), false, false, true, true, new StatusHandler(false));
 		    
 	        return resultdiff;
 		} catch (SVNException e) {
