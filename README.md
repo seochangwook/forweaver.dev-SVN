@@ -33,8 +33,8 @@
 <li>file download</li>
 <li>Authentication</li>
 <li>diff (Revision Differences)</li>
-<li>status -> developing</li>
 <li>Lock & UnLock (Troubleshoot Status Mismatch -> modifying)</li>
+<li>status -> developing</li>
 </div>
 <br>
 <h3><label>* SVNKit-dav (Server)</label></h3>
