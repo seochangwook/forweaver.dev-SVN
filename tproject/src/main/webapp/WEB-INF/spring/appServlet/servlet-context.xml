@@ -65,4 +65,5 @@
 	<beans:bean id="svnUtil" class="com.tproject.util.SVNUtil"/>
 	<beans:bean id="downloadView" class="com.tproject.util.FileDownloadUtil"/>
 	<beans:bean id="echoHandler" class="com.tproject.util.EchoHandler"/>
+	<beans:bean id="statusHandler" class="com.tproject.util.StatusHandler"/>
 </beans:beans>

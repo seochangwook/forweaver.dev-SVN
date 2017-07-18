@@ -1,5 +1,10 @@
 package com.tproject.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Component;
 import org.tmatesoft.svn.core.SVNCancelException;
 import org.tmatesoft.svn.core.SVNLock;
@@ -10,17 +15,32 @@ import org.tmatesoft.svn.core.wc.SVNEventAction;
 import org.tmatesoft.svn.core.wc.SVNStatus;
 import org.tmatesoft.svn.core.wc.SVNStatusType;
 
+@Component
 public class StatusHandler implements ISVNStatusHandler, ISVNEventHandler {
     private boolean myIsRemote;
+    public static int COUNT = 0;
     
-    public StatusHandler(){
-    	
-    }
+    public static Map<String, Object> result;
+    private static List<Object>statusinfolist;
     
-    public StatusHandler( boolean isRemote ) {
-        myIsRemote = isRemote;
-    }
+	public void setInit(boolean myIsRemote) {
+		this.myIsRemote = myIsRemote;
+		
+		result = new HashMap<String, Object>();
+		statusinfolist = new ArrayList<Object>();
+		
+		COUNT = 0;
+		
+		System.out.println("init data");
+	}
+	
+	public Map<String, Object> getResult() {
+		result.put("statusinfolist", statusinfolist);
+		
+		return result;
+	}
 
+	//Status를 수행하는 파일개수만큼 핸들러가 반복실행//
     public void handleStatus( SVNStatus status ) {
         /*
          * Gets  the  status  of  file/directory/symbolic link  text  contents. 
@@ -199,6 +219,47 @@ public class StatusHandler implements ISVNStatusHandler, ISVNEventHandler {
          * status is shown in the manner of the native Subversion command  line
          * client's command "svn status"
          */
+        String resultcontent = "";
+        
+        resultcontent += pathChangeType + " " + propertiesChangeType;
+        
+        if(isLocked == true){
+        	resultcontent += " " + "L";
+        } else if(isLocked == false){
+        	resultcontent += " " + " ";
+        }
+        
+        if(isAddedWithHistory == true){
+        	resultcontent += " " + "+";
+        } else if(isAddedWithHistory == false){
+        	resultcontent += " " + " ";
+        }
+        
+        if(isSwitched == true){
+        	resultcontent += " " + "S";
+        } else if(isSwitched == false){
+        	resultcontent += " " + " ";
+        }
+        
+        resultcontent += " " + lockLabel;
+        resultcontent += " " + remoteChangeType;
+        resultcontent += " " + workingRevision;
+        resultcontent += " " + offsets[0];
+        
+        if(lastChangedRevision >= 0){
+        	resultcontent += " " + String.valueOf(lastChangedRevision)+offsets[1];
+        } else{
+        	resultcontent += " " + "?"+offsets[1];
+        }
+        
+        if(status.getAuthor( ) != null){
+        	resultcontent += " " + status.getAuthor();
+        } else{
+        	resultcontent += " " + "?";
+        }
+        
+        resultcontent += offsets[2] + status.getFile().getPath();
+        
         System.out.println( pathChangeType
                 + propertiesChangeType
                 + ( isLocked ? "L" : " " )
@@ -213,6 +274,12 @@ public class StatusHandler implements ISVNStatusHandler, ISVNEventHandler {
                 + ( lastChangedRevision >= 0 ? String.valueOf( lastChangedRevision ) : "?" ) + offsets[1]
                 + ( status.getAuthor( ) != null ? status.getAuthor( ) : "?" )
                 + offsets[2] + status.getFile( ).getPath( ) );
+        
+        //System.out.println("count: " + COUNT + " | info: " + resultcontent);
+        statusinfolist.add(resultcontent);
+        result.put("count", ""+COUNT);
+        
+        COUNT ++;
     }
     
     public void handleEvent( SVNEvent event , double progress ) {
@@ -225,10 +292,12 @@ public class StatusHandler implements ISVNStatusHandler, ISVNEventHandler {
          */
         if ( action == SVNEventAction.STATUS_COMPLETED ) {
             System.out.println( "Status against revision:  " + event.getRevision( ) );
+            
+            System.out.println("finish status...");
         }
     
     }
 
-    public void checkCancelled( ) throws SVNCancelException {
+	public void checkCancelled( ) throws SVNCancelException {
     }
 }

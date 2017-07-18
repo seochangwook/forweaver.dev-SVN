@@ -42,6 +42,9 @@ import org.tmatesoft.svn.core.wc.SVNWCClient;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 @Component
 public class SVNUtil {
+	@Autowired
+	StatusHandler statushandler;
+	
 	private static int totalrepotreecount = 0; //�옱洹��샇異쒖씠�씪 �젙�쟻 硫ㅻ쾭蹂��닔濡� �븘�슂//
 	private static List<Object>repotreelist_name;
 	private static List<Object>repotreelist_author;
@@ -634,7 +637,7 @@ public class SVNUtil {
 	}
 	
 	public Map<String, Object> dolock(String repourl, String lockfilepath){
-		Map<String, Object>resultdiff = new HashMap<String, Object>();
+		Map<String, Object>resultlock = new HashMap<String, Object>();
 		
 		System.out.println("repourl: " + repourl + "/ filepath: " + lockfilepath);
 		
@@ -658,29 +661,29 @@ public class SVNUtil {
 			
 			if (lock == null) {
                 System.out.println(lockfilepath + " isn't lock");
-                resultdiff.put("resultval", "0");
+                resultlock.put("resultval", "0");
             }
 			
 			else if(lock != null){
 				System.out.println(lockfilepath + " is lock");
-				resultdiff.put("resultval", "1");
+				resultlock.put("resultval", "1");
 			}
 			
 			//resultdiff.put("resultval", "1");
 		    
-	        return resultdiff;
+	        return resultlock;
 		} catch (SVNException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
-			resultdiff.put("resultval", "0");
+			resultlock.put("resultval", "0");
 		}
 		
-		return resultdiff;
+		return resultlock;
 	}
 	
 	public Map<String, Object> dounlock(String repourl, String lockfilepath){
-		Map<String, Object>resultdiff = new HashMap<String, Object>();
+		Map<String, Object>resultunlock = new HashMap<String, Object>();
 		
 		System.out.println("repourl: " + repourl + "/ filepath: " + lockfilepath);
 		
@@ -698,21 +701,22 @@ public class SVNUtil {
 			
 			wcclient.doUnlock(lockfilelist, true);
 			
-			resultdiff.put("resultval", "1");
+			resultunlock.put("resultval", "1");
 		    
-	        return resultdiff;
+	        return resultunlock;
 		} catch (SVNException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
-			resultdiff.put("resultval", "0");
+			resultunlock.put("resultval", "0");
 		}
 		
-		return resultdiff;
+		return resultunlock;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public Map<String, Object> dostatus(String repourl, String statuspath){
-		Map<String, Object>resultdiff = new HashMap<String, Object>();
+		Map<String, Object>resultstatus = new HashMap<String, Object>();
 		
 		System.out.println("repourl: " + repourl + "/ statuspath: " + statuspath);
 		
@@ -728,16 +732,22 @@ public class SVNUtil {
 		    /*ourClientManager.getStatusClient( ).doStatus( wcPath , isRecursive , isRemote , isReportAll ,
                                                     isIncludeIgnored , isCollectParentExternals , 
                                                     new StatusHandler( isRemote ) );*/
-		    statusclient.doStatus(new File(statuspath), false, false, true, true, new StatusHandler(false));
+		    statushandler.setInit(false);
 		    
-	        return resultdiff;
+		    statusclient.doStatus(new File(statuspath), false, false, true, true, statushandler);
+		    
+		    Map<String, Object>resultmap = statushandler.getResult();
+		   
+		    resultstatus.put("resultval", resultmap);
+		  
+	        return resultstatus;
 		} catch (SVNException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
-			resultdiff.put("resultval", "0");
+			resultstatus.put("resultval", "0");
 		}
 		
-		return resultdiff;
+		return resultstatus;
 	}
 }

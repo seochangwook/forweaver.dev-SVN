@@ -199,8 +199,6 @@ public class RepoAjaxController{
 	public @ResponseBody Map<String, Object> status(@RequestBody Map<String, Object> info) {	
 		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
 		
-		svnUtil.dostatus(info.get("repourl").toString(), info.get("statuspath").toString());
-		
 		retVal.put("result", "success");
 		retVal.put("statusinfo", svnUtil.dostatus(
 				info.get("repourl").toString(), 

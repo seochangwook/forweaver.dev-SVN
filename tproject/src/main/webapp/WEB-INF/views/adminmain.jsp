@@ -160,7 +160,30 @@ $(function(){
 			contentType: 'application/json',
 			mimeType: 'application/json',
 			success: function(retVal){
-				alert('success ajax');
+				var count = retVal.statusinfo.resultval.count;
+				var content = [];
+				var printcontent = '';
+				
+				content = retVal.statusinfo.resultval.statusinfolist;
+				
+				for(var i=0; i<=count; i++){
+					console.log(content[i]);
+					printcontent += content[i] + '<br>';
+				}
+				
+				var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>'+printcontent+'</p>',{
+					title: 'SVN Test Dialog',
+					type: 'confirmation',
+					print: false,
+					width: 760,
+					position: ['right - 20', 'top + 20'],
+					buttons: ['닫기'],
+					onClose: function(caption){
+						if(caption == '닫기'){
+							//alert('yes click');
+						}
+					}
+				});
 			},
 			error: function(retVal, status, er){
 				alert("error: "+retVal+" status: "+status+" er:"+er);
