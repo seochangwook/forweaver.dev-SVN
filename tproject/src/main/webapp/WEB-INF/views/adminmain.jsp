@@ -33,7 +33,7 @@
 <body>
 	<div ng-controller="authcheckcontroller">
 		<h1>SVN Test page(for Admin)</h1><br>
-		<input type="button" ng-click="logoutclick()" value="logout ">
+		<input type="button" value="logout" ng-click="logoutclick('${serverip}')">
 	</div>
 	<br><br>
 	<div id="repomake_local">
@@ -125,6 +125,23 @@
 		</div>
 	</div>
 	<div>
+		<label>* 저장소 blame (About file modifier by file line)</label><br>
+		<div class="well">
+			<label>-> 조사 저장소 파일 경로:</label>
+			<input type="text" id="blamerepofilepath" placeholder="input repo path"><br>
+			<label>-> Start Revesion :</label>
+			<input type="number" id="start_revesion" placeholder="input revesion 1" min="0"><br>
+			<label>-> End Revesion :</label>
+			<input type="number" id="end_revesion" placeholder="input revesion 2" min="0"><br><br>
+			<input type="button" id="btn_blame_button" value="blame run">
+		</div>
+		<div id="diffresult">
+			<label>-> blame 결과 출력영역</label>
+			<pre id="code" class="brush : diff">
+			</pre>
+		</div>
+	</div>
+	<div>
 		<label>* 채팅방 이동</label><br>
 		<form name='TransTest' id='tForm' method='get' action='http://${serverip}:8080/controller/chatting.do'>
 			<p><button name='subject' type='submit'>채팅방 입장</button></p>
@@ -167,7 +184,6 @@ $(function(){
 				content = retVal.statusinfo.resultval.statusinfolist;
 				
 				for(var i=0; i<=count; i++){
-					console.log(content[i]);
 					printcontent += content[i] + '<br>';
 				}
 				

@@ -732,9 +732,9 @@ public class SVNUtil {
 		    /*ourClientManager.getStatusClient( ).doStatus( wcPath , isRecursive , isRemote , isReportAll ,
                                                     isIncludeIgnored , isCollectParentExternals , 
                                                     new StatusHandler( isRemote ) );*/
-		    statushandler.setInit(false);
+		    statushandler.setInit(true);
 		    
-		    statusclient.doStatus(new File(statuspath), false, false, true, true, statushandler);
+		    statusclient.doStatus(new File(statuspath), false, true, true, true, statushandler);
 		    
 		    Map<String, Object>resultmap = statushandler.getResult();
 		   

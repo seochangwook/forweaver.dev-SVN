@@ -20,7 +20,7 @@
 <body>
 	<h1>Login Error</h1>
 	<div ng-controller="mainbackcontroller">
-	<input type="button" value="Back to login page" ng-click="backmainbtn()">
+		<input type="button" value="Back to login page" ng-click="backmainbtn('${serverip}')">
 	</div>
 </body>
 </html>

@@ -67,6 +67,13 @@ public class AuthManageController {
 		mv.setViewName("error/loginerrorview");
 		
 		System.out.println("login error");
+		
+		//ip주소를 알아온다.//
+		//일반적인 IP주소 얻는 방법이 있지만 정확하지 않아 현재 접속되어 있는 IP주소를 불러온다.//
+		String ip = getLocalServerIp();
+		System.out.println("ip: " + ip);
+				
+		mv.addObject("serverip", ip);
 	
 		return mv;
 	}
