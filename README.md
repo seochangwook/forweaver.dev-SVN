@@ -1,6 +1,8 @@
 # SVN Test (ver 1.5)
-<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/svnicon.png" width="50" height="50">
+<div>
+<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/svnicon.png" width="50" height="50">&nbsp
 <img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/svnkiticon.png" width="100" height="50">
+<div>
 <div>
 <h1><label>$ SVN (Spring Framework)</label>
 </div>
