@@ -3,6 +3,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html ng-app="myadminApp">
 <head>
+	<link rel="icon" type="image/png"  href="resources/images/svnicon.png"/> <!-- favicon fix -->
 	<title>adminHome</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- jQuery, bootstrap CDN -->
@@ -110,7 +111,7 @@
 	<div>
 		<label>* 저장소 diff (Revision Differences)</label><br>
 		<div class="well">
-			<label>-> 저장소 경로:</label>
+			<label>-> 저장소 경로 (로컬):</label>
 			<input type="text" id="diffrepopath" placeholder="input repo path"><br>
 			<label>-> Compare Revesion 1:</label>
 			<input type="number" id="compare_revesion_one" placeholder="input revesion 1" min="0"><br>
@@ -127,7 +128,7 @@
 	<div>
 		<label>* 저장소 blame (About file modifier by file line)</label><br>
 		<div class="well">
-			<label>-> 조사 저장소 파일 경로:</label>
+			<label>-> 조사 저장소 파일 경로 (로컬):</label>
 			<input type="text" id="blamerepofilepath" placeholder="input repo path"><br>
 			<label>-> Start Revesion :</label>
 			<input type="number" id="start_revesion" placeholder="input revesion 1" min="0"><br>
@@ -154,6 +155,36 @@ var serverip = $('#ipaddress').val();
 </script>
 <script type="text/javascript">
 $(function(){
+	$('#btn_blame_button').click(function(){
+		var filerepourl = $('#blamerepofilepath').val();
+		var startrevesion = $('#start_revesion').val();
+		var endrevesion = $('#end_revesion').val();
+		
+		console.log('file path: ' + filerepourl + '/ start rev: ' + startrevesion + '/ end rev: ' + endrevesion);
+		
+		var trans_objeect = 
+    	{
+        	'filerepourl':filerepourl,
+        	'startrevesion':startrevesion,
+        	'endrevesion':endrevesion
+	    }
+		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+		
+		$.ajax({
+			url: "http://"+serverip+":8080/controller/blameajax",
+			type: 'POST',
+			dataType: 'json',
+			data: trans_json,
+			contentType: 'application/json',
+			mimeType: 'application/json',
+			success: function(retVal){
+				alert('ajax success');
+			},
+			error: function(retVal, status, er){
+				alert("error: "+retVal+" status: "+status+" er:"+er);
+			}
+		});
+	})
 	$('#btn_status').click(function(){
 		var defaultfilepath = $('#originalrepourl').val();
 		var repourl = $('#repourl').val();

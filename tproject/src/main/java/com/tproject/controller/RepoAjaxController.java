@@ -206,4 +206,17 @@ public class RepoAjaxController{
 		
 		return retVal;
 	}
+	
+	@RequestMapping(value = "/blameajax", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> blame(@RequestBody Map<String, Object> info) {	
+		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
+		
+		retVal.put("result", "success");
+		retVal.put("diffinfo", svnUtil.doBlame(
+				info.get("filerepourl").toString(), 
+				Long.parseLong(info.get("startrevesion").toString()), 
+				Long.parseLong(info.get("endrevesion").toString())));
+		
+		return retVal;
+	}
 }

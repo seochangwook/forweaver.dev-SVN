@@ -729,11 +729,11 @@ public class SVNUtil {
 		    SVNClientManager clientManager = SVNClientManager.newInstance();
 		    SVNStatusClient statusclient = clientManager.getStatusClient();
 		    
-		    /*ourClientManager.getStatusClient( ).doStatus( wcPath , isRecursive , isRemote , isReportAll ,
-                                                    isIncludeIgnored , isCollectParentExternals , 
-                                                    new StatusHandler( isRemote ) );*/
 		    statushandler.setInit(true);
 		    
+		    /* parameter :
+		     * doStatus(wcPath, isRecursive, isRemote, isReportAll, isIncludeIgnored, isCollectParentExternals, Handler)
+		     */
 		    statusclient.doStatus(new File(statuspath), false, true, true, true, statushandler);
 		    
 		    Map<String, Object>resultmap = statushandler.getResult();
@@ -749,5 +749,13 @@ public class SVNUtil {
 		}
 		
 		return resultstatus;
+	}
+	
+	public Map<String, Object> doBlame(String repourl, long revesionone, long revesiontwo){
+		Map<String, Object>resultdiff = new HashMap<String, Object>();
+		
+		
+		
+		return resultdiff;
 	}
 }
