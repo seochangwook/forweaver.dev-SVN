@@ -34,9 +34,9 @@
 <li>repository history view</li>
 <li>repository tree view</li>
 <li>file content view</li>
-<li>commit/add file and directory</li>
-<li>commit modify file (Checksum mismatch issue -> modifying)</li>
-<li>commit delete file (out of date issue -> modifying)</li>
+<li>add file and directory</li>
+<li>modify file (Checksum mismatch issue -> modifying)</li>
+<li>delete file (out of date issue -> modifying)</li>
 <li>code Syntax Beautiful</li>
 <li>Separate files and directories with images</li>
 <li>file download</li>
@@ -45,7 +45,8 @@
 <li>Lock & UnLock (Troubleshoot Status Mismatch -> modifying)</li>
 <li>Status</li>
 <li>Blame (file modifier by file line)</li>
-<li>Update -> developing</li>
+<li>Update</li>
+<li>Commit -> developing</li>
 </div>
 <br>
 <h3><label>* SVNKit-dav (Server)</label></h3>
