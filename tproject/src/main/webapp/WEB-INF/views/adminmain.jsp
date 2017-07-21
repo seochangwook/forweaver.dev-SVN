@@ -24,6 +24,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushJava.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushDiff.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushPlain.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCore.css"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeDefault.css"/>
 </head>
@@ -138,7 +139,7 @@
 		</div>
 		<div id="diffresult">
 			<label>-> blame 결과 출력영역</label>
-			<pre id="code" class="brush : diff">
+			<pre id="codeblame" class="brush : plain">
 			</pre>
 		</div>
 	</div>
@@ -178,7 +179,21 @@ $(function(){
 			contentType: 'application/json',
 			mimeType: 'application/json',
 			success: function(retVal){
-				alert('ajax success');
+				//alert('ajax success');
+				var count = retVal.blameinfo.resultval.count;
+				var content = [];
+				var printcontent = '';
+				
+				content = retVal.blameinfo.resultval.blamelist;
+				
+				console.log('count: ' + count);
+				
+				for(var i=0; i<=count; i++){
+					printcontent += content[i] + '<br>';
+				}
+				
+				$('#codeblame').empty();
+				$('#codeblame').append(printcontent);
 			},
 			error: function(retVal, status, er){
 				alert("error: "+retVal+" status: "+status+" er:"+er);

@@ -35,6 +35,7 @@ import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.io.diff.SVNDeltaGenerator;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNDiffClient;
+import org.tmatesoft.svn.core.wc.SVNLogClient;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNStatus;
 import org.tmatesoft.svn.core.wc.SVNStatusClient;
@@ -44,6 +45,8 @@ import org.tmatesoft.svn.core.wc.SVNWCUtil;
 public class SVNUtil {
 	@Autowired
 	StatusHandler statushandler;
+	@Autowired
+	AnnotationHandler annotationhandler;
 	
 	private static int totalrepotreecount = 0; //�옱洹��샇異쒖씠�씪 �젙�쟻 硫ㅻ쾭蹂��닔濡� �븘�슂//
 	private static List<Object>repotreelist_name;
@@ -751,11 +754,31 @@ public class SVNUtil {
 		return resultstatus;
 	}
 	
-	public Map<String, Object> doBlame(String repourl, long revesionone, long revesiontwo){
-		Map<String, Object>resultdiff = new HashMap<String, Object>();
+	public Map<String, Object> doBlame(String repourl, long startrevesion, long endrevesion){
+		Map<String, Object>resultblame = new HashMap<String, Object>();
 		
+		try {	
+			//Get LogClient//
+			SVNClientManager clientManager = SVNClientManager.newInstance();
+			SVNLogClient logClient = clientManager.getLogClient();
+			
+			boolean includeMergedRevisions = false;
+			
+			annotationhandler.setInit(includeMergedRevisions, true, logClient.getOptions());
+			
+			logClient.doAnnotate(new File(repourl), SVNRevision.UNDEFINED, SVNRevision.create(startrevesion), SVNRevision.create(endrevesion), annotationhandler);
+		  
+			Map<String, Object>resultmap = annotationhandler.getResult();
+			resultblame.put("resultval", resultmap);
+			
+	        return resultblame;
+		} catch (SVNException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+			resultblame.put("resultval", "0");
+		}
 		
-		
-		return resultdiff;
+		return resultblame;
 	}
 }

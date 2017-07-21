@@ -212,7 +212,7 @@ public class RepoAjaxController{
 		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
 		
 		retVal.put("result", "success");
-		retVal.put("diffinfo", svnUtil.doBlame(
+		retVal.put("blameinfo", svnUtil.doBlame(
 				info.get("filerepourl").toString(), 
 				Long.parseLong(info.get("startrevesion").toString()), 
 				Long.parseLong(info.get("endrevesion").toString())));
