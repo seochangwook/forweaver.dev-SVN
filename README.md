@@ -44,7 +44,7 @@
 <li>diff (Revision Differences)</li>
 <li>Lock & UnLock (Troubleshoot Status Mismatch -> modifying)</li>
 <li>Status</li>
-<li>Blame (file modifier by file line) -> developing</li>
+<li>Blame (file modifier by file line)</li>
 </div>
 <br>
 <h3><label>* SVNKit-dav (Server)</label></h3>
