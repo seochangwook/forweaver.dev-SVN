@@ -92,12 +92,12 @@ public class RepoAjaxController{
 		return retVal;
 	}
 	
-	@RequestMapping(value = "/commitajax", method = RequestMethod.POST, produces = {"application/json"})
-	public @ResponseBody Map<String, Object> commit(@RequestBody Map<String, Object> info) {	
+	@RequestMapping(value = "/addajax", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> addFile(@RequestBody Map<String, Object> info) {	
 		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
 	
 		retVal.put("result", "success");
-		retVal.put("commitinfo", svnUtil.docommit(
+		retVal.put("commitinfo", svnUtil.docommitaddfile(
 				info.get("repourl").toString(), 
 				info.get("commitpath").toString(), 
 				info.get("commitlog").toString(), 
@@ -125,8 +125,8 @@ public class RepoAjaxController{
 		return retVal;
 	}
 	
-	@RequestMapping(value = "/commitdirajax", method = RequestMethod.POST, produces = {"application/json"})
-	public @ResponseBody Map<String, Object> commitdir(@RequestBody Map<String, Object> info) {	
+	@RequestMapping(value = "/adddirajax", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> adddir(@RequestBody Map<String, Object> info) {	
 		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
 		
 		retVal.put("result", "success");
@@ -216,6 +216,31 @@ public class RepoAjaxController{
 				info.get("filerepourl").toString(), 
 				Long.parseLong(info.get("startrevesion").toString()), 
 				Long.parseLong(info.get("endrevesion").toString())));
+		
+		return retVal;
+	}
+	
+	@RequestMapping(value = "/updateajax", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> update(@RequestBody Map<String, Object> info) {	
+		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
+		
+		retVal.put("result", "success");
+		retVal.put("updateinfo", svnUtil.doUpdate(
+				info.get("repourl").toString(),
+				info.get("updaterepo").toString(), 
+				Long.parseLong(info.get("updaterevesion").toString())));
+		
+		return retVal;
+	}
+	
+	@RequestMapping(value = "/commitajax", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> commit(@RequestBody Map<String, Object> info) {	
+		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
+		
+		retVal.put("result", "success");
+		retVal.put("commitinfo", svnUtil.doCommit(
+				info.get("commitrepo").toString(), 
+				info.get("commitmessage").toString()));
 		
 		return retVal;
 	}

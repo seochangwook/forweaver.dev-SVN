@@ -34,11 +34,13 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.io.diff.SVNDeltaGenerator;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
+import org.tmatesoft.svn.core.wc.SVNCommitClient;
 import org.tmatesoft.svn.core.wc.SVNDiffClient;
 import org.tmatesoft.svn.core.wc.SVNLogClient;
 import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNStatus;
 import org.tmatesoft.svn.core.wc.SVNStatusClient;
+import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 import org.tmatesoft.svn.core.wc.SVNWCClient;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 @Component
@@ -337,7 +339,7 @@ public class SVNUtil {
 		return filecontentinfo;
 	}
 	
-	public Map<String, Object> docommit(String repourl, String commitpath, String commitlog, String commitfilename, String commitfilecontent, String userid, String userpassword){
+	public Map<String, Object> docommitaddfile(String repourl, String commitpath, String commitlog, String commitfilename, String commitfilecontent, String userid, String userpassword){
 		Map<String, Object>resultcommit = new HashMap<String, Object>();
 		
 		System.out.println("file commit");
@@ -780,5 +782,69 @@ public class SVNUtil {
 		}
 		
 		return resultblame;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public Map<String, Object> doUpdate(String repourl, String updaterepourl, long updaterevesion){
+		Map<String, Object>resultupdate = new HashMap<String, Object>();
+		
+		SVNRepository repository = null;
+		
+		try {
+			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			SVNClientManager clientManager = SVNClientManager.newInstance();
+			SVNUpdateClient updateClient = clientManager.getUpdateClient();
+			
+			updateClient.setIgnoreExternals( false );
+			
+			if(updaterevesion == 0){
+				System.out.println("latest revesion("+repository.getLatestRevision()+") update");
+				
+				updateClient.doUpdate(new File(updaterepourl), SVNRevision.create(repository.getLatestRevision()), true);
+				
+				resultupdate.put("retval", "1");
+				resultupdate.put("retmsg", "success update revesion["+repository.getLatestRevision()+"]");
+			} else{
+				System.out.println(updaterevesion + " revesion update");
+				
+				updateClient.doUpdate(new File(updaterepourl), SVNRevision.create(updaterevesion), true);
+				
+				resultupdate.put("retval", "1");
+				resultupdate.put("retmsg", "success update revesion["+updaterevesion+"]");
+			} 
+		}catch(SVNException e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			
+			resultupdate.put("retval", "0");
+			resultupdate.put("retmsg", e.getMessage());
+		}
+		
+		return resultupdate;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public Map<String, Object> doCommit(String commitrepourl, String commitmessage){
+		Map<String, Object>resultcommit = new HashMap<String, Object>();
+		
+		//System.out.println("commit path: " + commitrepourl + " / commit message: " + commitmessage);
+		SVNClientManager clientManager = SVNClientManager.newInstance();
+		SVNCommitClient commitclient = clientManager.getCommitClient();
+		
+		try{
+			File commitfilelist[] = new File[1];
+			commitfilelist[0] = new File(commitrepourl);
+			
+			commitclient.doCommit(commitfilelist, false, commitmessage, false, true);
+			resultcommit.put("retval", "1");
+			resultcommit.put("retmsg", "success commit [" + commitmessage + "]");
+		} catch(SVNException e){
+			e.printStackTrace();
+			resultcommit.put("retval", "0");
+			resultcommit.put("retmsg", e.getMessage());
+		}
+		
+		return resultcommit;
 	}
 }

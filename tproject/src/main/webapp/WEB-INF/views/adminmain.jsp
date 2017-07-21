@@ -71,17 +71,24 @@
 	<br><br>
 	<label>* 저장소 트리구조 출력: </label>
 	<input type="text" id="repopathtexttree" placeholder="input repo path">
-	<input type="button" id="btn_test5" value="click button">&nbsp
-	<input type="button" id="btn_status" value="repo status"><br>
+	<input type="button" id="btn_test5" value="view repo">&nbsp
+	<input type="button" id="btn_status" value="repo status">&nbsp
+	<input type="button" id="btn_update" value="repo update">&nbsp
+	<input type="number" id="update_revesion" placeholder="input update revesion" min="0">&nbsp
+	<label id="infotext">(select 0 is latest revesion)</label><br>
 	<input type='hidden' id='filepath' value=''>
 	<input type='hidden' id='repourl' value=''>
 	<input type='hidden' id='originalcontent' value=''>
 	<input type="hidden" id='originalrepourl' value=''> 
+	<br>
+	<div id="resultwell">
+	</div>
+	<br>
 	<div id="repotree">
 	</div>
 	<br>
 	<div class="well">
-		<label>* 저장소 커밋</label><br>
+		<label>* 저장소 파일/디렉터리</label><br>
 		<label>-> 생성 경로:</label>
 		<input type="text" id="commitpath" placeholder="view repo path" disabled="disabled"><br>
 		<label>-> 디렉터리 생성:</label>
@@ -104,9 +111,16 @@
    		 	</div>
   		</div>
   		<div class="btn-group btn-group-justified">
-	     	<input type="button" id="btn_test6" value="new file commit">
-	      	<input type="button" id="btn_test8" value="new dir commit">
-	      	<input type="button" id="btn_test7" value="modify commit">
+	     	<input type="button" id="btn_test6" value="new file add">
+	      	<input type="button" id="btn_test8" value="new dir add">
+	      	<input type="button" id="btn_test7" value="modify file">
+  		</div>
+  		<br>
+  		<div>
+  			<input type="button" id="btn_commit" value="commit">&nbsp
+  			<input type="text" id="commitlog" placeholder="input commit message"><br>
+  			<div id="resultwellcommit">
+			</div>
   		</div>
 	</div>
 	<div>
@@ -156,6 +170,115 @@ var serverip = $('#ipaddress').val();
 </script>
 <script type="text/javascript">
 $(function(){
+	$('#btn_commit').click(function(){
+		var defaultfilepath = $('#originalrepourl').val();
+		var relativefilepath = $('#filepath').val();
+		var commitmessage = $('#commitlog').val();
+		var commitpath = '';
+		
+		commitpath = defaultfilepath.substring(7) + relativefilepath;
+		
+		console.log('commit path: ' + commitpath);
+		
+		var trans_objeect = 
+    	{
+        	'commitrepo':commitpath,
+        	'commitmessage':commitmessage
+	    }
+		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+		
+		$.ajax({
+			url: "http://"+serverip+":8080/controller/commitajax",
+			type: 'POST',
+			dataType: 'json',
+			data: trans_json,
+			contentType: 'application/json',
+			mimeType: 'application/json',
+			success: function(retVal){
+				//alert('success ajax');
+				var returnvalue = retVal.commitinfo.retval;
+				var retmessage = retVal.commitinfo.retmsg;
+				var PrintHTML = '';
+				
+				if(returnvalue == '0'){
+					PrintHTML += "<br>";
+					PrintHTML += "<div class='alert alert-danger alert-dismissable fade in'>";
+					PrintHTML += "<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>";
+					PrintHTML += "<strong>Commit Fail...</strong> ["+retmessage+']';
+					PrintHTML += "</div>";
+				} else if(returnvalue == '1'){
+					PrintHTML += "<br>";
+					PrintHTML += "<div class='alert alert-success alert-dismissable fade in'>";
+					PrintHTML += "<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>";
+					PrintHTML += "<strong>Commit Success...</strong> ["+retmessage+']';
+					PrintHTML += "</div>";
+				}
+				
+				$('#resultwellcommit').empty();
+				$('#resultwellcommit').append(PrintHTML);
+			},
+			error: function(retVal, status, er){
+				alert("error: "+retVal+" status: "+status+" er:"+er);
+			}
+		});
+	});
+	$('#btn_update').click(function(){
+		var repourl = $('#repourl').val();
+		var defaultfilepath = $('#originalrepourl').val();
+		var relativefilepath = $('#filepath').val();
+		var update_revesion_number = $('#update_revesion').val();
+		var updatepath = '';
+		
+		console.log('repo url: ' + repourl);
+		//file:// 잘라내기//
+		updatepath = defaultfilepath.substring(7) + relativefilepath;
+		
+		if(update_revesion_number == 0){
+			console.log('update path: ' + updatepath + ' / update revesion number: latest revesion');
+		} else{
+			console.log('update path: ' + updatepath + ' / update revesion number: ' + update_revesion_number);	
+		}
+		
+		var trans_objeect = 
+    	{
+			'repourl':repourl,
+        	'updaterepo':updatepath,
+        	'updaterevesion':update_revesion_number
+	    }
+		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+		
+		$.ajax({
+			url: "http://"+serverip+":8080/controller/updateajax",
+			type: 'POST',
+			dataType: 'json',
+			data: trans_json,
+			contentType: 'application/json',
+			mimeType: 'application/json',
+			success: function(retVal){
+				var returnvalue = retVal.updateinfo.retval;
+				var retmessage = retVal.updateinfo.retmsg;
+				var PrintHTML = '';
+				
+				if(returnvalue == '0'){
+					PrintHTML += "<div class='alert alert-danger alert-dismissable fade in'>";
+					PrintHTML += "<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>";
+					PrintHTML += "<strong>Update Fail...</strong> ["+retmessage+']';
+					PrintHTML += "</div>";
+				} else if(returnvalue == '1'){
+					PrintHTML += "<div class='alert alert-success alert-dismissable fade in'>";
+					PrintHTML += "<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>";
+					PrintHTML += "<strong>Update Success...</strong> ["+retmessage+']';
+					PrintHTML += "</div>";
+				}
+				
+				$('#resultwell').empty();
+				$('#resultwell').append(PrintHTML);
+			},
+			error: function(retVal, status, er){
+				alert("error: "+retVal+" status: "+status+" er:"+er);
+			}
+		});
+	});
 	$('#btn_blame_button').click(function(){
 		var filerepourl = $('#blamerepofilepath').val();
 		var startrevesion = $('#start_revesion').val();
@@ -681,7 +804,7 @@ $(function(){
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
 		$.ajax({
-			url: "http://"+serverip+":8080/controller/commitajax",
+			url: "http://"+serverip+":8080/controller/addajax",
 			type: 'POST',
 			dataType: 'json',
 			data: trans_json,
@@ -802,7 +925,7 @@ $(function(){
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
 		$.ajax({
-			url: "http://"+serverip+":8080/controller/commitdirajax",
+			url: "http://"+serverip+":8080/controller/adddirajax",
 			type: 'POST',
 			dataType: 'json',
 			data: trans_json,
