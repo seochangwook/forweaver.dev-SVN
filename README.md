@@ -46,7 +46,7 @@
 <li>Status</li>
 <li>Blame (file modifier by file line)</li>
 <li>Update</li>
-<li>Commit -> developing</li>
+<li>Commit</li>
 </div>
 <br>
 <h3><label>* SVNKit-dav (Server)</label></h3>
