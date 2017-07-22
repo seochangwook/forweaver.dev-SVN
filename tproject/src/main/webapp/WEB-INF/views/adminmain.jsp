@@ -124,6 +124,22 @@
   		</div>
 	</div>
 	<div>
+		<label>* 저장소 checkout</label><br>
+		<div class="well">
+			<label>-> 체크아웃 URL:</label>
+			<input type="text" id="checkoutrepourl" placeholder="input repo URL"><br>
+			<label>-> 체크아웃 Local 경로:</label>
+			<input type="text" id="checkoutlocalpath" placeholder="input Local path"><br>
+			<label>-> Revesion 1:</label>
+			<input type="number" id="checkoutrevesionone" placeholder="input revesion 1" min="0"><br>
+			<label>-> Revesion 2:</label>
+			<input type="number" id="checkoutrevesiontwo" placeholder="input revesion 2" min="0"><br><br>
+			<input type="button" id="btn_checkout" value="checkout run">
+			<div id="checkoutresult">
+			</div>
+		</div>
+	</div>
+	<div>
 		<label>* 저장소 diff (Revision Differences)</label><br>
 		<div class="well">
 			<label>-> 저장소 경로 (로컬):</label>
@@ -170,6 +186,56 @@ var serverip = $('#ipaddress').val();
 </script>
 <script type="text/javascript">
 $(function(){
+	$('#btn_checkout').click(function(){
+		var checkouturl = $('#checkoutrepourl').val();
+		var checkoutpath = $('#checkoutlocalpath').val();
+		var checkoutrevesionone = $('#checkoutrevesionone').val();
+		var checkoutrevesiontwo = $('#checkoutrevesiontwo').val();
+	
+		var trans_objeect = 
+    	{
+        	'checkoutrepourl':checkouturl,
+        	'checkoutlocalpath':checkoutpath,
+        	'checkoutrevesionone':checkoutrevesionone,
+        	'checkoutrevesiontwo':checkoutrevesiontwo
+	    }
+		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+		
+		$.ajax({
+			url: "http://"+serverip+":8080/controller/checkoutajax",
+			type: 'POST',
+			dataType: 'json',
+			data: trans_json,
+			contentType: 'application/json',
+			mimeType: 'application/json',
+			success: function(retVal){
+				//alert('success ajax');
+				var returnvalue = retVal.checkoutinfo.retval;
+				var retmessage = retVal.checkoutinfo.retmsg;
+				var PrintHTML = '';
+				
+				if(returnvalue == '0'){
+					PrintHTML += "<br>";
+					PrintHTML += "<div class='alert alert-danger alert-dismissable fade in'>";
+					PrintHTML += "<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>";
+					PrintHTML += "<strong>Checkoit Fail...</strong> ["+retmessage+']';
+					PrintHTML += "</div>";
+				} else if(returnvalue == '1'){
+					PrintHTML += "<br>";
+					PrintHTML += "<div class='alert alert-success alert-dismissable fade in'>";
+					PrintHTML += "<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>";
+					PrintHTML += "<strong>Checkout Success...</strong> ["+retmessage+']';
+					PrintHTML += "</div>";
+				}
+				
+				$('#checkoutresult').empty();
+				$('#checkoutresult').append(PrintHTML);
+			},
+			error: function(retVal, status, er){
+				alert("error: "+retVal+" status: "+status+" er:"+er);
+			}
+		});
+	});
 	$('#btn_commit').click(function(){
 		var defaultfilepath = $('#originalrepourl').val();
 		var relativefilepath = $('#filepath').val();

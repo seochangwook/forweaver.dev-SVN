@@ -244,4 +244,18 @@ public class RepoAjaxController{
 		
 		return retVal;
 	}
+	
+	@RequestMapping(value = "/checkoutajax", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> checkout(@RequestBody Map<String, Object> info) {	
+		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
+		
+		retVal.put("result", "success");
+		retVal.put("checkoutinfo", svnUtil.doCheckout(
+				info.get("checkoutrepourl").toString(), 
+				info.get("checkoutlocalpath").toString(),
+				Long.parseLong(info.get("checkoutrevesionone").toString()),
+				Long.parseLong(info.get("checkoutrevesiontwo").toString())));
+		
+		return retVal;
+	}
 }

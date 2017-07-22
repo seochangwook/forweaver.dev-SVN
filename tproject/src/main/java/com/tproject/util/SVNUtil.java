@@ -837,6 +837,7 @@ public class SVNUtil {
 			commitfilelist[0] = new File(commitrepourl);
 			
 			commitclient.doCommit(commitfilelist, false, commitmessage, false, true);
+			
 			resultcommit.put("retval", "1");
 			resultcommit.put("retmsg", "success commit [" + commitmessage + "]");
 		} catch(SVNException e){
@@ -846,5 +847,31 @@ public class SVNUtil {
 		}
 		
 		return resultcommit;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public Map<String, Object> doCheckout(String checkoutrepourl, String checkoutlocalpath, long checkoutrevesionone, long checkoutrevesiontwo){
+		Map<String, Object>resultcheckout = new HashMap<String, Object>();
+		
+		//System.out.println("checkout url: " + checkoutrepourl + " / checkoutpath: " + checkoutlocalpath + " / " + checkoutrevesionone + " / " + checkoutrevesiontwo);
+		SVNClientManager clientManager = SVNClientManager.newInstance();
+		SVNUpdateClient updateClient = clientManager.getUpdateClient();
+		
+		try{
+			SVNURL svnURL = SVNURL.parseURIEncoded(checkoutrepourl);
+			
+			updateClient.setIgnoreExternals( false );
+			updateClient.doCheckout(svnURL, new File(checkoutlocalpath), SVNRevision.UNDEFINED, SVNRevision.create(checkoutrevesionone), true, false);
+			
+			resultcheckout.put("retval", "1");
+			resultcheckout.put("retmsg", "success checkout");
+		} catch(SVNException e){
+			e.printStackTrace();
+			
+			resultcheckout.put("retval", "0");
+			resultcheckout.put("retmsg", e.getMessage());
+		}
+		
+		return resultcheckout;
 	}
 }
