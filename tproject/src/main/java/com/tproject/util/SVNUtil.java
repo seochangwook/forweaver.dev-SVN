@@ -43,6 +43,7 @@ import org.tmatesoft.svn.core.wc.SVNStatusClient;
 import org.tmatesoft.svn.core.wc.SVNUpdateClient;
 import org.tmatesoft.svn.core.wc.SVNWCClient;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
+
 @Component
 public class SVNUtil {
 	@Autowired
@@ -60,19 +61,26 @@ public class SVNUtil {
 	private static List<Object>repotreelist_commitmessage;
 	private static List<Object>repotreelist_filepath;
 	
-	public String doMakeRepo(String repourl){
-		String tgtPath = repourl;
+	public Map<String, Object> doMakeRepo(String repourl){
+		Map<String, Object> makerepomap = new HashMap<String,Object>();
 		
 		try {
-			SVNURL tgtURL = SVNRepositoryFactory.createLocalRepository( new File( tgtPath ), true , false );
+			SVNURL tgtURL = SVNRepositoryFactory.createLocalRepository( new File( repourl ), true , false );
 			
-			return tgtURL.toString();
+			System.out.println("repo URL: " + tgtURL);
+			
+			makerepomap.put("resultVal", "1");
+			makerepomap.put("repopath", ""+tgtURL);
+			
+			return makerepomap;
 		} catch (SVNException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
+			makerepomap.put("resultVal", "0");
 		}
 		
-		return null;
+		return makerepomap;
 	}
 	
 	public Map<String, Object> doPrintRepo(String repourl, String userid, String userpassword){

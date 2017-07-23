@@ -30,10 +30,9 @@ public class RepoAjaxController{
 	public @ResponseBody Map<String, Object> makerepo(@RequestBody Map<String, Object> info) {	
 		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
 		
-		String repourl = svnUtil.doMakeRepo(info.get("url").toString());
-		
 		retVal.put("result", "success");
-		retVal.put("repourl", repourl);
+		retVal.put("repourl", svnUtil.doMakeRepo(
+				info.get("url").toString()));
 		
 		return retVal;
 	}

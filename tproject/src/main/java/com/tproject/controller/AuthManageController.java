@@ -39,6 +39,7 @@ public class AuthManageController {
 		System.out.println("ip: " + ip);
 		
 		mv.addObject("serverip", ip);
+		mv.addObject("sessionid", user.getUsername());
 
 		System.out.println("=-=-=-=-=-=-=-=-=-=-=-==-==-=-");
 		logger.debug("tproject debug print");

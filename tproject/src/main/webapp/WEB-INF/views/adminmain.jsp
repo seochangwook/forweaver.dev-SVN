@@ -34,12 +34,13 @@
 </script>
 <body>
 	<div ng-controller="authcheckcontroller">
-		<h1>SVN Test page(for Admin)</h1><br>
+		<h1>SVN Test page(for ${sessionid})</h1><br>
 		<input type="button" value="logout" ng-click="logoutclick('${serverip}')">
 	</div>
 	<br><br>
 	<div id="repomake_local">
-		<label>* 저장소 생성(바탕화면): </label>
+		<label>* 저장소 생성: </label>&nbsp
+		<input type="text" id="makerepopath" placeholder="input make repo path">
 		<input type="button" id="btn_test" value="click button"><br>
 		<label>* 저장소 불러오기: </label>
 		<input type="text" id="repopathtext" placeholder="input repo path">
@@ -504,33 +505,43 @@ $(function(){
 		});
 	});
 	$('#btn_test').click(function(){
+		var makerepourl = $('#makerepopath').val();
+		
 		var trans_objeect = 
     	{
-        	'url': 'C:\\Users\\seochangwook\\Desktop\\testrepo' //파일선택하는 걸로 나중엔 설정. 현재는 디폴트//
+        	'url': makerepourl //파일선택하는 걸로 나중엔 설정. 현재는 디폴트//
 	    }
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
 		$.ajax({
-			url: "http://localhost:8080/controller/makerepoajax",
+			url: "http://"+serverip+":8080/controller/makerepoajax",
 			type: 'POST',
 			dataType: 'json',
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
 			success: function(retVal){
-				alert("success ajax..." + '/' + retVal.result + "저장소 생성");
+				var resultvalue = retVal.repourl.resultVal;
 				
-				var printHTML = "<label id='repourltext'>-> local repo URL: "+retVal.repourl+"</label>"
-				printHTML += "<input type='hidden' id='repourl' value='"+retVal.repourl+"'>";
+				console.log('repo path: ' + retVal.repourl.repopath);
 				
-				$('#makereponame').empty();
-				$('#makereponame').append(printHTML);
+				if(resultvalue == '1'){
+					alert("success ajax..." + '/' + retVal.result + "저장소 생성");
+					
+					var printHTML = "<label id='repourltext'>-> local repo URL: "+retVal.repourl.repopath+"</label>"
+					printHTML += "<input type='hidden' id='repourl' value='"+retVal.repourl.repopath+"'>";
+					
+					$('#makereponame').empty();
+					$('#makereponame').append(printHTML);	
+				} else if(resultvalue == '0'){
+					alert('fail repo ['+makerepourl+'] make');
+				}
 			},
 			error: function(retVal, status, er){
 				alert("error: "+retVal+" status: "+status+" er:"+er);
 			}
 		});
-	})
+	});
 	$('#btn_test2').click(function(){
 		var repourl = $('#repourl').val();
 		var repouserid = $('#repouserid').val();
