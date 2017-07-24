@@ -59,4 +59,6 @@
 <br>
 <h3><label>* Additional service</label></h3>
 <li>Chatting (WebSocket)</li>
-<h2><label># Big Picture</label></h2>
+<br>
+<h2><label># OpenSource Copyright</label></h2>
+<li>SVNKit : copyright © 2004-2017, tmate software</li>
