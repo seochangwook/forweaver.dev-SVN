@@ -66,6 +66,6 @@
 <li>SVNKit : copyright © 2004-2017, tmate software</li>
 <br>
 <h2><label># Test method</label></h2>
-<li>Client Method : TotoiseSVN (Window) & SVNKit View (after forweaver)</li>
+<li>Client Method : TotoiseSVN (Window), Terminal (Linux, Mac) & SVNKit View (after forweaver)</li>
 <li>Server Method : SVNKitDAV Servlet</li><br>
 <img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitScreenshot/screenshot_2_teststructure.png" width="800" height="500">
