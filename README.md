@@ -62,3 +62,7 @@
 <br>
 <h2><label># OpenSource Copyright</label></h2>
 <li>SVNKit : copyright © 2004-2017, tmate software</li>
+<br>
+<h2><label># Test method</label></h2>
+<li>Client Method : TotoiseSVN (Window) & SVNKit View (after forweaver)</li>
+<li>Server Method : SVNKitDAV Servlet</li>
