@@ -76,7 +76,7 @@
 	<input type="button" id="btn_status" value="repo status">&nbsp
 	<input type="button" id="btn_update" value="repo update">&nbsp
 	<input type="number" id="update_revesion" placeholder="input update revesion" min="0">&nbsp
-	<label id="infotext">(select 0 is latest revesion)</label><br>
+	<label id="infotext">(select 0 is latest(HEAD) revesion)</label><br>
 	<input type='hidden' id='filepath' value=''>
 	<input type='hidden' id='repourl' value=''>
 	<input type='hidden' id='originalcontent' value=''>
@@ -123,6 +123,20 @@
   			<div id="resultwellcommit">
 			</div>
   		</div>
+	</div>
+	<div>
+		<label>* 저장소 import</label><br>
+		<div class="well">
+			<label>-> Local PATH:</label>
+			<input type="text" id="importlocalpath" placeholder="input local path"><br>
+			<label>-> save Repository URL:</label>
+			<input type="text" id="importdesturl" placeholder="input repo url"><br>
+			<label>-> Commit message:</label>
+			<input type="text" id="importcommitmessage" placeholder="input commit message"><br>
+			<input type="button" id="importbutton" value="import">
+			<div id="importresult">
+			</div>
+		</div>
 	</div>
 	<div>
 		<label>* 저장소 checkout</label><br>
@@ -187,6 +201,54 @@ var serverip = $('#ipaddress').val();
 </script>
 <script type="text/javascript">
 $(function(){
+	$('#importbutton').click(function(){
+		var localpath = $('#importlocalpath').val();
+		var repourl = $('#importdesturl').val();
+		var commitmessage = $('#importcommitmessage').val();
+		
+		var trans_objeect = 
+    	{
+        	'importlocalpath':localpath,
+        	'importdesturl':repourl,
+        	'importcommitmessage':commitmessage,
+	    }
+		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+		
+		$.ajax({
+			url: "http://"+serverip+":8080/controller/importajax",
+			type: 'POST',
+			dataType: 'json',
+			data: trans_json,
+			contentType: 'application/json',
+			mimeType: 'application/json',
+			success: function(retVal){
+				//alert('success ajax');
+				var returnvalue = retVal.importinfo.retval;
+				var retmessage = retVal.importinfo.retmsg;
+				var PrintHTML = '';
+				
+				if(returnvalue == '0'){
+					PrintHTML += "<br>";
+					PrintHTML += "<div class='alert alert-danger alert-dismissable fade in'>";
+					PrintHTML += "<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>";
+					PrintHTML += "<strong>Checkoit Fail...</strong> ["+retmessage+']';
+					PrintHTML += "</div>";
+				} else if(returnvalue == '1'){
+					PrintHTML += "<br>";
+					PrintHTML += "<div class='alert alert-success alert-dismissable fade in'>";
+					PrintHTML += "<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>";
+					PrintHTML += "<strong>Checkout Success...</strong> ["+retmessage+']';
+					PrintHTML += "</div>";
+				}
+				
+				$('#importresult').empty();
+				$('#importresult').append(PrintHTML);
+			},
+			error: function(retVal, status, er){
+				alert("error: "+retVal+" status: "+status+" er:"+er);
+			}
+		});
+	});
 	$('#btn_checkout').click(function(){
 		var checkouturl = $('#checkoutrepourl').val();
 		var checkoutpath = $('#checkoutlocalpath').val();
@@ -686,6 +748,7 @@ $(function(){
 						type: 'warning',
 						print: false,
 						width: 760,
+						position: ['right - 20', 'top + 20'],
 						buttons: ['닫기'],
 						onClose: function(caption){
 							if(caption == '닫기'){
@@ -818,7 +881,7 @@ $(function(){
 		            	}
 		            	else if(repokind[i] == 'file'){
 		            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";
-		            		printStr += "<td><a href='http://localhost:8080/controller/download.do/"+repotreelistname[i]+"&filepath="+filepath+"'>Download</a></td>";
+		            		printStr += "<td><a href='http://"+serverip+":8080/controller/download.do/"+repotreelistname[i]+"&filepath="+filepath+"'>Download</a></td>";
 		            	}
 		            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='deletepath(this.value)'>remove</button></td>";
 	                	printStr += "</tr>"; 
@@ -839,6 +902,7 @@ $(function(){
 						type: 'warning',
 						print: false,
 						width: 760,
+						position: ['right - 20', 'top + 20'],
 						buttons: ['닫기'],
 						onClose: function(caption){
 							if(caption == '닫기'){
@@ -894,6 +958,7 @@ $(function(){
 						type: 'confirmation',
 						print: false,
 						width: 760,
+						position: ['right - 20', 'top + 20'],
 						buttons: ['닫기'],
 						onClose: function(caption){
 							if(caption == '닫기'){
@@ -907,6 +972,7 @@ $(function(){
 						type: 'error',
 						print: false,
 						width: 760,
+						position: ['right - 20', 'top + 20'],
 						buttons: ['닫기'],
 						onClose: function(caption){
 							if(caption == '닫기'){
@@ -955,6 +1021,7 @@ $(function(){
 						type: 'confirmation',
 						print: false,
 						width: 760,
+						position: ['right - 20', 'top + 20'],
 						buttons: ['닫기'],
 						onClose: function(caption){
 							if(caption == '닫기'){
@@ -968,6 +1035,7 @@ $(function(){
 						type: 'error',
 						print: false,
 						width: 760,
+						position: ['right - 20', 'top + 20'],
 						buttons: ['닫기'],
 						onClose: function(caption){
 							if(caption == '닫기'){
@@ -1015,6 +1083,7 @@ $(function(){
 						type: 'confirmation',
 						print: false,
 						width: 760,
+						position: ['right - 20', 'top + 20'],
 						buttons: ['닫기'],
 						onClose: function(caption){
 							if(caption == '닫기'){
@@ -1028,6 +1097,7 @@ $(function(){
 						type: 'error',
 						print: false,
 						width: 760,
+						position: ['right - 20', 'top + 20'],
 						buttons: ['닫기'],
 						onClose: function(caption){
 							if(caption == '닫기'){
@@ -1081,6 +1151,7 @@ function viewcode(filename){
 					type: 'information',
 					print: false,
 					width: 760,
+					position: ['right - 20', 'top + 20'],
 					buttons: ['닫기'],
 					onClose: function(caption){
 						if(caption == '닫기'){
@@ -1148,6 +1219,7 @@ function deletepath(filename){
 								type: 'confirmation',
 								print: false,
 								width: 760,
+								position: ['right - 20', 'top + 20'],
 								buttons: ['닫기'],
 								onClose: function(caption){
 									if(caption == '닫기'){
@@ -1161,6 +1233,7 @@ function deletepath(filename){
 								type: 'error',
 								print: false,
 								width: 760,
+								position: ['right - 20', 'top + 20'],
 								buttons: ['닫기'],
 								onClose: function(caption){
 									if(caption == '닫기'){
@@ -1176,6 +1249,7 @@ function deletepath(filename){
 							type: 'error',
 							print: false,
 							width: 760,
+							position: ['right - 20', 'top + 20'],
 							buttons: ['닫기'],
 							onClose: function(caption){
 								if(caption == '닫기'){
@@ -1283,7 +1357,7 @@ function list_reload(repourl){
 	            	}
 	            	else if(repokind[i] == 'file'){
 	            		printStr += "<td><button value='"+repotreelistname[i]+"' onclick='viewcode(this.value)'>view</button></td>";	
-	            		printStr += "<td><a href='http://localhost:8080/controller/download.do?filename="+repotreelistname[i]+"&filepath="+filepath+"'>Download</a></td>";
+	            		printStr += "<td><a href='http://"+serverip+":8080/controller/download.do?filename="+repotreelistname[i]+"&filepath="+filepath+"'>Download</a></td>";
 	            	}
 	            	printStr += "<td><button value='"+repotreelistname[i]+"' onclick='deletepath(this.value)'>remove</button></td>";
                 	printStr += "</tr>"; 
@@ -1304,6 +1378,7 @@ function list_reload(repourl){
 					type: 'error',
 					print: false,
 					width: 760,
+					position: ['right - 20', 'top + 20'],
 					buttons: ['닫기'],
 					onClose: function(caption){
 						if(caption == '닫기'){

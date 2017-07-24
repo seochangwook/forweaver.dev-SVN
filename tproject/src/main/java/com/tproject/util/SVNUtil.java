@@ -882,4 +882,28 @@ public class SVNUtil {
 		
 		return resultcheckout;
 	}
+	
+	@SuppressWarnings("deprecation")
+	public Map<String, Object> doImport(String importlocalpath, String importdesturl, String importcommitmessage){
+		Map<String, Object>resultimport = new HashMap<String, Object>();
+		
+		//System.out.println("import local path: " + importlocalpath + " / import repo url: " + importdesturl + " / commit message" + importcommitmessage);
+		SVNClientManager clientManager = SVNClientManager.newInstance();
+		SVNCommitClient commitClient = clientManager.getCommitClient();
+		
+		try{
+			SVNURL svnURL = SVNURL.parseURIEncoded(importdesturl);
+			
+			commitClient.doImport(new File(importlocalpath), svnURL, importcommitmessage, true);
+			
+			resultimport.put("retval", "1");
+			resultimport.put("retmsg", "success import");
+		} catch(SVNException e){
+			e.printStackTrace();
+			resultimport.put("retval", "0");
+			resultimport.put("retmsg", e.getMessage());
+		}
+		
+		return resultimport;
+	}
 }

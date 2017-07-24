@@ -257,4 +257,17 @@ public class RepoAjaxController{
 		
 		return retVal;
 	}
+	
+	@RequestMapping(value = "/importajax", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> importrepo(@RequestBody Map<String, Object> info) {	
+		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
+		
+		retVal.put("result", "success");
+		retVal.put("importinfo", svnUtil.doImport(
+				info.get("importlocalpath").toString(), 
+				info.get("importdesturl").toString(),
+				info.get("importcommitmessage").toString()));
+		
+		return retVal;
+	}
 }
