@@ -48,6 +48,7 @@
 <li>Update</li>
 <li>Commit</li>
 <li>Checkout</li>
+<li>import -> developing</li>
 </div>
 <br>
 <h3><label>* SVNKit-dav (Server)</label></h3>
