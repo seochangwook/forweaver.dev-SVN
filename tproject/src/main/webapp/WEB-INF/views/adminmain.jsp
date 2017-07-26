@@ -198,6 +198,7 @@
 </body>
 <script type="text/javascript">
 var serverip = $('#ipaddress').val();
+var commitlist = []; //커밋 리스트를 저장할 배열//
 </script>
 <script type="text/javascript">
 $(function(){
@@ -851,6 +852,9 @@ $(function(){
 				repocommitmsg = retVal.repotreelist.repocommitmsg;
 				repofilepath = retVal.repotreelist.repofilepath;
 				
+				commitlist = ''; //저장하기 전 초기화//
+				commitlist = repocommitmsg;
+				
 				//Table에 결과를 출력//
 				$('#repotree').empty();
 				
@@ -886,7 +890,7 @@ $(function(){
 		            	printStr += "<td>"+repotreelistauthor[i]+"</td>";
 		            	printStr += "<td>ver."+repotreelistrevesion[i]+"</td>";
 		            	printStr += "<td>"+repotreelistdate[i]+"</td>";
-		            	printStr += "<td>"+repocommitmsg[i]+"</td>";
+		            	printStr += "<td>"+commitlist[repotreelistrevesion[i]]+"</td>";
 		            	console.log('lock condition: [' + repotreelistname[i] + '] is [' + repotreelistlock[i] + ']');
 		            	if(repotreelistlock[i] == 'lock' && repokind[i] == 'file'){
 		            		printStr += "<td><img alt='"+repotreelistname[i]+"' src='./resources/images/lockimage.png' width='40' height='40' onclick='unlock(this.alt)'></td>";	
@@ -1373,9 +1377,10 @@ function list_reload(repourl){
 	            	}
 	            	printStr += "<td>"+repotreelistname[i]+"</td>";
 	            	printStr += "<td>"+repotreelistauthor[i]+"</td>";
+	            	console.log('revesion: ' + repotreelistrevesion[i]);
 	            	printStr += "<td>ver."+repotreelistrevesion[i]+"</td>";
 	            	printStr += "<td>"+repotreelistdate[i]+"</td>";
-	            	printStr += "<td>"+repocommitmsg[i]+"</td>";
+	            	printStr += "<td>"+commitlist[repotreelistrevesion[i]]+"</td>";
 	            	console.log('lock condition: [' + repotreelistname[i] + '] is [' + repotreelistlock[i] + ']');
 	            	if(repotreelistlock[i] == 'lock' && repokind[i] == 'file'){
 	            		printStr += "<td><img alt='"+repotreelistname[i]+"' src='./resources/images/lockimage.png' width='40' height='40' onclick='unlock(this.alt)'></td>";	

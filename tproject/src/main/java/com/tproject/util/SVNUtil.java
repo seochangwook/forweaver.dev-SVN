@@ -220,9 +220,11 @@ public class SVNUtil {
 			repotreelist_kind = new ArrayList<Object>();
 			repotreelist_commitmessage = new ArrayList<Object>();
 			repotreelist_filepath = new ArrayList<Object>();
-			
-			
+				
 			listEntries(repository, ""); //由ъ뒪�듃瑜� �젙蹂대�� 異붽�//
+			
+			//로그(커밋명) 구하기//
+			listLog(repository);
 			
 			repotreelistinfo.put("listcount", totalrepotreecount);
 			repotreelistinfo.put("repotreelistname", repotreelist_name);
@@ -243,43 +245,69 @@ public class SVNUtil {
 	}
 	
 	public static void listEntries(SVNRepository repository, String path) throws SVNException {
-        Collection entries = repository.getDir(path, -1, null, (Collection) null);
-        Iterator iterator = entries.iterator();
-        
-        int repptreecount = 0;
-        
-        while (iterator.hasNext()) {
-            SVNDirEntry entry = (SVNDirEntry) iterator.next();
+        try
+        {
+        	Collection entries = repository.getDir(path, -1, null, (Collection) null);
+        	
+            Iterator iterator = entries.iterator();
             
-            repotreelist_name.add(entry.getName());
-            if(entry.getAuthor() != null){
-            	repotreelist_author.add(entry.getAuthor());
-            }else{
-            	repotreelist_author.add("not author");
+            int repptreecount = 0;
+            
+        	while (iterator.hasNext()) {
+                SVNDirEntry entry = (SVNDirEntry) iterator.next();
+                
+                repotreelist_name.add(entry.getName());
+                if(entry.getAuthor() != null){
+                	repotreelist_author.add(entry.getAuthor());
+                }else{
+                	repotreelist_author.add("not author");
+                }
+                repotreelist_revesion.add(entry.getRevision());
+                repotreelist_date.add(entry.getDate().toString());
+                if(entry.getLock() == null){
+                	repotreelist_lock.add("unlock");
+                }else{
+                	repotreelist_lock.add(entry.getLock());
+                }
+                
+                repotreelist_kind.add(entry.getKind().toString());
+                repotreelist_filepath.add(entry.getRelativePath().toString());
+            
+                repptreecount++;
+                
+                //재귀적으로 호출 시 하위구조의 정보까지 출력된다.//
+                /*if (entry.getKind() == SVNNodeKind.DIR) {
+                    listEntries(repository, (path.equals("")) ? entry.getName() : path + "/" + entry.getName());
+                }*/
             }
-            repotreelist_revesion.add(entry.getRevision());
-            repotreelist_date.add(entry.getDate().toString());
-            if(entry.getLock() == null){
-            	repotreelist_lock.add("unlock");
-            }else{
-            	repotreelist_lock.add(entry.getLock());
-            }
             
-            repotreelist_kind.add(entry.getKind().toString());
-            repotreelist_commitmessage.add(entry.getCommitMessage());
-            repotreelist_filepath.add(entry.getRelativePath().toString());
-        
-            repptreecount++;
-            
-            //재귀적으로 호출 시 하위구조의 정보까지 출력된다.//
-            /*if (entry.getKind() == SVNNodeKind.DIR) {
-            	//���옣�냼媛� �뵒�젆�꽣由ъ씠硫� Depth�븯�굹瑜� �뜑 �뱾�뼱媛��빞吏� �뙆�씪�씠 �엳湲곗뿉 listEntries瑜� �옱洹��샇異쒗븳�떎.//
-                listEntries(repository, (path.equals("")) ? entry.getName() : path + "/" + entry.getName());
-            }*/
+            totalrepotreecount += repptreecount;
+        } catch(SVNException e){
+        	e.printStackTrace();
         }
-        
-        totalrepotreecount += repptreecount;
     }
+	
+	public static void listLog(SVNRepository repository){
+		Collection logEntries = null;
+		
+		long startRevision = 0;
+		long endRevision = -1; //HEAD (the latest) revision
+		
+		try {
+			logEntries = repository.log(new String[] { "" }, null, startRevision, endRevision, true, true);
+			
+			for (Iterator entries = logEntries.iterator(); entries.hasNext();) {
+				SVNLogEntry logEntry = (SVNLogEntry) entries.next();
+				
+				repotreelist_commitmessage.add(logEntry.getMessage());
+				
+				System.out.println("log: " + logEntry.getMessage());
+			}
+		} catch (SVNException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	public Map<String,Object> doPrintFilecontent(String repourl, String userid, String userpassword, String filename, String filepath){
 		Map<String, Object>filecontentinfo = new HashMap<String, Object>();
