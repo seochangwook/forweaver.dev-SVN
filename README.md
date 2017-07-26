@@ -34,7 +34,7 @@
 <li>make repository</li>
 <li>repository info view</li>
 <li>repository history view</li>
-<li>repository tree view (commit name is null issue -> modifying)</li>
+<li><font color="red">repository tree view (commit name is null issue -> modifying)</font></li>
 <li>file content view</li>
 <li>add file and directory</li>
 <li>modify file</li>
