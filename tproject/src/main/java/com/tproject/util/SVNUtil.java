@@ -406,7 +406,7 @@ public class SVNUtil {
 		return resultcommit;
 	}
 	
-	public Map<String, Object> docommitdir(String repourl, String commitpath, String commitlog, String commitfilename, String commitfilecontent, String comitdirname){
+	public Map<String, Object> docommitdir(String repourl, String commitpath, String commitlog, String commitfilename, String commitfilecontent, String comitdirname, String userid, String userpassword){
 		Map<String, Object>resultcommit = new HashMap<String, Object>();
 		
 		System.out.println("file commit");
@@ -417,11 +417,17 @@ public class SVNUtil {
 		System.out.println("commit filename: " + commitfilename);
 		System.out.println("commit filecontent: " + commitfilecontent);
 		System.out.println("commit dirname: " + comitdirname);
+		System.out.println("user id: " + userid);
 		
 		SVNRepository repository = null;
 		
 		try {
 			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			//인증정보를 확인
+			//인증정보를 설정//
+			ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(userid, userpassword);
+			repository.setAuthenticationManager(authManager);
 			
 			byte[] contents = commitfilecontent.getBytes();
 			
@@ -489,7 +495,7 @@ public class SVNUtil {
         return editor.closeEdit();
     }
 	
-	public Map<String, Object> docommitmodify(String repourl, String commitpath, String commitlog, String commitfilename, String originalcontent, String updatecontent){
+	public Map<String, Object> docommitmodify(String repourl, String commitpath, String commitlog, String commitfilename, String originalcontent, String updatecontent, String userid, String userpassword){
 		Map<String, Object>resultcommit = new HashMap<String, Object>();
 		
 		System.out.println("file commit");
@@ -500,11 +506,17 @@ public class SVNUtil {
 		System.out.println("commit filename: " + commitfilename);
 		System.out.println("commit filecontent: " + originalcontent);
 		System.out.println("update content:" + updatecontent);
+		System.out.println("user id: " + userid);
 		
 		SVNRepository repository = null;
 		
 		try {
 			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			//인증정보를 확인
+			//인증정보를 설정//
+			ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(userid, userpassword);
+			repository.setAuthenticationManager(authManager);
 			
 			byte[] oldcontents = originalcontent.getBytes();
 			byte[] updatecontents = updatecontent.getBytes();
@@ -557,7 +569,7 @@ public class SVNUtil {
         return editor.closeEdit();
     }
 	
-	public Map<String, Object> docommitdelete(String repourl, String deletepath, String commitlog){
+	public Map<String, Object> docommitdelete(String repourl, String deletepath, String commitlog, String userid, String userpassword){
 		Map<String, Object>resultcommit = new HashMap<String, Object>();
 		
 		System.out.println("file commit");
@@ -570,6 +582,11 @@ public class SVNUtil {
 		
 		try {
 			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			
+			//인증정보를 확인
+			//인증정보를 설정//
+			ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(userid, userpassword);
+			repository.setAuthenticationManager(authManager);
 			
 			SVNNodeKind nodeKind = repository.checkPath("", -1);
 

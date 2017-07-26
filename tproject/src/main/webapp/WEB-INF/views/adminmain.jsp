@@ -696,6 +696,7 @@ $(function(){
 				var datelist = [];
 				var logmessagelist = [];
 				var changepathlist = [];
+				var logmaeesgaelistcount = 0;
 				
 				revesionlist = retVal.loginfolist.revesionlist;
 				authorlist = retVal.loginfolist.authorlist;
@@ -717,6 +718,7 @@ $(function(){
 		        	printStr += "<th>권한</th>";
 		        	printStr += "<th>commit 메세지</th>";
 		        	printStr += "<th>변경된 파일정보</th>";
+		        	printStr += "<th>이슈성</th>";
 		        	printStr += "</tr>";
 		        	printStr += "</thead>"; 
 		        	printStr += "<tbody>";
@@ -727,9 +729,27 @@ $(function(){
 		            	printStr += "<td>"+(i+1)+"</td>";
 		            	printStr += "<td>"+datelist[i]+"</td>";
 		            	printStr += "<td>"+revesionlist[i]+"</td>";
-		            	printStr += "<td>"+authorlist[i]+"</td>";
-		            	printStr += "<td>"+logmessagelist[i]+"</td>";
-		            	printStr += "<td>"+changepathlist[i]+"</td>";
+		            	if(authorlist[i] == null){
+		            		printStr += "<td>Account not known</td>";
+		            	} else{
+		            		printStr += "<td>"+authorlist[i]+"</td>";	
+		            	}
+		            	if(logmessagelist[i] == null || logmessagelist[i] == ''){
+		            		printStr += "<td>No commit messages</td>";
+		            	} else{
+		            		printStr += "<td>"+logmessagelist[i]+"</td>";	
+		            	}
+		            	if(authorlist[i] == null){
+		            		printStr += "<td>Could not verify change history</td>";	
+		            	} else{
+		            		printStr += "<td>"+changepathlist[logmaeesgaelistcount]+"</td>";	
+		            		logmaeesgaelistcount++;
+		            	}
+		            	if(authorlist[i] == null || logmessagelist[i] == null || logmessagelist[i] == ''){
+		            		printStr += "<td><img src='./resources/images/warning.png' width='30' height='30'></td>";
+		            	} else{
+		            		printStr += "<td><img src='./resources/images/confirmation.png' width='30' height='30'></td>";
+		            	}
 	                	printStr += "</tr>"; 
 		           	}
 		        	
@@ -994,6 +1014,8 @@ $(function(){
 		var original_content = $('#originalcontent').val();
 		var commitlog = $('#commitname').val();
 		var commitpath = $('#filepath').val();
+		var repouserid = $('#repouserid').val();
+		var repouserpassword = $('#repouserpassword').val();
 		
 		//alert(repourl + ',' + original_content + ',' + update_content + ',' + commitlog + ',' + commitpath + ',' + filename);
 		var trans_objeect = 
@@ -1003,7 +1025,9 @@ $(function(){
         	'commitlog':commitlog,
         	'commitfilename':commitfilename,
         	'updatecontent':update_content,
-        	'originalcontent':original_content
+        	'originalcontent':original_content,
+        	'userid':repouserid,
+        	'userpassword':repouserpassword
 	    }
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
@@ -1057,6 +1081,8 @@ $(function(){
 		var commitfilename = $('#commitfilename').val();
 		var commitfilecontent = $('#filecontent').val();
 		var commitdirname = $('#commitdirname').val();
+		var repouserid = $('#repouserid').val();
+		var repouserpassword = $('#repouserpassword').val();
 		
 		var trans_objeect = 
     	{
@@ -1065,7 +1091,9 @@ $(function(){
         	'commitlog':commitlog,
         	'commitfilename':commitfilename,
         	'commitfilecontent':commitfilecontent,
-        	'commitdirname':commitdirname
+        	'commitdirname':commitdirname,
+        	'userid':repouserid,
+        	'userpassword':repouserpassword
 	    }
 		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 		
@@ -1186,12 +1214,15 @@ function deletepath(filename){
 	var repourl = $('#repourl').val();
 	var filepath = $('#filepath').val() + '/'+ filename;
 	var commitlog = $('#commitname').val();
+	var repouserid = $('#repouserid').val();
+	var repouserpassword = $('#repouserpassword').val();
 	
 	var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>'+filepath+' 를 제거 합니까?</p>',{
 		title: 'SVN Test Dialog',
 		type: 'question',
 		print: false,
 		width: 760,
+		position: ['right - 20', 'top + 20'],
 		buttons: ['제거','닫기'],
 		onClose: function(caption){
 			if(caption == '닫기'){
@@ -1201,7 +1232,9 @@ function deletepath(filename){
 				{
 			    	'url': repourl,
 			    	'deletepath': filepath,
-			    	'commitlog':commitlog
+			    	'commitlog':commitlog,
+			    	'userid':repouserid,
+		        	'userpassword':repouserpassword
 			    }
 				var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 				

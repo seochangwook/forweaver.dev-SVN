@@ -119,7 +119,9 @@ public class RepoAjaxController{
 				info.get("commitlog").toString(), 
 				info.get("commitfilename").toString(), 
 				info.get("originalcontent").toString(),
-				info.get("updatecontent").toString()));
+				info.get("updatecontent").toString(),
+				info.get("userid").toString(),
+				info.get("userpassword").toString()));
 		
 		return retVal;
 	}
@@ -135,7 +137,9 @@ public class RepoAjaxController{
 				info.get("commitlog").toString(), 
 				info.get("commitfilename").toString(), 
 				info.get("commitfilecontent").toString(),
-				info.get("commitdirname").toString()));
+				info.get("commitdirname").toString(),
+				info.get("userid").toString(),
+				info.get("userpassword").toString()));
 		
 		return retVal;
 	}
@@ -148,7 +152,9 @@ public class RepoAjaxController{
 		retVal.put("commitinfo", svnUtil.docommitdelete(
 				info.get("url").toString(), 
 				info.get("deletepath").toString(),
-				info.get("commitlog").toString()));
+				info.get("commitlog").toString(),
+				info.get("userid").toString(),
+				info.get("userpassword").toString()));
 		
 		return retVal;
 	}
