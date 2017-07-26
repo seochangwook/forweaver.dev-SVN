@@ -34,7 +34,8 @@
 <li>make repository</li>
 <li>repository info view</li>
 <li>repository history view</li>
-<li>repository tree view (commit name is null issue -> modifying)</li>
+<li>repository tree view (commit name is null issue -> modifying) 
+<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/warning.png" width="30" height="30"></li>
 <li>file content view</li>
 <li>add file and directory</li>
 <li>modify file</li>
@@ -43,10 +44,16 @@
 <li>Separate files and directories with images</li>
 <li>file download</li>
 <li>Authentication</li>
-<li>diff (Revision Differences), (Window path issue -> modifying)</li>
-<li>Lock & UnLock (Troubleshoot Status Mismatch -> modifying)</li>
+<li>diff (Revision Differences), (Window path issue -> modifying)
+<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/warning.png" width="30" height="30">
+</li>
+<li>Lock & UnLock (Troubleshoot Status Mismatch -> modifying)
+<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/warning.png" width="30" height="30">
+</li>
 <li>Status</li>
-<li>Blame (file modifier by file line), (Window path issue -> modifying)</li>
+<li>Blame (file modifier by file line), (Window path issue -> modifying)
+<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/warning.png" width="30" height="30">
+</li>
 <li>Update</li>
 <li>Commit</li>
 <li>Checkout</li>
