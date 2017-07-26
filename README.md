@@ -37,7 +37,7 @@
 <li>repository tree view</li>
 <li>file content view</li>
 <li>add file and directory</li>
-<li>modify file (Checksum mismatch issue -> modifying)</li>
+<li>modify file</li>
 <li>delete file (out of date issue -> modifying)</li>
 <li>code Syntax Beautiful</li>
 <li>Separate files and directories with images</li>
