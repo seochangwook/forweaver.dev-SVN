@@ -13,6 +13,8 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/latest/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<!-- Progressbar loading -->
+	<link rel="stylesheet" href="resources/css/progressbarcss.css" type="text/css"/>
 	<!-- Zebra-Dialog CDN -->
 	<script src="resources/js/dialog/zebra_dialog.src.js"></script>
 	<link rel="stylesheet" href="resources/css/dialog/zebra_dialog.css" type="text/css"/>
@@ -195,6 +197,9 @@
 		</form>
 	</div>
 	<input type="hidden" id="ipaddress" value='${serverip}'>
+	<div class="wrap-loading display-none">
+    	<div><img src="resources/images/ajax-loader.gif" /></div>
+	</div> 
 </body>
 <script type="text/javascript">
 var serverip = $('#ipaddress').val();
@@ -222,6 +227,12 @@ $(function(){
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
 			success: function(retVal){
 				//alert('success ajax');
 				var returnvalue = retVal.importinfo.retval;
@@ -272,6 +283,12 @@ $(function(){
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
 			success: function(retVal){
 				//alert('success ajax');
 				var returnvalue = retVal.checkoutinfo.retval;
@@ -324,6 +341,12 @@ $(function(){
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
 			success: function(retVal){
 				//alert('success ajax');
 				var returnvalue = retVal.commitinfo.retval;
@@ -384,6 +407,12 @@ $(function(){
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
 			success: function(retVal){
 				var returnvalue = retVal.updateinfo.retval;
 				var retmessage = retVal.updateinfo.retmsg;
@@ -431,6 +460,12 @@ $(function(){
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
 			success: function(retVal){
 				//alert('ajax success');
 				var count = retVal.blameinfo.resultval.count;
@@ -475,6 +510,12 @@ $(function(){
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
 			success: function(retVal){
 				var count = retVal.statusinfo.resultval.count;
 				var content = [];
@@ -525,6 +566,12 @@ $(function(){
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
 			success: function(retVal){
 				if(retVal.diffinfo.resultval == '0'){
 					//alert("success ajax and function fail..." + retVal.diffinfo.resultval);
@@ -583,6 +630,12 @@ $(function(){
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
 			success: function(retVal){
 				var resultvalue = retVal.repourl.resultVal;
 				
@@ -627,6 +680,12 @@ $(function(){
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
 			success: function(retVal){
 				var printStr = '';	
 				
@@ -688,6 +747,12 @@ $(function(){
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
 			success: function(retVal){
 				var printStr = '';	
 				
@@ -832,6 +897,12 @@ $(function(){
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
 			success: function(retVal){
 				var repotreecount = retVal.repotreelist.listcount;
 				var repotreelistname = [];
@@ -975,6 +1046,12 @@ $(function(){
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
 			success: function(retVal){
 				if(retVal.commitinfo.resultval == '1'){
 					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>commit success</p>',{
@@ -1042,6 +1119,12 @@ $(function(){
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
 			success: function(retVal){
 				if(retVal.commitinfo.resultval == '1'){
 					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>commit modify success</p>',{
@@ -1108,6 +1191,12 @@ $(function(){
 			data: trans_json,
 			contentType: 'application/json',
 			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
 			success: function(retVal){
 				if(retVal.commitinfo.resultval == '1'){
 					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>commit success</p>',{
@@ -1169,6 +1258,12 @@ function viewcode(filename){
 		data: trans_json,
 		contentType: 'application/json',
 		mimeType: 'application/json',
+		beforeSend:function(){
+       		$('.wrap-loading').removeClass('display-none');
+        },
+       	complete:function(){
+       		$('.wrap-loading').addClass('display-none');
+        },
 		success: function(retVal){
 			var type = retVal.filecontentinfo.type;
 			
@@ -1249,6 +1344,12 @@ function deletepath(filename){
 					data: trans_json,
 					contentType: 'application/json',
 					mimeType: 'application/json',
+					beforeSend:function(){
+			       		$('.wrap-loading').removeClass('display-none');
+			        },
+			       	complete:function(){
+			       		$('.wrap-loading').addClass('display-none');
+			        },
 					success: function(retVal){
 						if(retVal.commitinfo.resultval == '1'){
 							var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>'+filepath+' 를 제거 합니다.</p>',{
@@ -1323,6 +1424,12 @@ function list_reload(repourl){
 		data: trans_json,
 		contentType: 'application/json',
 		mimeType: 'application/json',
+		beforeSend:function(){
+       		$('.wrap-loading').removeClass('display-none');
+        },
+       	complete:function(){
+       		$('.wrap-loading').addClass('display-none');
+        },
 		success: function(retVal){
 			var repotreecount = retVal.repotreelist.listcount;
 			var repotreelistname = [];
@@ -1460,6 +1567,12 @@ function unlock(filename){
 		data: trans_json,
 		contentType: 'application/json',
 		mimeType: 'application/json',
+		beforeSend:function(){
+       		$('.wrap-loading').removeClass('display-none');
+        },
+       	complete:function(){
+       		$('.wrap-loading').addClass('display-none');
+        },
 		success: function(retVal){
 			if(retVal.lockinfo.resultval == '1'){
 				var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>파일잠금 해제가 정상적으로 이루어졌습니다. 새로고침하여 확인하세요</p>',{
@@ -1524,6 +1637,12 @@ function lock(filename){
 		data: trans_json,
 		contentType: 'application/json',
 		mimeType: 'application/json',
+		beforeSend:function(){
+       		$('.wrap-loading').removeClass('display-none');
+        },
+       	complete:function(){
+       		$('.wrap-loading').addClass('display-none');
+        },
 		success: function(retVal){
 			if(retVal.lockinfo.resultval == '1'){
 				var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>파일잠금이 정상적으로 이루어졌습니다. 새로고침하여 확인하세요</p>',{
