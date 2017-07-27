@@ -24,6 +24,11 @@
 </div>
 <br>
 <div>
+<h2><label># Subversion architecture</label></h2>
+<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitScreenshot/screenshot_3_architecture.png" width="600" height="600">
+</div>
+<br>
+<div>
 <h2><label># Big Picture</label></h2>
 <img src="https://github.com/seochangwook/forweaver.dev-SVN-FTP/blob/master/gitScreenshot/screenshot_1_bigpicture.png" width="800" height="500">
 </div>
