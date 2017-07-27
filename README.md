@@ -49,14 +49,14 @@
 <li>file download</li>
 <li>Authentication</li>
 <li>diff (Revision Differences), (Window path issue -> modifying)
-<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/warning.png" width="30" height="30">
+<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/fixicon.png" width="30" height="30">
 </li>
 <li>Lock & UnLock (SVNClient(Tortoisesvn) & Subversion  version issue -> pending)
 <img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/warning.png" width="30" height="30">
 </li>
 <li>Status</li>
 <li>Blame (file modifier by file line), (Window path issue -> modifying)
-<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/warning.png" width="30" height="30">
+<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/fixicon.png" width="30" height="30">
 </li>
 <li>Update</li>
 <li>Commit</li>
