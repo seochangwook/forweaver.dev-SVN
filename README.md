@@ -51,7 +51,7 @@
 <li>diff (Revision Differences), (Window path issue -> modifying)
 <img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/warning.png" width="30" height="30">
 </li>
-<li>Lock & UnLock (The XML response contains invalid XML -> modifying)
+<li>Lock & UnLock (SVNClient(Tortoisesvn) & Subversion issue -> pending)
 <img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/warning.png" width="30" height="30">
 </li>
 <li>Status</li>
