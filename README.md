@@ -46,7 +46,7 @@
 <li>delete file</li>
 <li>code Syntax Beautiful</li>
 <li>Separate files and directories with images</li>
-<li>file download (server file path -> modifying)
+<li>file download (server file path issue -> modifying)
 <img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/fixicon.png" width="30" height="30">
 </li>
 <li>Authentication</li>
