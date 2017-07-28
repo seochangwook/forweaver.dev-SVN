@@ -243,13 +243,13 @@ $(function(){
 					PrintHTML += "<br>";
 					PrintHTML += "<div class='alert alert-danger alert-dismissable fade in'>";
 					PrintHTML += "<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>";
-					PrintHTML += "<strong>Checkoit Fail...</strong> ["+retmessage+']';
+					PrintHTML += "<strong>Import Fail...</strong> ["+retmessage+']';
 					PrintHTML += "</div>";
 				} else if(returnvalue == '1'){
 					PrintHTML += "<br>";
 					PrintHTML += "<div class='alert alert-success alert-dismissable fade in'>";
 					PrintHTML += "<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>";
-					PrintHTML += "<strong>Checkout Success...</strong> ["+retmessage+']';
+					PrintHTML += "<strong>Import Success...</strong> ["+retmessage+']';
 					PrintHTML += "</div>";
 				}
 				
@@ -550,6 +550,8 @@ $(function(){
 		var repourl = $('#diffrepopath').val();
 		var revesionone = $('#compare_revesion_one').val();
 		var revesiontwo = $('#compare_revesion_two').val();
+		
+		console.log('diff file path: ' + repourl);
 		
 		var trans_objeect = 
     	{
@@ -962,7 +964,6 @@ $(function(){
 		            	printStr += "<td>ver."+repotreelistrevesion[i]+"</td>";
 		            	printStr += "<td>"+repotreelistdate[i]+"</td>";
 		            	printStr += "<td>"+commitlist[repotreelistrevesion[i]]+"</td>";
-		            	console.log('lock condition: [' + repotreelistname[i] + '] is [' + repotreelistlock[i] + ']');
 		            	if(repotreelistlock[i] == 'lock' && repokind[i] == 'file'){
 		            		printStr += "<td><img alt='"+repotreelistname[i]+"' src='./resources/images/lockimage.png' width='40' height='40' onclick='unlock(this.alt)'></td>";	
 		            	} else if(repotreelistlock[i] == 'unlock' && repokind[i] == 'file'){
@@ -1010,7 +1011,7 @@ $(function(){
 				$('#repotree').append(printStr); //다시 테이블을 보여주기 위해서 HTML코드 적용//
 				$('#repourl').val(repourl); 
 				
-				$('#originalrepourl').val($('#repourl').val()+'/svnserverone'); //추후 이 부분은 하드코딩이 아닌 저장소의 이름을 받아온다.//
+				$('#originalrepourl').val($('#repourl').val()+'/'); //추후 이 부분은 하드코딩이 아닌 저장소의 이름을 받아온다.//
 			},
 			error: function(retVal, status, er){
 				alert("error: "+retVal+" status: "+status+" er:"+er);
@@ -1488,7 +1489,6 @@ function list_reload(repourl){
 	            	printStr += "<td>ver."+repotreelistrevesion[i]+"</td>";
 	            	printStr += "<td>"+repotreelistdate[i]+"</td>";
 	            	printStr += "<td>"+commitlist[repotreelistrevesion[i]]+"</td>";
-	            	console.log('lock condition: [' + repotreelistname[i] + '] is [' + repotreelistlock[i] + ']');
 	            	if(repotreelistlock[i] == 'lock' && repokind[i] == 'file'){
 	            		printStr += "<td><img alt='"+repotreelistname[i]+"' src='./resources/images/lockimage.png' width='40' height='40' onclick='unlock(this.alt)'></td>";	
 	            	} else if(repotreelistlock[i] == 'unlock' && repokind[i] == 'file'){
@@ -1546,9 +1546,11 @@ function unlock(filename){
 	var defaultfilepath = $('#originalrepourl').val();
 	var repourl = $('#repourl').val();
 	var relativefilepath = $('#filepath').val();
+	var repouserid = $('#repouserid').val();
+	var repouserpassword = $('#repouserpassword').val();
 	var unlockfilepath;
 	
-	unlockfilepath = defaultfilepath.substring(7) + relativefilepath + '/' +filename;
+	unlockfilepath = defaultfilepath + relativefilepath + '/' +filename;
 	
 	//앞의 file:// 을 제거//
 	console.log(unlockfilepath +' -> unlock' + ' / repourl: ' + repourl);
@@ -1556,7 +1558,9 @@ function unlock(filename){
 	var trans_objeect = 
 	{
     	'url': repourl,
-    	'unlockfilepath':lockfilepath
+    	'unlockfilepath':lockfilepath,
+    	'userid':repouserid,
+    	'userpassword':repouserpassword
     }
 	var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 	
@@ -1616,17 +1620,20 @@ function lock(filename){
 	var defaultfilepath = $('#originalrepourl').val();
 	var repourl = $('#repourl').val();
 	var relativefilepath = $('#filepath').val();
+	var repouserid = $('#repouserid').val();
+	var repouserpassword = $('#repouserpassword').val();
 	var lockfilepath;
 	
-	lockfilepath = defaultfilepath.substring(7) + relativefilepath + '/' +filename;
+	lockfilepath = defaultfilepath + relativefilepath + '/' +filename;
 	
-	//앞의 file:// 을 제거//
 	console.log(lockfilepath +' -> lock' + ' / repourl: ' + repourl);
 	
 	var trans_objeect = 
 	{
     	'url': repourl,
-    	'lockfilepath':lockfilepath
+    	'lockfilepath':lockfilepath,
+    	'userid':repouserid,
+    	'userpassword':repouserpassword
     }
 	var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
 	

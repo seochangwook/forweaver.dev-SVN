@@ -3,6 +3,8 @@ package com.tproject.util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -564,6 +566,7 @@ public class SVNUtil {
 	        
 	        ISVNEditor editor = repository.getCommitEditor(commitlog, null);
 	        
+	        System.out.println("midify path: " + commitpath);
 	        SVNCommitInfo commitInfo = modifyFile(editor, commitpath, commitpath+'/'+commitfilename, oldcontents, updatecontents);
 	        System.out.println("The file was changed: " + commitInfo);
 	        
@@ -631,6 +634,7 @@ public class SVNUtil {
 	        
 	        ISVNEditor editor = repository.getCommitEditor(commitlog, null);
 	        
+	        System.out.println("delete path: " + deletepath);
 	        SVNCommitInfo commitInfo = deleteDir(editor, deletepath);
 	        System.out.println("The directory was deleted: " + commitInfo);
 	        
@@ -661,7 +665,7 @@ public class SVNUtil {
 	public Map<String, Object> doDiff(String repourl, long revesionone, long revesiontwo){
 		Map<String, Object>resultdiff = new HashMap<String, Object>();
 		
-		//System.out.println("repourl: " + repourl + "/ revesionone: " + revesionone + "/ revesiontwo: " + revesiontwo);
+		System.out.println("repourl: " + repourl + " / revesionone: " + revesionone + "/ revesiontwo: " + revesiontwo);
 		
 		SVNRepository repository = null;
 		
@@ -669,6 +673,8 @@ public class SVNUtil {
 			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
 			
 			SVNURL svnURL = SVNURL.parseURIEncoded(repourl);
+			
+			System.out.println("repo setting succcess...");
 
 			// Get diffClient.
 		    SVNClientManager clientManager = SVNClientManager.newInstance();
@@ -678,7 +684,7 @@ public class SVNUtil {
 		    // byteArrayOutputStream, as unified format.
 		    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		    diffClient.doDiff(svnURL, null, SVNRevision.create(revesionone), SVNRevision.create(revesiontwo), SVNDepth.INFINITY, true, byteArrayOutputStream);
-			
+		    //diffClient.doDiff(new File(repourl), SVNRevision.UNDEFINED, SVNRevision.create(revesionone), SVNRevision.create(revesiontwo), true, true, byteArrayOutputStream);
 		    String diffresult = byteArrayOutputStream.toString();
 		    
 		    resultdiff.put("resultval", diffresult);
@@ -694,26 +700,31 @@ public class SVNUtil {
 		return resultdiff;
 	}
 	
-	public Map<String, Object> dolock(String repourl, String lockfilepath){
+	public Map<String, Object> dolock(String repourl, String lockfilepath, String userid, String userpassword){
 		Map<String, Object>resultlock = new HashMap<String, Object>();
 		
-		System.out.println("repourl: " + repourl + "/ filepath: " + lockfilepath);
+		System.out.println("repourl: " + repourl + " / filepath: " + lockfilepath);
 		
 		SVNRepository repository = null;
 		
 		try {
-			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(lockfilepath));
 			
+			ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(userid, userpassword);
+			repository.setAuthenticationManager(authManager);
 			//File Lock//
 			SVNClientManager clientManager = SVNClientManager.newInstance();
 			SVNWCClient wcclient = clientManager.getWCClient();
 			
-			File lockfilelist[] = new File[1];
-			lockfilelist[0] = new File(lockfilepath);
+			SVNURL svnURLs[] = new SVNURL[1];
+			SVNURL svnURL = SVNURL.parseURIEncoded(lockfilepath);
 			
-			wcclient.doLock(lockfilelist, true, "file lock");
+			svnURLs[0] = svnURL;
 			
-			//락 확인//
+			//wcclient.doLock(lockfilelist, true, "file lock");
+			wcclient.doLock(svnURLs, false, "fff");
+			
+			/*//락 확인//
 			String lockPath = lockfilepath;
 			SVNLock lock = repository.getLock(lockPath);
 			
@@ -725,9 +736,9 @@ public class SVNUtil {
 			else if(lock != null){
 				System.out.println(lockfilepath + " is lock");
 				resultlock.put("resultval", "1");
-			}
+			}*/
 			
-			//resultdiff.put("resultval", "1");
+			resultlock.put("resultval", "1");
 		    
 	        return resultlock;
 		} catch (SVNException e) {
@@ -740,7 +751,7 @@ public class SVNUtil {
 		return resultlock;
 	}
 	
-	public Map<String, Object> dounlock(String repourl, String lockfilepath){
+	public Map<String, Object> dounlock(String repourl, String lockfilepath, String userid, String userpassword){
 		Map<String, Object>resultunlock = new HashMap<String, Object>();
 		
 		System.out.println("repourl: " + repourl + "/ filepath: " + lockfilepath);
@@ -748,16 +759,21 @@ public class SVNUtil {
 		SVNRepository repository = null;
 		
 		try {
-			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(repourl));
+			repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded(lockfilepath));
+			
+			ISVNAuthenticationManager authManager = SVNWCUtil.createDefaultAuthenticationManager(userid, userpassword);
+			repository.setAuthenticationManager(authManager);
 			
 			//File Lock//
 			SVNClientManager clientManager = SVNClientManager.newInstance();
 			SVNWCClient wcclient = clientManager.getWCClient();
 			
-			File lockfilelist[] = new File[1];
-			lockfilelist[0] = new File(lockfilepath);
+			SVNURL svnURLs[] = new SVNURL[1];
+			SVNURL svnURL = SVNURL.parseURIEncoded(lockfilepath);
 			
-			wcclient.doUnlock(lockfilelist, true);
+			svnURLs[0] = svnURL;
+			
+			wcclient.doUnlock(svnURLs, false);
 			
 			resultunlock.put("resultval", "1");
 		    
@@ -821,7 +837,9 @@ public class SVNUtil {
 			
 			annotationhandler.setInit(includeMergedRevisions, true, logClient.getOptions());
 			
-			logClient.doAnnotate(new File(repourl), SVNRevision.UNDEFINED, SVNRevision.create(startrevesion), SVNRevision.create(endrevesion), annotationhandler);
+			SVNURL svnURL = SVNURL.parseURIEncoded(repourl);
+			
+			logClient.doAnnotate(svnURL, SVNRevision.UNDEFINED, SVNRevision.create(startrevesion), SVNRevision.create(endrevesion), annotationhandler);
 		  
 			Map<String, Object>resultmap = annotationhandler.getResult();
 			resultblame.put("resultval", resultmap);
@@ -832,6 +850,8 @@ public class SVNUtil {
 			e.printStackTrace();
 			
 			resultblame.put("resultval", "0");
+		} catch(Exception e){
+			e.printStackTrace();
 		}
 		
 		return resultblame;
@@ -902,7 +922,6 @@ public class SVNUtil {
 		return resultcommit;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public Map<String, Object> doCheckout(String checkoutrepourl, String checkoutlocalpath, long checkoutrevesionone, long checkoutrevesiontwo){
 		Map<String, Object>resultcheckout = new HashMap<String, Object>();
 		
@@ -914,9 +933,7 @@ public class SVNUtil {
 			SVNURL svnURL = SVNURL.parseURIEncoded(checkoutrepourl);
 			
 			updateClient.setIgnoreExternals( false );
-			updateClient.doCheckout(svnURL, new File(checkoutlocalpath), SVNRevision.UNDEFINED, SVNRevision.create(checkoutrevesionone), true, false);
-			
-			resultcheckout.put("retval", "1");
+			updateClient.doCheckout(svnURL, new File(checkoutlocalpath), SVNRevision.UNDEFINED, SVNRevision.create(checkoutrevesionone), SVNDepth.INFINITY, true);
 			resultcheckout.put("retmsg", "success checkout");
 		} catch(SVNException e){
 			e.printStackTrace();

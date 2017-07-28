@@ -176,12 +176,12 @@ public class RepoAjaxController{
 	public @ResponseBody Map<String, Object> lock(@RequestBody Map<String, Object> info) {	
 		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
 		
-		svnUtil.dolock(info.get("url").toString(), info.get("lockfilepath").toString());
-		
 		retVal.put("result", "success");
 		retVal.put("lockinfo", svnUtil.dolock(
 				info.get("url").toString(), 
-				info.get("lockfilepath").toString()));
+				info.get("lockfilepath").toString(),
+				info.get("userid").toString(),
+				info.get("userpassword").toString()));
 		
 		return retVal;
 	}
@@ -190,12 +190,12 @@ public class RepoAjaxController{
 	public @ResponseBody Map<String, Object> unlock(@RequestBody Map<String, Object> info) {	
 		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
 		
-		svnUtil.dolock(info.get("url").toString(), info.get("lockfilepath").toString());
-		
 		retVal.put("result", "success");
 		retVal.put("lockinfo", svnUtil.dounlock(
 				info.get("url").toString(), 
-				info.get("unlockfilepath").toString()));
+				info.get("unlockfilepath").toString(),
+				info.get("userid").toString(),
+				info.get("userpassword").toString()));
 		
 		return retVal;
 	}
