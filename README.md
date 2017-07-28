@@ -58,10 +58,14 @@
 <li>Blame (file modifier by file line), (API Local path issue -> pending)
 <img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/warning.png" width="30" height="30">
 </li>
-<li>Update</li>
-<li>Commit</li>
-<li>Checkout</li>
-<li>Import</li>
+<li>Update (API Local path issue -> pending)</li>
+<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/warning.png" width="30" height="30">
+<li>Commit (API Local path issue -> pending)</li>
+<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/warning.png" width="30" height="30">
+<li>Checkout (API Local path issue -> pending)</li>
+<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/warning.png" width="30" height="30">
+<li>Import (API Local path issue -> pending)</li>
+<img src="https://raw.githubusercontent.com/seochangwook/forweaver.dev-SVN/master/gitimage/warning.png" width="30" height="30">
 </div>
 <br>
 <h3><label>* SVNKit-dav (Server)</label></h3>
