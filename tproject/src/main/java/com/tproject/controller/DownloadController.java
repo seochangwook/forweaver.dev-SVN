@@ -22,7 +22,7 @@ public class DownloadController implements ApplicationContextAware{
 	
 	@RequestMapping(value = "/download.do")
 	public ModelAndView download(@RequestParam("filename") String filename, @RequestParam("filepath") String filepath ) throws Exception {	
-		String realFolder = "http://192.168.0.71:8080/controller/svn/repoone/"; //파일의 실제(디폴트) 경로(서버의 디폴트 경로)//
+		String realFolder = "http://192.168.0.71:8080/controller/svn/repoone"; //파일의 실제(디폴트) 경로(서버의 디폴트 경로)//
 
 		File file = new File(realFolder + filepath + "/" + filename);
 		

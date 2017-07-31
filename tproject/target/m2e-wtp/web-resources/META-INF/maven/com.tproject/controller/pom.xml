@@ -148,6 +148,13 @@
           	<artifactId>spring-websocket</artifactId>
           	<version>${org.springframework-version}</version>
       	</dependency>
+      	
+      	<!-- PDF Viewer -->
+      	<dependency>
+			<groupId>com.lowagie</groupId>
+			<artifactId>itext</artifactId>
+			<version>2.1.7</version>
+		</dependency>
 				
 		<!-- AspectJ -->
 		<dependency>

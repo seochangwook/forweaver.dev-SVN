@@ -165,7 +165,8 @@
 			<input type="number" id="compare_revesion_one" placeholder="input revesion 1" min="0"><br>
 			<label>-> Compare Revesion 2:</label>
 			<input type="number" id="compare_revesion_two" placeholder="input revesion 2" min="0"><br><br>
-			<input type="button" id="btn_diff_button" value="diff run">
+			<input type="button" id="btn_diff_button" value="diff run"><br><br>
+			<input type="button" id="btn_pdfview" value="pdf view">
 		</div>
 		<div id="diffresult">
 			<label>-> diff 결과 출력영역</label>
@@ -207,6 +208,42 @@ var commitlist = []; //커밋 리스트를 저장할 배열//
 </script>
 <script type="text/javascript">
 $(function(){
+	$('#btn_pdfview').click(function(){
+		var repourl = $('#diffrepopath').val();
+		var revesionone = $('#compare_revesion_one').val();
+		var revesiontwo = $('#compare_revesion_two').val();
+		
+		console.log('diff file path: ' + repourl);
+		
+		var trans_objeect = 
+    	{
+        	'repourl':repourl,
+        	'revesionone':revesionone,
+        	'revesiontwo':revesiontwo
+	    }
+		var trans_json = JSON.stringify(trans_objeect); //json으로 반환//
+		
+		$.ajax({
+			url: "http://"+serverip+":8080/controller/pdfdiffview",
+			type: 'POST',
+			dataType: 'json',
+			data: trans_json,
+			contentType: 'application/json',
+			mimeType: 'application/json',
+			beforeSend:function(){
+	       		$('.wrap-loading').removeClass('display-none');
+	        },
+	       	complete:function(){
+	       		$('.wrap-loading').addClass('display-none');
+	        },
+			success: function(retVal){
+				console.log('ajax success..');
+			},
+			error: function(retVal, status, er){
+				alert("error: "+retVal+" status: "+status+" er:"+er);
+			}
+		});
+	});
 	$('#importbutton').click(function(){
 		var localpath = $('#importlocalpath').val();
 		var repourl = $('#importdesturl').val();
@@ -593,7 +630,7 @@ $(function(){
 				} else{
 					$('#code').empty();
 					$('#code').append(retVal.diffinfo.resultval);
-					
+				
 					SyntaxHighlighter.highlight(); //동적으로 한번 더 로드해준다.//
 					
 					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>해당 저장소의 [Revesion'+revesionone+'] 과 [Revesion'+revesiontwo+'] 의 차이 결과를 출력합니다.</p>',{

@@ -723,7 +723,6 @@ public class SVNUtil {
 			
 			//wcclient.doLock(lockfilelist, true, "file lock");
 			wcclient.doLock(svnURLs, false, "fff");
-			
 			/*//락 확인//
 			String lockPath = lockfilepath;
 			SVNLock lock = repository.getLock(lockPath);
@@ -934,6 +933,7 @@ public class SVNUtil {
 			
 			updateClient.setIgnoreExternals( false );
 			updateClient.doCheckout(svnURL, new File(checkoutlocalpath), SVNRevision.UNDEFINED, SVNRevision.create(checkoutrevesionone), SVNDepth.INFINITY, true);
+		
 			resultcheckout.put("retmsg", "success checkout");
 		} catch(SVNException e){
 			e.printStackTrace();

@@ -1,6 +1,9 @@
 package com.tproject.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +21,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfWriter;
 import com.tproject.util.FileDownloadUtil;
 import com.tproject.util.SVNUtil;
 
@@ -273,6 +282,56 @@ public class RepoAjaxController{
 				info.get("importlocalpath").toString(), 
 				info.get("importdesturl").toString(),
 				info.get("importcommitmessage").toString()));
+		
+		return retVal;
+	}
+	
+	@RequestMapping(value = "/pdfdiffview", method = RequestMethod.POST, produces = {"application/json"})
+	public @ResponseBody Map<String, Object> pdfview(@RequestBody Map<String, Object> info) {	
+		Map<String, Object> retVal = new HashMap<String, Object>(); //諛섑솚�븷 ���엯�쓽 �겢�옒�뒪瑜� �꽑�뼵//
+		
+		retVal.put("diffinfo", svnUtil.doDiff(
+				info.get("repourl").toString(), 
+				Long.parseLong(info.get("revesionone").toString()), 
+				Long.parseLong(info.get("revesiontwo").toString())));
+		
+		Document document = new Document();
+
+        try {
+
+            PdfWriter.getInstance(document, new FileOutputStream(new File("/Users/macbook/Desktop/pdf/diffpdf.pdf")));
+
+            //open
+            document.open();
+
+            Paragraph p = new Paragraph();
+            p.add("This is my paragraph 1");
+            p.setAlignment(Element.ALIGN_CENTER);
+
+            document.add(p);
+
+            Paragraph p2 = new Paragraph();
+            p2.add("This is my paragraph 2"); //no alignment
+
+            document.add(p2);
+
+            Font f = new Font();
+            f.setStyle(Font.BOLD);
+            f.setSize(8);
+
+            document.add(new Paragraph(retVal.get("diffinfo").toString(), f));
+
+            //close
+            document.close();
+
+            System.out.println("Done");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return retVal;
 	}
