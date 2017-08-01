@@ -67,4 +67,5 @@
 	<beans:bean id="echoHandler" class="com.tproject.util.EchoHandler"/>
 	<beans:bean id="statusHandler" class="com.tproject.util.StatusHandler"/>
 	<beans:bean id="blameHandler" class="com.tproject.util.AnnotationHandler"/>
+	<beans:bean id="pdfview" class="com.tproject.util.PdfView"></beans:bean>
 </beans:beans>

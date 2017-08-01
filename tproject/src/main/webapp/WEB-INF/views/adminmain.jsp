@@ -237,7 +237,37 @@ $(function(){
 	       		$('.wrap-loading').addClass('display-none');
 	        },
 			success: function(retVal){
-				console.log('ajax success..');
+				var pdfok = retVal.resultpdf;
+				
+				if(pdfok == '0'){
+					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>pdf load fail...</p>',{
+						title: 'SVN Test Dialog',
+						type: 'error',
+						print: false,
+						width: 760,
+						position: ['right - 20', 'top + 20'],
+						buttons: ['닫기'],
+						onClose: function(caption){
+							if(caption == '닫기'){
+								//alert('yes click');
+							}
+						}
+					});
+				} else if(pdfok == '1'){
+					var infodialog = new $.Zebra_Dialog('<strong>Message:</strong><br><br><p>pdf load success...</p>',{
+						title: 'SVN Test Dialog',
+						type: 'confirmation',
+						print: false,
+						width: 760,
+						position: ['right - 20', 'top + 20'],
+						buttons: ['닫기'],
+						onClose: function(caption){
+							if(caption == '닫기'){
+								//alert('yes click');
+							}
+						}
+					});
+				}
 			},
 			error: function(retVal, status, er){
 				alert("error: "+retVal+" status: "+status+" er:"+er);
