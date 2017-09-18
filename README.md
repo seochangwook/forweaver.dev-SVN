@@ -21,6 +21,7 @@
 <li>https://github.com/ndeloof/svnkit/tree/master/svnkit-dav</li>
 <li>https://logback.qos.ch/index.html</li>
 <li>https://tortoisesvn.net/</li>
+<li>http://wiki.kldp.org/wiki.php/SubversionBook/GuidedTour#svn-ch-3-sect-1</li>
 </div>
 <br>
 <div>
